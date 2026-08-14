@@ -3,6 +3,8 @@
 #include "../include/log.h"
 
 #include <stdio.h>
+#include <inttypes.h>
+#include <string.h>
 #include <sqlite3.h>
 #include <assert.h>
 
@@ -15,8 +17,7 @@ unsigned char createCheckDb() {
                               "balance INTEGER NOT NULL DEFAULT 0, "
                               "phoneNumber TEXT, "
                               "hasJoined BLOB NOT NULL DEFAULT 0 CHECK(length(hasJoined = 1)), "
-                              "banned BLOB NOT NULL DEFAULT 0 CHECK(length(banned = 1)), "
-                              "cState BLOB NOT NULL DEFAULT 0 CHECK(length(cState = 1))"
+                              "banned BLOB NOT NULL DEFAULT 0 CHECK(length(banned = 1)) "
                               ");";
 
     int rc = sqlite3_open("user.db", &userDb);
@@ -107,11 +108,11 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
 
         }
 
-        case userDataRWSql_CONVERSATION_STATE:
+        case userDataRWSql_BANNED_STATE:
         {
-            const char* insertCStateSql = "UPDATE users SET conversationState = ? where userId = ?;";
+            const char* insertBannedStateSql = "UPDATE users SET banned = ? WHERE userId = ?;";
 
-            insertSql = insertCStateSql;
+            insertSql = insertBannedStateSql;
 
             break;
 
@@ -167,12 +168,6 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
 
         case userDataRWSql_BANNED_STATE:
             sqlite3_bind_blob(stmt, 1, &uInfo->banned, 1, SQLITE_STATIC);
-            sqlite3_bind_int64(stmt, 2, uInfo->userId);
-
-            break;
-
-        case userDataRWSql_CONVERSATION_STATE:
-            sqlite3_bind_blob(stmt, 1, &uInfo->cState, 1, SQLITE_STATIC);
             sqlite3_bind_int64(stmt, 2, uInfo->userId);
 
             break;
@@ -244,11 +239,6 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
 
             break;
 
-        case userDataRWSql_CONVERSATION_STATE:
-            readSql = "SELECT cState FROM users WHERE userId = ?;";
-
-            break;
-
     }
 
     if (readSql == NULL) {
@@ -268,22 +258,110 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
     }
     DBG(INFO, "Prepare statement success");
 
+    const char* readDataFieldName = NULL;
     switch (uDataRWSql) {
         case userDataRWSql_ALL:
-            while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
-                // just log to the output
-                DBG(INFO, "User data read: balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d, cState = %d",
-                    sqlite3_column_int(stmt, 0),
-                    sqlite3_column_text(stmt, 1),
-                    sqlite3_column_int(stmt, 2),
-                    sqlite3_column_int(stmt, 3),
-                    sqlite3_column_int(stmt, 4));
+        {
+            const char* allDataFieldName = "userDataRWSql_ALL";
+
+            readDataFieldName = allDataFieldName;
+
+            break;
+
+        }
+
+        case userDataRWSql_BALANCE:
+        {
+            const char* balanceFieldName = "userDataRWSql_BALANCE";
+
+            readDataFieldName = balanceFieldName;
+
+            break;
+
+        }
+
+        case userDataRWSql_PHONE_NUMBER:
+        {
+            const char* phoneNumberFieldName = "userDataRWSql_PHONE_NUMBER";
+
+            readDataFieldName = phoneNumberFieldName;
+
+            break;
+
+        }
+
+        case userDataRWSql_JOIN_STATE:
+        {
+            const char* joinStateFieldName = "userDataRWSql_JOIN_STATE";
+
+            readDataFieldName = joinStateFieldName;
+
+            break;
+
+        }
+
+        case userDataRWSql_BANNED_STATE:
+        {
+            const char* bannedStateFieldName = "userDataRWSql_BANNED_STATE";
+
+            readDataFieldName = bannedStateFieldName;
+
+            break;
+
+        }
+
+    }
+
+    switch (uDataRWSql) {
+        case userDataRWSql_ALL:
+            sqlite3_bind_int64(stmt, 1, uInfo->userId);
+            rc = sqlite3_step(stmt);
+            if (rc != SQLITE_ROW) {
+                sqlErrorMsg("Cannot execute read all statement", userDb, rc);
+
+                sqlite3_finalize(stmt);
+                sqlite3_close(userDb);
+
+                return 0;
+
             }
+
+            uInfo->balance = sqlite3_column_int(stmt, 0);
+            uInfo->phoneNumber = (const char*)sqlite3_column_text(stmt, 1);
+            uInfo->hasJoined = sqlite3_column_int(stmt, 2);
+            uInfo->banned = sqlite3_column_int(stmt, 3);
+
+            DBG(INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
+                readDataFieldName,
+                uInfo->userId,
+                uInfo->balance,
+                uInfo->phoneNumber,
+                uInfo->hasJoined,
+                uInfo->banned
+            );
 
             break;
 
         case userDataRWSql_BALANCE:
             sqlite3_bind_int64(stmt, 1, uInfo->userId);
+            rc = sqlite3_step(stmt);
+            if (rc != SQLITE_ROW) {
+                sqlErrorMsg("Cannot execute read all statement", userDb, rc);
+
+                sqlite3_finalize(stmt);
+                sqlite3_close(userDb);
+
+                return 0;
+
+            }
+            DBG(INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
+                readDataFieldName,
+                uInfo->userId,
+                uInfo->balance,
+                uInfo->phoneNumber,
+                uInfo->hasJoined,
+                uInfo->banned
+            );
 
             uInfo->balance = sqlite3_column_int(stmt, 0);
 
@@ -291,27 +369,76 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
 
         case userDataRWSql_PHONE_NUMBER:
             sqlite3_bind_int64(stmt, 1, uInfo->userId);
+            rc = sqlite3_step(stmt);
+            if (rc != SQLITE_ROW) {
+                sqlErrorMsg("Cannot execute read all statement", userDb, rc);
+
+                sqlite3_finalize(stmt);
+                sqlite3_close(userDb);
+
+                return 0;
+
+            }
+            DBG(INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
+                readDataFieldName,
+                uInfo->userId,
+                uInfo->balance,
+                uInfo->phoneNumber,
+                uInfo->hasJoined,
+                uInfo->banned
+            );
 
             uInfo->phoneNumber = (const char*)sqlite3_column_text(stmt, 0);
 
             break;
+
         case userDataRWSql_JOIN_STATE:
             sqlite3_bind_int64(stmt, 1, uInfo->userId);
+            rc = sqlite3_step(stmt);
+            if (rc != SQLITE_ROW) {
+                sqlErrorMsg("Cannot execute read all statement", userDb, rc);
+
+                sqlite3_finalize(stmt);
+                sqlite3_close(userDb);
+
+                return 0;
+
+            }
+            DBG(INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
+                readDataFieldName,
+                uInfo->userId,
+                uInfo->balance,
+                uInfo->phoneNumber,
+                uInfo->hasJoined,
+                uInfo->banned
+            );
 
             uInfo->hasJoined = *(unsigned char*)sqlite3_column_blob(stmt, 0);
 
             break;
+
         case userDataRWSql_BANNED_STATE:
             sqlite3_bind_int64(stmt, 1, uInfo->userId);
+            rc = sqlite3_step(stmt);
+            if (rc != SQLITE_ROW) {
+                sqlErrorMsg("Cannot execute read all statement", userDb, rc);
+
+                sqlite3_finalize(stmt);
+                sqlite3_close(userDb);
+
+                return 0;
+
+            }
+            DBG(INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
+                readDataFieldName,
+                uInfo->userId,
+                uInfo->balance,
+                uInfo->phoneNumber,
+                uInfo->hasJoined,
+                uInfo->banned
+            );
 
             uInfo->banned = *(unsigned char*)sqlite3_column_blob(stmt, 0);
-
-            break;
-
-        case userDataRWSql_CONVERSATION_STATE:
-            sqlite3_bind_int64(stmt, 1, uInfo->userId);
-
-            uInfo->cState = *(unsigned char*)sqlite3_column_blob(stmt, 0);
 
             break;
 

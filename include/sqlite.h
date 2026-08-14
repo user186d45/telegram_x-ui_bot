@@ -11,8 +11,7 @@ enum userDataRWSql : uint8_t {
     userDataRWSql_BALANCE,
     userDataRWSql_PHONE_NUMBER,
     userDataRWSql_JOIN_STATE,
-    userDataRWSql_BANNED_STATE,
-    userDataRWSql_CONVERSATION_STATE
+    userDataRWSql_BANNED_STATE
 
 };
 
