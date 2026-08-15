@@ -8,6 +8,7 @@
 struct panelInfo {
     int                      id;
     const char*              domainAddress;
+    const char*              panelPath;
     const char*              authKey;
 
 };
@@ -16,6 +17,7 @@ struct applicationConfig {
     const char*              botApiKey;
     const char**             admins;
     const char**             channels2Join;
+    struct panelInfo**       panelsInfo;
 
 };
 
