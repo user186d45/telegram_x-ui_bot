@@ -37,7 +37,7 @@ struct jsonListInboundSettingsClientsArrayStruct {
     const char*                 subId;
     int64_t                     tgId;
     int64_t                     totalGB;
-    int64_t                     updated_at;
+    int64_t                     updatedAt; // "updated_at" on server side
 
 };
 
@@ -191,9 +191,9 @@ struct jsonAddInboundSettingsFallbacksArrayPostStruct {
 };
 
 struct jsonAddInboundSettingsObjPostStruct {
-    struct jsonAddInboundSettingsClientsArrayPostStruct* addInSettingsCliArrPostStruct;
+    struct jsonAddInboundSettingsClientsArrayPostStruct* addInSettingsCliArrPStruct;
     const char*                 decryption;
-    struct jsonAddInboundSettingsFallbacksArrayPostStruct* addInSettingsFalbackArrPostStruct;
+    struct jsonAddInboundSettingsFallbacksArrayPostStruct* addInSettingsFalbackArrPStruct;
 
 };
 
@@ -206,7 +206,7 @@ struct jsonAddInboundStreamSettingsRealitySettingsObjectPostStruct {
 struct jsonAddInboundStreamSettingsObjPostStruct {
     const char*                 network;
     const char*                 security;
-    struct jsonAddInboundStreamSettingsRealitySettingsObjectPostStruct* addInStreamSettignsRealitySettingsObjPostStruct;
+    struct jsonAddInboundStreamSettingsRealitySettingsObjectPostStruct* addInStreamSettignsRealitySettingsObjPStruct;
 
 };
 
@@ -224,9 +224,9 @@ struct jsonAddInboundPostStruct {
     const char*                 protocol;
     int64_t                     expiryTime;
     const char*                 total;
-    struct jsonAddInboundSettingsObjPostStruct* addInSettingsObjPostStruct;
-    struct jsonAddInboundStreamSettingsObjPostStruct* addInStreamSettingsObjPostStruct;
-    struct jsonAddInboundSniffingObjectPostStruct* addInSniffingObjPostStruct;
+    struct jsonAddInboundSettingsObjPostStruct* addInSettingsObjPStruct;
+    struct jsonAddInboundStreamSettingsObjPostStruct* addInStreamSettingsObjPStruct;
+    struct jsonAddInboundSniffingObjectPostStruct* addInSniffingObjPStruct;
 
 };
 
@@ -355,13 +355,13 @@ struct jsonResetAllInboundsUploadNDownload {
 // structs
 // The content shall be sent as follows, else it will not work:
 // curl -X POST "http://127.0.0.1:25175/000000000000000/panel/api/inbounds/import"
-// -H "Authorization: Bearer UGoPnx7t78eMIX84r6xmIkoIDHburMj9NgYeYQMCmLS26HxW" \  --data-urlencode "data=$(jq -c . <<< '{
+// -H "Authorization: Bearer exampleBearerToken" \  --data-urlencode "data=$(jq -c . <<< '{
 //  "id": 1,
 //  "userId": 0,
 //  "up": 0,
 //  "down": 0,
 //  "total": 0,
-//  "remark": "fssdfasdfasfa",
+//  "remark": "exampleRemark",
 //  "enable": true,
 //  "expiryTime": 1787776200000,
 //  "trafficReset": "never",
@@ -404,11 +404,239 @@ struct jsonImportInboundsPostStruct {
 };
 
 struct jsonImportInboundsResponseStruct {
-    unsigned char               success;
+    const unsigned char         success;
     const char*                 msg;
     struct jsonListInboundObjectStruct* listInObjStruct;
 
 };
+
+// =====================================================
+// List every client
+// =====================================================
+struct jsonListEveryClientObjectTrafficObjectStruct {
+    int64_t                     id;
+    int64_t                     inboundId;
+    const unsigned char         enable;
+    const char*                 email;
+    const char*                 uuid;
+    const char*                 subId;
+    int64_t                     up;
+    int64_t                     down;
+    int64_t                     expiryTime;
+    int64_t                     total;
+    int                         reset;
+    int64_t                     resetDay;
+    int64_t                     resetMax;
+    int64_t                     resetCount;
+    int64_t                     lastOnline;
+    int64_t                     lastSubFetch;
+
+};
+
+struct jsonListEveryClientArrayStruct {
+    int64_t                     id;
+    const char*                 email;
+    const char*                 subId;
+    const char*                 uuid;
+    const char*                 password;
+    const char*                 auth;
+    const char*                 flow;
+    const char*                 security;
+    const char*                 privateKey;
+    const char*                 publicKey;
+    const char*                 allowedIps;
+    const char*                 preSharedKey;
+    const unsigned char         keepAlive;
+    const char*                 forwardedPorts;
+    const char*                 secret;
+    const char*                 adTag;
+    int64_t                     limitIp;
+    int64_t                     limitHwid;
+    int64_t                     totalGB;
+    int64_t                     expiryTime;
+    const unsigned char         enable;
+    int64_t                     tagId;
+    const char*                 group;
+    const char*                 comment;
+    int                         reset;
+    int64_t                     resetDay;
+    int64_t                     resetMax;
+    const char*                 trafficReset;
+    int                         trafficResetDay;
+    int64_t                     createdAt; // "created_at" on server side
+    int64_t                     updatedAt; // "updated_at" on server side
+    const void*                 reverse; // This shall be null on normal ( not customized  ) setup
+    int*                        inboundIds;
+    struct jsonListEveryClientObjectTrafficObjectStruct* listEveryCliObjTrafficObjStruct;
+
+};
+
+struct jsonListEveryClientStruct {
+    const unsigned char         success;
+    const char*                 msg;
+    struct jsonListEveryClientArrayStruct** listEveryCliArrStruct;
+
+};
+
+// =====================================================
+// Filter, sort and paginate clients on the server post
+// and response fields
+// =====================================================
+struct jsonFilterClientsPostStruct {
+    int page;
+    int pageSize;
+    char* search;
+    char* filter;
+    char* protocol;
+    char* sort;
+    char* order;
+
+};
+
+struct jsonFilterClientsObjectResponseStruct {
+    struct jsonFilterClientsObjectItemsArrayResponseStruct* filterCliObjItemsArrStruct;
+    int64_t total;
+    int64_t filtered;
+    int page;
+    unsigned short pageSize;
+    struct jsonFilterClientsObjectSummaryObjectResponseStruct* filterCliObjSummaryObjRStruct; // Summary
+    struct jsonFilterClientsObjectDepletedArrayResponseStruct* filterCliObjDepletedArrRStruct; // Depleted
+    struct jsonFilterClientsObjectExpiringArrayResponseStruct* filterCliObjExpiringArrRStruct; // Expiring
+    struct jsonFilterClientsObjectDeactiveArrayResponseStruct* filterCliObjDeactiveArrRStruct; // Deactive
+
+};
+
+struct jsonFilterClientsGroupObjectResponseStruct {
+    // Functionality unknown
+
+};
+
+struct jsonFilterClientsResponseStruct {
+    unsigned char success;
+    const char* msg;
+    struct jsonFilterClientsObjectResponseStruct* filterCliObjRStruct;
+    struct jsonFilterClientsGroupObjectResponseStruct* filterCliGroupObjRStruct;
+
+};
+
+// =====================================================
+// Fetch details of one client by email
+// =====================================================
+
+/*
+ * The response of the server to fetching by email request is not accurately
+ * provided at the original documentaion thus it will be introduced here:
+ * {
+ *   "success": true,
+ *   "msg": "",
+ *   "obj": {
+ *     "client": {
+ *       "id": 8,
+ *       "email": "8h8uc11km3",
+ *       "subId": "bjkv8azacpmwjpvx",
+ *       "uuid": "5df6c2f8-912f-4d56-a3d7-dfa984f79c47",
+ *       "password": "pbh36tewkda4tkx6",
+ *       "auth": "789huvsbv650n50t",
+ *       "flow": "",
+ *       "security": "auto",
+ *       "privateKey": "",
+ *       "publicKey": "",
+ *       "allowedIPs": "",
+ *       "preSharedKey": "",
+ *       "keepAlive": 0,
+ *       "forwardedPorts": "",
+ *       "secret": "",
+ *       "adTag": "",
+ *       "limitIp": 0,
+ *       "limitHwid": 0,
+ *       "totalGB": 0,
+ *       "expiryTime": 0,
+ *       "enable": true,
+ *       "tgId": 0,
+ *       "group": "",
+ *       "comment": "",
+ *       "reset": 0,
+ *       "resetDay": 0,
+ *       "resetMax": 0,
+ *       "trafficReset": "never",
+ *       "trafficResetDay": 1,
+ *       "createdAt": 1787759859421,
+ *       "updatedAt": 1787759859000,
+ *       "reverse": null
+ *     },
+ *     "externalLinks": [],
+ *     "inboundIds": [
+ *       2
+ *     ],
+ *     "tunnelAllowedIPs": {},
+ *     "usedTraffic": 29476591186
+ *   }
+ * }
+ *
+ */
+
+struct jsonFetchClientByEmailObjectClientObjectStruct {
+    int64_t id;
+    const char* email;
+    const char* subId;
+    const char* uuid;
+    const char* password;
+    const char* auth;
+    const char* flow;
+    const char* security;
+    const char* privateKey;
+    const char* publicKey;
+    const char* allowedIPs;
+    const char* preSharedKey;
+    int keepAlive;
+    const char* forwardedPorts;
+    const char* secret;
+    const char* adTag;
+    int limitIp;
+    int limitHwid;
+    int totalGB;
+    int64_t expiryTime;
+    unsigned char enable;
+    int64_t tgId;
+    const char* group;
+    const char* comment;
+    int reset;
+    int resetDay;
+    int resetMax;
+    const char* trafficReset;
+    int trafficResetDay;
+    int64_t createdAt;
+    int64_t updatedAt;
+    void* reverse; // This shall be null on normal ( not customized  ) setup
+
+};
+
+struct jsonFetchClientByEmailObjectExternalLinksArrayStruct {
+    // what this returns is unknwon
+
+};
+
+struct jsonFetchClientByEmailObjectStruct {
+    struct jsonFetchClientByEmailObjectClientObjectStruct* fetchCliByEmailObjCliObjStruct;
+    struct jsonFetchClientByEmailObjectExternalLinksArrayStruct* fetchCliByEmailObjExternalLinksArrStruct;
+    int* inboundIds;
+    const char* tunnelAllowedIPs;
+    int64_t usedTraffic;
+
+};
+
+struct jsonFetchClientByEmailStruct {
+    unsigned char success;
+    const char* msg;
+    struct jsonFetchClientByEmailObjectStruct* fetchCliByEmailObjStruct;
+
+};
+
+// =====================================================
+// Fetch details of one client by telegram id
+// =====================================================
+
+// TODO: complete this on writing ( and testing  ) the add client post structure
 
 #endif
 
