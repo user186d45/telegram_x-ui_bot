@@ -451,7 +451,7 @@ struct jsonListEveryClientArrayStruct {
     const char*                 secret;
     const char*                 adTag;
     int64_t                     limitIp;
-    int64_t                     limitHwid;
+    int                         limitHwid;
     int64_t                     totalGB;
     int64_t                     expiryTime;
     const unsigned char         enable;
@@ -483,22 +483,22 @@ struct jsonListEveryClientStruct {
 // and response fields
 // =====================================================
 struct jsonFilterClientsPostStruct {
-    int page;
-    int pageSize;
-    char* search;
-    char* filter;
-    char* protocol;
-    char* sort;
-    char* order;
+    int                         page;
+    int                         pageSize;
+    char*                       search;
+    char*                       filter;
+    char*                       protocol;
+    char*                       sort;
+    char*                       order;
 
 };
 
 struct jsonFilterClientsObjectResponseStruct {
     struct jsonFilterClientsObjectItemsArrayResponseStruct* filterCliObjItemsArrStruct;
-    int64_t total;
-    int64_t filtered;
+    int64_t                     total;
+    int64_t                     filtered;
     int page;
-    unsigned short pageSize;
+    unsigned short              pageSize;
     struct jsonFilterClientsObjectSummaryObjectResponseStruct* filterCliObjSummaryObjRStruct; // Summary
     struct jsonFilterClientsObjectDepletedArrayResponseStruct* filterCliObjDepletedArrRStruct; // Depleted
     struct jsonFilterClientsObjectExpiringArrayResponseStruct* filterCliObjExpiringArrRStruct; // Expiring
@@ -512,8 +512,8 @@ struct jsonFilterClientsGroupObjectResponseStruct {
 };
 
 struct jsonFilterClientsResponseStruct {
-    unsigned char success;
-    const char* msg;
+    unsigned char               success;
+    const char*                 msg;
     struct jsonFilterClientsObjectResponseStruct* filterCliObjRStruct;
     struct jsonFilterClientsGroupObjectResponseStruct* filterCliGroupObjRStruct;
 
@@ -525,7 +525,7 @@ struct jsonFilterClientsResponseStruct {
 
 /*
  * The response of the server to fetching by email request is not accurately
- * provided at the original documentaion thus it will be introduced here:
+ * provided at the original documentation thus it will be introduced here:
  * {
  *   "success": true,
  *   "msg": "",
@@ -576,38 +576,38 @@ struct jsonFilterClientsResponseStruct {
  */
 
 struct jsonFetchClientByEmailObjectClientObjectStruct {
-    int64_t id;
-    const char* email;
-    const char* subId;
-    const char* uuid;
-    const char* password;
-    const char* auth;
-    const char* flow;
-    const char* security;
-    const char* privateKey;
-    const char* publicKey;
-    const char* allowedIPs;
-    const char* preSharedKey;
-    int keepAlive;
-    const char* forwardedPorts;
-    const char* secret;
-    const char* adTag;
-    int limitIp;
-    int limitHwid;
-    int totalGB;
-    int64_t expiryTime;
-    unsigned char enable;
-    int64_t tgId;
-    const char* group;
-    const char* comment;
-    int reset;
-    int resetDay;
-    int resetMax;
-    const char* trafficReset;
-    int trafficResetDay;
-    int64_t createdAt;
-    int64_t updatedAt;
-    void* reverse; // This shall be null on normal ( not customized  ) setup
+    int64_t                     id;
+    const char*                 email;
+    const char*                 subId;
+    const char*                 uuid;
+    const char*                 password;
+    const char*                 auth;
+    const char*                 flow;
+    const char*                 security;
+    const char*                 privateKey;
+    const char*                 publicKey;
+    const char*                 allowedIPs;
+    const char*                 preSharedKey;
+    int                         keepAlive;
+    const char*                 forwardedPorts;
+    const char*                 secret;
+    const char*                 adTag;
+    int                         limitIp;
+    int                         limitHwid;
+    int                         totalGB;
+    int64_t                     expiryTime;
+    unsigned char               enable;
+    int64_t                     tgId;
+    const char*                 group;
+    const char*                 comment;
+    int                         reset;
+    int                         resetDay;
+    int                         resetMax;
+    const char*                 trafficReset;
+    int                         trafficResetDay;
+    int64_t                     createdAt;
+    int64_t                     updatedAt;
+    void*                       reverse; // This shall be null on normal ( not customized  ) setup
 
 };
 
@@ -619,15 +619,15 @@ struct jsonFetchClientByEmailObjectExternalLinksArrayStruct {
 struct jsonFetchClientByEmailObjectStruct {
     struct jsonFetchClientByEmailObjectClientObjectStruct* fetchCliByEmailObjCliObjStruct;
     struct jsonFetchClientByEmailObjectExternalLinksArrayStruct* fetchCliByEmailObjExternalLinksArrStruct;
-    int* inboundIds;
-    const char* tunnelAllowedIPs;
-    int64_t usedTraffic;
+    int*                        inboundIds;
+    const char*                 tunnelAllowedIPs;
+    int64_t                     usedTraffic;
 
 };
 
 struct jsonFetchClientByEmailStruct {
-    unsigned char success;
-    const char* msg;
+    unsigned char               success;
+    const char*                 msg;
     struct jsonFetchClientByEmailObjectStruct* fetchCliByEmailObjStruct;
 
 };
@@ -636,7 +636,385 @@ struct jsonFetchClientByEmailStruct {
 // Fetch details of one client by telegram id
 // =====================================================
 
-// TODO: complete this on writing ( and testing  ) the add client post structure
+/*
+ * The response of the server to fetching by telegram id request is not accurately
+ * provided at the original documentation thus it will be introduced here:
+ *
+ * {
+ *   "success": true,
+ *   "msg": "",
+ *   "obj": [
+ *     {
+ *       "client": {
+ *         "id": 9,
+ *         "email": "lsadfasdfsad",
+ *         "subId": "fb6b5716-c72e-4be8-b6b6-ca6fe720ba1a",
+ *         "uuid": "68160944-c655-4c0f-962b-4a967af345c3",
+ *         "password": "",
+ *         "auth": "",
+ *         "flow": "",
+ *         "security": "",
+ *         "privateKey": "",
+ *         "publicKey": "",
+ *         "allowedIPs": "",
+ *         "preSharedKey": "",
+ *         "keepAlive": 0,
+ *         "forwardedPorts": "",
+ *         "secret": "",
+ *         "adTag": "",
+ *         "limitIp": 2,
+ *         "limitHwid": 2,
+ *         "totalGB": 1,
+ *         "expiryTime": 0,
+ *         "enable": true,
+ *         "tgId": 113146749,
+ *         "group": "",
+ *         "comment": "",
+ *         "reset": 0,
+ *         "resetDay": 0,
+ *         "resetMax": 0,
+ *         "trafficReset": "never",
+ *         "trafficResetDay": 1,
+ *         "createdAt": 1788440886056,
+ *         "updatedAt": 1788440886000,
+ *         "reverse": null
+ *       },
+ *       "externalLinks": [],
+ *       "inboundIds": [
+ *         2
+ *       ],
+ *       "tunnelAllowedIPs": {},
+ *       "usedTraffic": 0
+ *     }
+ *   ]
+ * }
+ *
+ */
+
+struct jsonFetchClientByTelegramIdObjectArrayClientObjectStruct {
+    int64_t                     id;
+    const char*                 email;
+    const char*                 subId;
+    const char*                 uuid;
+    const char*                 password;
+    const char*                 auth;
+    const char*                 flow;
+    const char*                 security;
+    const char*                 privateKey;
+    const char*                 publicKey;
+    const char*                 allowedIPs;
+    const char*                 preSharedKey;
+    int                         keepAlive;
+    const char*                 forwardedPorts;
+    const char*                 secret;
+    const char*                 adTag;
+    int                         limitIp;
+    int                         limitHwid;
+    int                         totalGB;
+    int64_t                     expiryTime;
+    unsigned char               enable;
+    int64_t                     tgId;
+    const char*                 group;
+    const char*                 comment;
+    int                         reset;
+    int                         resetDay;
+    int                         resetMax;
+    const char*                 trafficReset;
+    int                         trafficResetDay;
+    int64_t                     createdAt;
+    int64_t                     updatedAt;
+    void*                       reverse; // This shall be null on normal ( not customized  ) setup
+
+};
+
+struct jsonFetchClientByTelegramIdObjectArrayStruct {
+    struct jsonFetchClientByTelegramIdObjectArrayClientObjectStruct* fetchCliByTgIdObjArrCliObjStruct;
+    struct jsonFetchClientByTelegramIdObjectArrayExternalLinksArrayStruct* fetchCliByTgIArrdObjExternalLinksArrStruct;
+    int*                        inboundIds;
+    const char*                 tunnelAllowedIPs;
+    int64_t                     usedTraffic;
+
+};
+
+struct jsonFetchClientByTelegramIdStruct {
+    unsigned char success;
+    const char* msg;
+    struct jsonFetchClientByTelegramIdObjectArrayStruct** fetchCliByTgIdObjArrStruct;
+
+};
+
+// =====================================================
+// Create new client and attach it to one or more 
+// inbounds post and response structs
+// =====================================================
+struct jsonCreateNewClientPostStruct {
+    const char*                 emaill;
+    int64_t                     totalGB; // Albeit named totalGB, its the total traffic of the user in BYTES
+    int64_t                     expiryTime;
+    int64_t                     tgId;
+    int                         limitIp;
+    int                         limitHwid;
+    unsigned char               enable;
+    int*                        inboundIds;
+
+};
+
+struct jsonCreateNewClientResponseStruct {
+    unsigned char success;
+    const char* msg;
+    void* obj; // This shall be null on normal ( not customized  ) setup
+
+};
+
+// =====================================================
+// Update an existing client by email post and response
+// structs
+// =====================================================
+
+// The sample provided by the official documentation, lacks
+// some of the fields used at the client creation process,
+// i have tested the server behavior on including those fields
+// and it did just fine!
+
+struct jsonUpdateClientByEmailPostStruct {
+    const char*                 emaill;
+    int64_t                     totalGB; // Albeit named totalGB, its the total traffic of the user in BYTES
+    int64_t                     expiryTime;
+    int64_t                     tgId;
+    int                         limitIp;
+    int                         limitHwid;
+    unsigned char               enable;
+    int*                        inboundIds;
+
+};
+
+struct jsonUpdateClientByEmailResponseStruct {
+    unsigned char               success;
+    const char*                 msg;
+    void*                       obj; // This shall be null on normal ( not customized  ) setup
+
+};
+
+// =====================================================
+// Delete a client by email response struct
+// =====================================================
+struct jsonDeleteClientByEmailResponseStruct {
+    unsigned char               success;
+    const char*                 msg;
+    void*                       obj; // This shall be null on normal ( not customized  ) setup
+
+};
+
+// =====================================================
+// Attach existing client to one or more additional
+// inbounds post and response structs
+// =====================================================
+struct jsonAttachClient2AdditionalInboundsPostStruct {
+    int*                        inboundIds;
+
+};
+
+struct jsonAttachClient2AdditionalInboundsResponseStruct {
+    unsigned char               success;
+    const char*                 msg;
+    void*                       obj; // This shall be null on normal ( not customized  ) setup
+
+};
+
+// =====================================================
+// Detach existing client to one or more additional
+// inbounds post and response structs
+// =====================================================
+struct jsonDetachClient2AdditionalInboundsPostStruct {
+    int*                        inboundIds;
+
+};
+
+struct jsonDetachClient2AdditionalInboundsResponseStruct {
+    unsigned char               success;
+    const char*                 msg;
+    void*                       obj; // This shall be null on normal ( not customized  ) setup
+
+};
+
+// =====================================================
+// Delete all clients whom have exhausted quotas or
+// their configurations have passed their expiry dates
+// response struct
+// =====================================================
+struct jsonDeleteAllDepletedClientsResponseStruct {
+    unsigned char*              success;
+    int64_t                     deleted;
+
+};
+
+// =====================================================
+// Delete all orphan clients ( clients whom are not
+// attached to any inbound )
+// =====================================================
+struct jsonDeleteAllOrphanClientsResponseStruct {
+    unsigned char*              success;
+    int64_t                     deleted;
+
+};
+
+// =====================================================
+// Export all clients response struct
+// =====================================================
+
+/*
+ * The response of the server to exporting request is not accurately
+ * provided at the original documentation thus it will be introduced here:
+ *
+ * {
+ *   "success": true,
+ *   "msg": "",
+ *   "obj": [
+ *     {
+ *       "client": {
+ *         "id": "5df6c2f8-912f-4d56-a3d7-dfa984f79c47",
+ *         "security": "auto",
+ *         "password": "pbh36tewkda4tkx6",
+ *         "auth": "789huvsbv650n50t",
+ *         "email": "8h8uc11km3",
+ *         "limitIp": 0,
+ *         "totalGB": 0,
+ *         "expiryTime": 0,
+ *         "enable": true,
+ *         "tgId": 0,
+ *         "subId": "bjkv8azacpmwjpvx",
+ *         "comment": "",
+ *         "reset": 0,
+ *         "resetDay": 0,
+ *         "resetMax": 0,
+ *         "trafficReset": "never",
+ *         "trafficResetDay": 1,
+ *         "created_at": 1787759859421,
+ *         "updated_at": 1787759859000,
+ *         "limitHwid": 0
+ *       },
+ *       "inboundIds": [
+ *         2
+ *       ]
+ *     },
+ *     {
+ *       "client": {
+ *         "id": "02664c02-078f-4e30-a770-1b27e2c14b7a",
+ *         "security": "",
+ *         "email": "lsadfasdfsad",
+ *         "limitIp": 2,
+ *         "totalGB": 1,
+ *         "expiryTime": 0,
+ *         "enable": true,
+ *         "tgId": 113146749,
+ *         "subId": "0f2a77b9-f38e-416d-867b-30552b374015",
+ *         "comment": "",
+ *         "reset": 0,
+ *         "resetDay": 0,
+ *         "resetMax": 0,
+ *         "trafficReset": "never",
+ *         "trafficResetDay": 1,
+ *         "created_at": 1788464936550,
+ *         "updated_at": 1788465104000,
+ *         "limitHwid": 2
+ *       },
+ *       "inboundIds": [
+ *         2,
+ *         3
+ *       ]
+ *     }
+ *   ]
+ * }
+ *
+ */
+
+struct jsonExportAllClientsObjectArrayClientObjectResponseStruct {
+    const char*                 id;
+    const char*                 security;
+    const char*                 password;
+    const char*                 auth;
+    const char*                 email;
+    int                         limitIp;
+    int                         totalGB;
+    int64_t                     expiryTime;
+    unsigned char               enable;
+    int64_t                     tgId;
+    const char*                 subId;
+    const char*                 comment;
+    int                         reset;
+    int                         resetDay;
+    int                         resetMax;
+    const char*                 trafficReset;
+    int                         trafficResetDay;
+    int64_t                     createdAt; // "created_at" on server side
+    int64_t                     updatedAt; // "updated_at" on server side
+    int                         limitHwid;
+
+};
+
+struct jsonExportAllClientsObjectArrayResponseStruct {
+    struct jsonExportAllClientsObjectArrayClientObjectResponseStruct* exportAllCliObjArrCliObjRStruct;
+    int* inboundIds;
+
+};
+
+struct jsonExportAllClientsResponseStruct {
+    unsigned char success;
+    const char* msg;
+    struct jsonExportAllClientsObjectArrayResponseStruct* exportAllClisObjArrRStruct;
+
+};
+
+// =====================================================
+// Import clients post and response structs
+// =====================================================
+struct jsonImportClientsDataObjectPostStruct {
+    const char*                 id;
+    const char*                 security;
+    const char*                 password;
+    const char*                 auth;
+    const char*                 email;
+    int                         limitIp;
+    int                         totalGB;
+    int64_t                     expiryTime;
+    unsigned char               enable;
+    int64_t                     tgId;
+    const char*                 subId;
+    const char*                 comment;
+    int                         reset;
+    int                         resetDay;
+    int                         resetMax;
+    const char*                 trafficReset;
+    int                         trafficResetDay;
+    int64_t                     createdAt; // "created_at" on server side
+    int64_t                     updatedAt; // "updated_at" on server side
+    int                         limitHwid;
+
+};
+
+struct jsonImportClientsPostStruct {
+    struct jsonImportClientsDataObjectPostStruct** importClientsDataObjPStruct;
+
+};
+
+struct jsonImportClientsObjectSkippedArrayResponseStruct {
+    const char* email;
+    const char* reason;
+
+};
+
+struct jsonImportClientsObjectResponseStruct {
+    int64_t created;
+    struct jsonImportClientsObjectSkippedArrayResponseStruct* importClisObjSkippedArrRStruct; // skipped array
+
+};
+
+struct jsonImportClientsResponseStruct {
+    unsigned char success;
+    const char* msg;
+    struct jsonImportClientsObjectResponseStruct* importClisObjRStruct;
+
+};
 
 #endif
 
