@@ -11,7 +11,7 @@
 static sqlite3* userDb = NULL;
 
 unsigned char createCheckDb() {
-    DBG(INFO, "Function called");
+    DBG(LOG_INFO, "Function called");
     const char* tableCreate = "CREATE TABLE IF NOT EXISTS ( "
                               "userId INTEGER PRIMARY KEY, "
                               "balance INTEGER NOT NULL DEFAULT 0, "
@@ -27,7 +27,7 @@ unsigned char createCheckDb() {
         return 0;
 
     }
-    DBG(INFO, "Open database success");
+    DBG(LOG_INFO, "Open database success");
 
     char* errMsg = NULL;
     rc = sqlite3_exec(userDb, tableCreate, NULL, NULL, &errMsg);
@@ -40,7 +40,7 @@ unsigned char createCheckDb() {
         return 0;
 
     }
-    DBG(INFO, "Execute tableCreate sql success");
+    DBG(LOG_INFO, "Execute tableCreate sql success");
 
     sqlite3_free(errMsg);
     rc = sqlite3_close(userDb);
@@ -50,14 +50,14 @@ unsigned char createCheckDb() {
         return 0;
 
     }
-    DBG(INFO, "Close databsae success");
+    DBG(LOG_INFO, "Close databsae success");
 
     return 1;
 
 }
 
 unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
-    DBG(INFO, "Function called");
+    DBG(LOG_INFO, "Function called");
 
     int rc = sqlite3_open("user.db", &userDb);
     if (rc != SQLITE_OK) {
@@ -66,7 +66,7 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
         return 0;
 
     }
-    DBG(INFO, "Open database success");
+    DBG(LOG_INFO, "Open database success");
 
     const char* insertSql = NULL;
     switch (uDataRWSql) {
@@ -121,7 +121,7 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
     }
 
     if (insertSql == NULL) {
-        applicationLog(ERROR, __PRETTY_FUNCTION__, "Insert SQL is NULL");
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Insert SQL is NULL");
 
         sqlite3_close(userDb);
 
@@ -135,7 +135,7 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
         sqlErrorMsg("Cannot prepare the statement", userDb, rc);
         sqlite3_close(userDb);
     }
-    DBG(INFO, "Prepare statement success");
+    DBG(LOG_INFO, "Prepare statement success");
 
     switch (uDataRWSql) {
         case userDataRWSql_ALL:
@@ -184,7 +184,7 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
         return 0;
 
     }
-    DBG(INFO, "Step statement success");
+    DBG(LOG_INFO, "Step statement success");
 
     sqlite3_finalize(stmt);
     rc = sqlite3_close(userDb);
@@ -194,14 +194,14 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
         return 0;
 
     }
-    DBG(INFO, "Close databsae success");
+    DBG(LOG_INFO, "Close databsae success");
 
     return 1;
 
 }
 
 unsigned char readUserData(enum userDataRWSql uDataRWSql) {
-    DBG(INFO, "Function called");
+    DBG(LOG_INFO, "Function called");
 
     int rc = sqlite3_open("user.db", &userDb);
     if (rc != SQLITE_OK) {
@@ -210,7 +210,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
         return 0;
 
     }
-    DBG(INFO, "Open database success");
+    DBG(LOG_INFO, "Open database success");
 
     const char* readSql = NULL;
     switch (uDataRWSql) {
@@ -242,7 +242,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
     }
 
     if (readSql == NULL) {
-        applicationLog(ERROR, __PRETTY_FUNCTION__, "Read SQL is NULL");
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Read SQL is NULL");
 
         sqlite3_close(userDb);
 
@@ -256,7 +256,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
         sqlErrorMsg("Cannot prepare the statement", userDb, rc);
         sqlite3_close(userDb);
     }
-    DBG(INFO, "Prepare statement success");
+    DBG(LOG_INFO, "Prepare statement success");
 
     const char* readDataFieldName = NULL;
     switch (uDataRWSql) {
@@ -331,7 +331,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
             uInfo->hasJoined = sqlite3_column_int(stmt, 2);
             uInfo->banned = sqlite3_column_int(stmt, 3);
 
-            DBG(INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
+            DBG(LOG_INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
                 readDataFieldName,
                 uInfo->userId,
                 uInfo->balance,
@@ -354,7 +354,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
                 return 0;
 
             }
-            DBG(INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
+            DBG(LOG_INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
                 readDataFieldName,
                 uInfo->userId,
                 uInfo->balance,
@@ -379,7 +379,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
                 return 0;
 
             }
-            DBG(INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
+            DBG(LOG_INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
                 readDataFieldName,
                 uInfo->userId,
                 uInfo->balance,
@@ -404,7 +404,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
                 return 0;
 
             }
-            DBG(INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
+            DBG(LOG_INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
                 readDataFieldName,
                 uInfo->userId,
                 uInfo->balance,
@@ -429,7 +429,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
                 return 0;
 
             }
-            DBG(INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
+            DBG(LOG_INFO, "User data updated, updated the %s field(s): userId = %" PRId64 " balance = %d, phoneNumber = %s, hasJoined = %d, banned = %d",
                 readDataFieldName,
                 uInfo->userId,
                 uInfo->balance,
@@ -452,7 +452,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
         return 0;
 
     }
-    DBG(INFO, "Close databsae success");
+    DBG(LOG_INFO, "Close databsae success");
 
     return 1;
 
@@ -463,7 +463,7 @@ static void sqlErrorMsg(const char* msg, sqlite3* db, int rc) {
 
     char b[1024];
     snprintf(b, sizeof(b), "%s: rc = %i, sqlite3_errmsg = %s", msg, rc, dbMessage);
-    applicationLog(ERROR, __PRETTY_FUNCTION__, (const char*)&b);
+    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, (const char*)&b);
 
 }
 

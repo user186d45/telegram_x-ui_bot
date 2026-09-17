@@ -99,7 +99,7 @@ struct jsonListInboundObjectStruct {
 struct jsonListInboundStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonListInboundObjectStruct** listInObjStruct;
+    struct jsonListInboundObjectStruct* listInObjStruct;
 
 };
 
@@ -343,7 +343,7 @@ struct jsonRemoveEveryClientFromInboundResponseStruct {
 // Reset upload and download of all inbounds response
 // struct
 // =====================================================
-struct jsonResetAllInboundsUploadNDownload {
+struct jsonResetAllInboundsUploadNDownloadStruct {
     unsigned char               success;
     const char*                 msg;
     void*                       obj; // This shall be null on success
@@ -3687,6 +3687,222 @@ struct jsonDeleteSubBalancerResponseStruct {
 
 };
 
+
+// =====================================================
+// Parser / serializer declarations for the top-level
+// structs above. Structs nested inside a parent ( a
+// pointer declared in the parent's body ) have no
+// declaration of their own: the parent's parser handles
+// them. Post structs serialize to JSON; everything else
+// parses from JSON
+// =====================================================
+static unsigned char isJsonValid(const char* json);
+
+struct jsonListInboundClientStatsArrayStruct*      jsonListInboundClientStatsArray(const char* json);
+struct jsonListInboundStruct*                      jsonListInbound(const char* json);
+struct jsonListInboundSlimStruct*                  jsonListInboundSlim(const char* json);
+struct jsonListInboundOptionsStruct*               jsonListInboundOptions(const char* json);
+const char*                                        jsonAddInboundPost(struct jsonAddInboundPostStruct* addInboundPostStruct);
+struct jsonAddInboundResponseStruct*               jsonAddInboundResponse(const char* json);
+const char*                                        jsonDeleteSingleInboundPost(struct jsonDeleteSingleInboundPostStruct* deleteSingleInboundPostStruct);
+struct jsonDeleteSingleInboundResponseStruct*      jsonDeleteSingleInboundResponse(const char* json);
+const char*                                        jsonDeleteMultipleInboundsPost(struct jsonDeleteMultipleInboundsPostStruct* deleteMultipleInboundsPostStruct);
+struct jsonDeleteMultipleInboundResponseStruct*    jsonDeleteMultipleInboundResponse(const char* json);
+const char*                                        jsonSetEnableInboundPost(struct jsonSetEnableInboundPostStruct* setEnableInboundPostStruct);
+struct jsonSetEnableInboundResponseStruct*         jsonSetEnableInboundResponse(const char* json);
+const char*                                        jsonResetInboundPost(struct jsonResetInboundPostStruct* resetInboundPostStruct);
+struct jsonResetInboundResponseStruct*             jsonResetInboundResponse(const char* json);
+const char*                                        jsonRemoveEveryClientFromInboundPost(struct jsonRemoveEveryClientFromInboundPostStruct* removeEveryClientFromInboundPostStruct);
+struct jsonRemoveEveryClientFromInboundResponseStruct* jsonRemoveEveryClientFromInboundResponse(const char* json);
+struct jsonResetAllInboundsUploadNDownloadStruct*  jsonResetAllInboundsUploadNDownload(const char* json);
+const char*                                        jsonImportInboundsPost(struct jsonImportInboundsPostStruct* importInboundsPostStruct);
+struct jsonImportInboundsResponseStruct*           jsonImportInboundsResponse(const char* json);
+struct jsonListEveryClientStruct*                  jsonListEveryClient(const char* json);
+struct jsonFilterClientsQueryStruct*               jsonFilterClientsQuery(const char* json);
+struct jsonFilterClientsResponseStruct*            jsonFilterClientsResponse(const char* json);
+struct jsonFetchClientByEmailStruct*               jsonFetchClientByEmail(const char* json);
+struct jsonFetchClientByTelegramIdStruct*          jsonFetchClientByTelegramId(const char* json);
+const char*                                        jsonCreateNewClientPost(struct jsonCreateNewClientPostStruct* createNewClientPostStruct);
+struct jsonCreateNewClientResponseStruct*          jsonCreateNewClientResponse(const char* json);
+const char*                                        jsonUpdateClientByEmailPost(struct jsonUpdateClientByEmailPostStruct* updateClientByEmailPostStruct);
+struct jsonUpdateClientByEmailResponseStruct*      jsonUpdateClientByEmailResponse(const char* json);
+struct jsonDeleteClientByEmailResponseStruct*      jsonDeleteClientByEmailResponse(const char* json);
+const char*                                        jsonAttachClient2AdditionalInboundsPost(struct jsonAttachClient2AdditionalInboundsPostStruct* attachClient2AdditionalInboundsPostStruct);
+struct jsonAttachClient2AdditionalInboundsResponseStruct* jsonAttachClient2AdditionalInboundsResponse(const char* json);
+const char*                                        jsonDetachClient2AdditionalInboundsPost(struct jsonDetachClient2AdditionalInboundsPostStruct* detachClient2AdditionalInboundsPostStruct);
+struct jsonDetachClient2AdditionalInboundsResponseStruct* jsonDetachClient2AdditionalInboundsResponse(const char* json);
+const char*                                        jsonReplaceClientExternalLinksPost(struct jsonReplaceClientExternalLinksPostStruct* replaceClientExternalLinksPostStruct);
+struct jsonReplaceClientExternalLinksResponseStruct* jsonReplaceClientExternalLinksResponse(const char* json);
+struct jsonResetAllClientsTrafficsResponseStruct*  jsonResetAllClientsTrafficsResponse(const char* json);
+struct jsonDeleteAllDepletedClientsResponseStruct* jsonDeleteAllDepletedClientsResponse(const char* json);
+struct jsonDeleteAllOrphanClientsResponseStruct*   jsonDeleteAllOrphanClientsResponse(const char* json);
+struct jsonExportAllClientsResponseStruct*         jsonExportAllClientsResponse(const char* json);
+const char*                                        jsonImportClientsPost(struct jsonImportClientsPostStruct* importClientsPostStruct);
+struct jsonImportClientsResponseStruct*            jsonImportClientsResponse(const char* json);
+const char*                                        jsonBulkAdjustClientsPost(struct jsonBulkAdjustClientsPostStruct* bulkAdjustClientsPostStruct);
+struct jsonBulkAdjustClientsResponseStruct*        jsonBulkAdjustClientsResponse(const char* json);
+const char*                                        jsonBulkEnableClientsPost(struct jsonBulkEnableClientsPostStruct* bulkEnableClientsPostStruct);
+struct jsonBulkEnableClientsResponseStruct*        jsonBulkEnableClientsResponse(const char* json);
+const char*                                        jsonBulkDisableClientsPost(struct jsonBulkDisableClientsPostStruct* bulkDisableClientsPostStruct);
+struct jsonBulkDisableClientsResponseStruct*       jsonBulkDisableClientsResponse(const char* json);
+const char*                                        jsonBulkDeleteClientsPost(struct jsonBulkDeleteClientsPostStruct* bulkDeleteClientsPostStruct);
+struct jsonBulkDeleteClientsResponseStruct*        jsonBulkDeleteClientsResponse(const char* json);
+const char*                                        jsonBulkCreateClientsPost(struct jsonBulkCreateClientsPostStruct* bulkCreateClientsPostStruct);
+struct jsonBulkCreateClientsResponseStruct*        jsonBulkCreateClientsResponse(const char* json);
+const char*                                        jsonBulkAddClients2GroupPost(struct jsonBulkAddClients2GroupPostStruct* bulkAddClients2GroupPostStruct);
+struct jsonBulkAddClients2GroupResponseStruct*     jsonBulkAddClients2GroupResponse(const char* json);
+const char*                                        jsonBulkRemoveClientsGroupPost(struct jsonBulkRemoveClientsGroupPostStruct* bulkRemoveClientsGroupPostStruct);
+struct jsonBulkRemoveClientsGroupResponseStruct*   jsonBulkRemoveClientsGroupResponse(const char* json);
+const char*                                        jsonBulkAttachClientsPost(struct jsonBulkAttachClientsPostStruct* bulkAttachClientsPostStruct);
+struct jsonBulkAttachClientsResponseStruct*        jsonBulkAttachClientsResponse(const char* json);
+const char*                                        jsonBulkDetachClientsPost(struct jsonBulkDetachClientsPostStruct* bulkDetachClientsPostStruct);
+struct jsonBulkDetachClientsResponseStruct*        jsonBulkDetachClientsResponse(const char* json);
+const char*                                        jsonBulkResetTrafficPost(struct jsonBulkResetTrafficPostStruct* bulkResetTrafficPostStruct);
+struct jsonBulkResetTrafficResponseStruct*         jsonBulkResetTrafficResponse(const char* json);
+struct jsonListGroupsResponseStruct*               jsonListGroupsResponse(const char* json);
+struct jsonListGroupEmailsResponseStruct*          jsonListGroupEmailsResponse(const char* json);
+const char*                                        jsonCreateGroupPost(struct jsonCreateGroupPostStruct* createGroupPostStruct);
+struct jsonCreateGroupResponseStruct*              jsonCreateGroupResponse(const char* json);
+const char*                                        jsonRenameGroupPost(struct jsonRenameGroupPostStruct* renameGroupPostStruct);
+struct jsonRenameGroupResponseStruct*              jsonRenameGroupResponse(const char* json);
+const char*                                        jsonDeleteGroupPost(struct jsonDeleteGroupPostStruct* deleteGroupPostStruct);
+struct jsonDeleteGroupResponseStruct*              jsonDeleteGroupResponse(const char* json);
+const char*                                        jsonResetGroupTrafficPost(struct jsonResetGroupTrafficPostStruct* resetGroupTrafficPostStruct);
+struct jsonResetGroupTrafficResponseStruct*        jsonResetGroupTrafficResponse(const char* json);
+struct jsonResetClientTrafficResponseStruct*       jsonResetClientTrafficResponse(const char* json);
+const char*                                        jsonUpdateClientTrafficPost(struct jsonUpdateClientTrafficPostStruct* updateClientTrafficPostStruct);
+struct jsonUpdateClientTrafficResponseStruct*      jsonUpdateClientTrafficResponse(const char* json);
+struct jsonListClientIpsResponseStruct*            jsonListClientIpsResponse(const char* json);
+struct jsonClearClientIpsResponseStruct*           jsonClearClientIpsResponse(const char* json);
+struct jsonListClientHwidsResponseStruct*          jsonListClientHwidsResponse(const char* json);
+struct jsonClearClientHwidsResponseStruct*         jsonClearClientHwidsResponse(const char* json);
+struct jsonDeleteClientHwidResponseStruct*         jsonDeleteClientHwidResponse(const char* json);
+struct jsonOnlinesResponseStruct*                  jsonOnlinesResponse(const char* json);
+struct jsonOnlinesByGuidResponseStruct*            jsonOnlinesByGuidResponse(const char* json);
+struct jsonClientIpsByGuidResponseStruct*          jsonClientIpsByGuidResponse(const char* json);
+struct jsonActiveInboundsResponseStruct*           jsonActiveInboundsResponse(const char* json);
+struct jsonLastOnlineResponseStruct*               jsonLastOnlineResponse(const char* json);
+struct jsonTrafficResponseStruct*                  jsonTrafficResponse(const char* json);
+struct jsonSubLinksResponseStruct*                 jsonSubLinksResponse(const char* json);
+struct jsonLinksResponseStruct*                    jsonLinksResponse(const char* json);
+struct jsonOpenApiResponseStruct*                  jsonOpenApiResponse(const char* json);
+struct jsonServerStatusResponseStruct*             jsonServerStatusResponse(const char* json);
+struct jsonServerFail2banStatusResponseStruct*     jsonServerFail2banStatusResponse(const char* json);
+struct jsonServerCpuHistoryResponseStruct*         jsonServerCpuHistoryResponse(const char* json);
+struct jsonServerHistoryResponseStruct*            jsonServerHistoryResponse(const char* json);
+struct jsonServerXrayMetricsStateResponseStruct*   jsonServerXrayMetricsStateResponse(const char* json);
+struct jsonServerXrayMetricsHistoryResponseStruct* jsonServerXrayMetricsHistoryResponse(const char* json);
+struct jsonServerXrayObservatoryResponseStruct*    jsonServerXrayObservatoryResponse(const char* json);
+struct jsonServerXrayObservatoryHistoryResponseStruct* jsonServerXrayObservatoryHistoryResponse(const char* json);
+struct jsonServerGetXrayVersionResponseStruct*     jsonServerGetXrayVersionResponse(const char* json);
+struct jsonServerGetPanelUpdateInfoResponseStruct* jsonServerGetPanelUpdateInfoResponse(const char* json);
+struct jsonServerGetUpdateStatusResponseStruct*    jsonServerGetUpdateStatusResponse(const char* json);
+struct jsonServerGetConfigJsonResponseStruct*      jsonServerGetConfigJsonResponse(const char* json);
+struct jsonServerGetDbResponseStruct*              jsonServerGetDbResponse(const char* json);
+struct jsonServerGetMigrationResponseStruct*       jsonServerGetMigrationResponse(const char* json);
+struct jsonServerGetNewUUIDResponseStruct*         jsonServerGetNewUUIDResponse(const char* json);
+struct jsonServerGetWebCertFilesResponseStruct*    jsonServerGetWebCertFilesResponse(const char* json);
+struct jsonServerDescendantsResponseStruct*        jsonServerDescendantsResponse(const char* json);
+struct jsonServerGetNewX25519CertResponseStruct*   jsonServerGetNewX25519CertResponse(const char* json);
+struct jsonServerGetNewMldsa65ResponseStruct*      jsonServerGetNewMldsa65Response(const char* json);
+struct jsonServerGetNewMlkem768ResponseStruct*     jsonServerGetNewMlkem768Response(const char* json);
+struct jsonServerGetNewVlessEncResponseStruct*     jsonServerGetNewVlessEncResponse(const char* json);
+struct jsonServerStopXrayServiceResponseStruct*    jsonServerStopXrayServiceResponse(const char* json);
+struct jsonServerRestartXrayServiceResponseStruct* jsonServerRestartXrayServiceResponse(const char* json);
+struct jsonServerInstallXrayResponseStruct*        jsonServerInstallXrayResponse(const char* json);
+struct jsonServerUpdatePanelResponseStruct*        jsonServerUpdatePanelResponse(const char* json);
+const char*                                        jsonServerSetUpdateChannelPost(struct jsonServerSetUpdateChannelPostStruct* serverSetUpdateChannelPostStruct);
+struct jsonServerSetUpdateChannelResponseStruct*   jsonServerSetUpdateChannelResponse(const char* json);
+struct jsonServerUpdateGeofileResponseStruct*      jsonServerUpdateGeofileResponse(const char* json);
+struct jsonServerLogsResponseStruct*               jsonServerLogsResponse(const char* json);
+struct jsonServerXrayLogsResponseStruct*           jsonServerXrayLogsResponse(const char* json);
+struct jsonServerAmneziawgLogsResponseStruct*      jsonServerAmneziawgLogsResponse(const char* json);
+struct jsonServerImportDbResponseStruct*           jsonServerImportDbResponse(const char* json);
+const char*                                        jsonServerGetNewEchCertPost(struct jsonServerGetNewEchCertPostStruct* serverGetNewEchCertPostStruct);
+struct jsonServerGetNewEchCertResponseStruct*      jsonServerGetNewEchCertResponse(const char* json);
+const char*                                        jsonServerGetCertHashPost(struct jsonServerGetCertHashPostStruct* serverGetCertHashPostStruct);
+const char*                                        jsonServerGetRemoteCertHashPost(struct jsonServerGetRemoteCertHashPostStruct* serverGetRemoteCertHashPostStruct);
+struct jsonServerGetCertHashResponseStruct*        jsonServerGetCertHashResponse(const char* json);
+struct jsonServerGetRemoteCertHashResponseStruct*  jsonServerGetRemoteCertHashResponse(const char* json);
+const char*                                        jsonServerScanRealityTargetPost(struct jsonServerScanRealityTargetPostStruct* serverScanRealityTargetPostStruct);
+struct jsonServerScanRealityTargetResponseStruct*  jsonServerScanRealityTargetResponse(const char* json);
+const char*                                        jsonServerScanRealityTargetsPost(struct jsonServerScanRealityTargetsPostStruct* serverScanRealityTargetsPostStruct);
+struct jsonServerScanRealityTargetsResponseStruct* jsonServerScanRealityTargetsResponse(const char* json);
+struct jsonServerClientIpsResponseStruct*          jsonServerClientIpsResponse(const char* json);
+const char*                                        jsonServerSubmitClientIpsPost(struct jsonServerSubmitClientIpsPostStruct* serverSubmitClientIpsPostStruct);
+struct jsonServerSubmitClientIpsResponseStruct*    jsonServerSubmitClientIpsResponse(const char* json);
+struct jsonSettingAllResponseStruct*               jsonSettingAllResponse(const char* json);
+struct jsonSettingDefaultSettingsResponseStruct*   jsonSettingDefaultSettingsResponse(const char* json);
+struct jsonSettingFactoryDefaultsResponseStruct*   jsonSettingFactoryDefaultsResponse(const char* json);
+const char*                                        jsonSettingUpdatePost(struct jsonSettingUpdatePostStruct* settingUpdatePostStruct);
+struct jsonSettingUpdateResponseStruct*            jsonSettingUpdateResponse(const char* json);
+const char*                                        jsonSettingValidateRegexPost(struct jsonSettingValidateRegexPostStruct* settingValidateRegexPostStruct);
+struct jsonSettingValidateRegexResponseStruct*     jsonSettingValidateRegexResponse(const char* json);
+const char*                                        jsonSettingApiTokensListPost(struct jsonSettingApiTokensListPostStruct* settingApiTokensListPostStruct);
+const char*                                        jsonSettingApiTokenNewPost(struct jsonSettingApiTokenNewPostStruct* settingApiTokenNewPostStruct);
+struct jsonSettingApiTokenNewResponseStruct*       jsonSettingApiTokenNewResponse(const char* json);
+const char*                                        jsonSettingApiTokenDeletePost(struct jsonSettingApiTokenDeletePostStruct* settingApiTokenDeletePostStruct);
+struct jsonSettingApiTokenDeleteResponseStruct*    jsonSettingApiTokenDeleteResponse(const char* json);
+const char*                                        jsonSettingApiTokenSetDBPost(struct jsonSettingApiTokenSetDBPostStruct* settingApiTokenSetDBPostStruct);
+struct jsonSettingApiTokenSetDBResponseStruct*     jsonSettingApiTokenSetDBResponse(const char* json);
+const char*                                        jsonSettingUpdateUserPost(struct jsonSettingUpdateUserPostStruct* settingUpdateUserPostStruct);
+struct jsonSettingUpdateUserResponseStruct*        jsonSettingUpdateUserResponse(const char* json);
+struct jsonSettingRestartPanelResponseStruct*      jsonSettingRestartPanelResponse(const char* json);
+struct jsonSettingTestSmtpResponseStruct*          jsonSettingTestSmtpResponse(const char* json);
+struct jsonSettingTestTgBotResponseStruct*         jsonSettingTestTgBotResponse(const char* json);
+struct jsonSettingGetDefaultJsonConfigResponseStruct* jsonSettingGetDefaultJsonConfigResponse(const char* json);
+struct jsonXrayConfigResponseStruct*               jsonXrayConfigResponse(const char* json);
+struct jsonXrayGetDefaultJsonConfigResponseStruct* jsonXrayGetDefaultJsonConfigResponse(const char* json);
+struct jsonXrayGetOutboundsTrafficResponseStruct*  jsonXrayGetOutboundsTrafficResponse(const char* json);
+struct jsonXrayGetXrayResultResponseStruct*        jsonXrayGetXrayResultResponse(const char* json);
+const char*                                        jsonXrayUpdatePost(struct jsonXrayUpdatePostStruct* xrayUpdatePostStruct);
+struct jsonXrayUpdateResponseStruct*               jsonXrayUpdateResponse(const char* json);
+const char*                                        jsonXrayWarpPost(struct jsonXrayWarpPostStruct* xrayWarpPostStruct);
+struct jsonXrayWarpResponseStruct*                 jsonXrayWarpResponse(const char* json);
+const char*                                        jsonXrayNordPost(struct jsonXrayNordPostStruct* xrayNordPostStruct);
+struct jsonXrayNordResponseStruct*                 jsonXrayNordResponse(const char* json);
+const char*                                        jsonXrayPiaPost(struct jsonXrayPiaPostStruct* xrayPiaPostStruct);
+struct jsonXrayPiaResponseStruct*                  jsonXrayPiaResponse(const char* json);
+const char*                                        jsonXrayResetOutboundsTrafficPost(struct jsonXrayResetOutboundsTrafficPostStruct* xrayResetOutboundsTrafficPostStruct);
+struct jsonXrayResetOutboundsTrafficResponseStruct* jsonXrayResetOutboundsTrafficResponse(const char* json);
+const char*                                        jsonXrayTestOutboundPost(struct jsonXrayTestOutboundPostStruct* xrayTestOutboundPostStruct);
+struct jsonXrayTestOutboundResponseStruct*         jsonXrayTestOutboundResponse(const char* json);
+const char*                                        jsonXrayTestOutboundsPost(struct jsonXrayTestOutboundsPostStruct* xrayTestOutboundsPostStruct);
+struct jsonXrayTestOutboundsResponseStruct*        jsonXrayTestOutboundsResponse(const char* json);
+const char*                                        jsonXrayBalancerStatusPost(struct jsonXrayBalancerStatusPostStruct* xrayBalancerStatusPostStruct);
+struct jsonXrayBalancerStatusResponseStruct*       jsonXrayBalancerStatusResponse(const char* json);
+const char*                                        jsonXrayBalancerOverridePost(struct jsonXrayBalancerOverridePostStruct* xrayBalancerOverridePostStruct);
+struct jsonXrayBalancerOverrideResponseStruct*     jsonXrayBalancerOverrideResponse(const char* json);
+const char*                                        jsonXrayRouteTestPost(struct jsonXrayRouteTestPostStruct* xrayRouteTestPostStruct);
+struct jsonXrayRouteTestResponseStruct*            jsonXrayRouteTestResponse(const char* json);
+struct jsonXrayGeoDataFilesResponseStruct*         jsonXrayGeoDataFilesResponse(const char* json);
+struct jsonXrayGeoDataCategoriesQueryStruct*       jsonXrayGeoDataCategoriesQuery(const char* json);
+struct jsonXrayGeoDataCategoriesResponseStruct*    jsonXrayGeoDataCategoriesResponse(const char* json);
+struct jsonXrayGeoDataEntriesQueryStruct*          jsonXrayGeoDataEntriesQuery(const char* json);
+struct jsonXrayGeoDataEntriesResponseStruct*       jsonXrayGeoDataEntriesResponse(const char* json);
+const char*                                        jsonXrayGeoDataValidatePost(struct jsonXrayGeoDataValidatePostStruct* xrayGeoDataValidatePostStruct);
+struct jsonXrayGeoDataValidateResponseStruct*      jsonXrayGeoDataValidateResponse(const char* json);
+struct jsonXrayOutboundSubsListResponseStruct*     jsonXrayOutboundSubsListResponse(const char* json);
+const char*                                        jsonXrayOutboundSubsCreatePost(struct jsonXrayOutboundSubsCreatePostStruct* xrayOutboundSubsCreatePostStruct);
+struct jsonXrayOutboundSubsCreateResponseStruct*   jsonXrayOutboundSubsCreateResponse(const char* json);
+const char*                                        jsonXrayOutboundSubsUpdatePost(struct jsonXrayOutboundSubsUpdatePostStruct* xrayOutboundSubsUpdatePostStruct);
+struct jsonXrayOutboundSubsUpdateResponseStruct*   jsonXrayOutboundSubsUpdateResponse(const char* json);
+struct jsonXrayOutboundSubsDeleteResponseStruct*   jsonXrayOutboundSubsDeleteResponse(const char* json);
+struct jsonXrayOutboundSubsRefreshResponseStruct*  jsonXrayOutboundSubsRefreshResponse(const char* json);
+const char*                                        jsonXrayOutboundSubsMovePost(struct jsonXrayOutboundSubsMovePostStruct* xrayOutboundSubsMovePostStruct);
+struct jsonXrayOutboundSubsMoveResponseStruct*     jsonXrayOutboundSubsMoveResponse(const char* json);
+const char*                                        jsonXrayOutboundSubsParsePost(struct jsonXrayOutboundSubsParsePostStruct* xrayOutboundSubsParsePostStruct);
+struct jsonXrayOutboundSubsParseResponseStruct*    jsonXrayOutboundSubsParseResponse(const char* json);
+struct jsonSubServerGetQueryStruct*                jsonSubServerGetQuery(const char* json);
+struct jsonSubServerGetResponseStruct*             jsonSubServerGetResponse(const char* json);
+struct jsonSubServerJsonResponseStruct*            jsonSubServerJsonResponse(const char* json);
+struct jsonSubServerClashResponseStruct*           jsonSubServerClashResponse(const char* json);
+struct jsonListSubBalancersResponseStruct*         jsonListSubBalancersResponse(const char* json);
+const char*                                        jsonCreateSubBalancerPost(struct jsonCreateSubBalancerPostStruct* createSubBalancerPostStruct);
+struct jsonCreateSubBalancerResponseStruct*        jsonCreateSubBalancerResponse(const char* json);
+const char*                                        jsonUpdateSubBalancerPost(struct jsonUpdateSubBalancerPostStruct* updateSubBalancerPostStruct);
+struct jsonUpdateSubBalancerResponseStruct*        jsonUpdateSubBalancerResponse(const char* json);
+struct jsonDeleteSubBalancerResponseStruct*        jsonDeleteSubBalancerResponse(const char* json);
 
 #endif
 
