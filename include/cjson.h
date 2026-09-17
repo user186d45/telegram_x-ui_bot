@@ -1754,34 +1754,79 @@ struct jsonServerStatusDiskObjectStruct {
 
 };
 
+struct jsonServerStatusDiskIOObjectStruct {
+    int64_t                     read;
+    int64_t                     write;
+
+};
+
+struct jsonServerStatusDiskTrafficObjectStruct {
+    int64_t                     read;
+    int64_t                     write;
+
+};
+
 struct jsonServerStatusNetIOObjectStruct {
     int64_t                     up;
     int64_t                     down;
+    int64_t                     pktUp;
+    int64_t                     pktDown;
+
+};
+
+struct jsonServerStatusNetTrafficObjectStruct {
+    int64_t                     sent;
+    int64_t                     recv;
+    int64_t                     pktSent;
+    int64_t                     pktRecv;
+
+};
+
+struct jsonServerStatusPublicIPObjectStruct {
+    const char*                 ipv4; // e.g. "178.104.155.165"
+    const char*                 ipv6; // e.g. "N/A"
+};
+
+struct jsonServerStatusAppStatsObjectStruct {
+    int                         threads;
+    int64_t                     mem;
+    int64_t                     uptime;
 
 };
 
 struct jsonServerStatusXrayObjectStruct {
     const char*                 state; // e.g. "running"
+    const char*                 errorMsg; // e.g. "" ( empty when running normally )
     const char*                 version; // e.g. "v25.10.31"
 
 };
 
 struct jsonServerStatusLoadObjectStruct {
-    double                      load1;
-    double                      load5;
-    double                      load15;
+    double*                     loads; // 3 elements : the 1m, 5m and 15m load averages
 
 };
 
 struct jsonServerStatusObjectStruct {
     double                      cpu;
+    int64_t                     cpuCores;
+    int64_t                     logicalPro;
+    int64_t                     cpuSpeedMhz;
     struct jsonServerStatusMemObjectStruct* srvStatusObjMemObjStruct;
     struct jsonServerStatusSwapObjectStruct* srvStatusObjSwapObjStruct;
     struct jsonServerStatusDiskObjectStruct* srvStatusObjDiskObjStruct;
+    struct jsonServerStatusDiskIOObjectStruct* srvStatusObjDiskIOObjStruct;
+    struct jsonServerStatusDiskTrafficObjectStruct* srvStatusObjDiskTrafficObjStruct;
     struct jsonServerStatusNetIOObjectStruct* srvStatusObjNetIOObjStruct;
+    struct jsonServerStatusNetTrafficObjectStruct* srvStatusObjNetTrafficObjStruct;
     struct jsonServerStatusXrayObjectStruct* srvStatusObjXrayObjStruct;
+    const char*                 panelVersion; // e.g. "3.6.0"
+    const char*                 panelGuid;
+    int64_t                     uptime; // seconds
     int                         tcpCount;
+    int                         udpCount;
     struct jsonServerStatusLoadObjectStruct* srvStatusObjLoadObjStruct;
+    struct jsonServerStatusPublicIPObjectStruct* srvStatusObjPublicIPObjStruct;
+    struct jsonServerStatusAppStatsObjectStruct* srvStatusObjAppStatsObjStruct;
 
 };
 
@@ -1814,12 +1859,22 @@ struct jsonServerFail2banStatusResponseStruct {
 // =====================================================
 // Legacy : aggregated CPU history response struct.
 // Use /history/cpu/:bucket instead — same data with a
-// uniform { t, v } shape
+// uniform { t, v } shape. Real payload obj is an array
+// of { cpu, t } samples
 // =====================================================
+struct jsonServerCpuHistoryObjectArrayStruct {
+    double                      cpu;
+    int64_t                     t;
+
+};
+
 struct jsonServerCpuHistoryResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // This shall be null on normal ( not customized  ) setup
+    struct jsonServerCpuHistoryObjectArrayStruct** cpuHistoryObjArrStruct; // every
+                                                                           // pointer presented
+                                                                           // is an element of
+                                                                           // the array
 
 };
 
@@ -2091,7 +2146,7 @@ struct jsonServerGetNewMlkem768ResponseStruct {
 // decryption fields
 // =====================================================
 struct jsonServerGetNewVlessEncAuthsArrayStruct {
-    int                         id;
+    const char*                 id; // e.g. "x25519", "mlkem768", "x25519_xorpub", ...
     const char*                 label;
     const char*                 encryption;
     const char*                 decryption;
@@ -2467,13 +2522,193 @@ struct jsonServerSubmitClientIpsResponseStruct {
 // =====================================================
 // Return every panel setting: web server, Telegram bot,
 // subscription, security, LDAP. The full JSON blob that
-// the Settings page edits
+// the Settings page edits. The wire shape is a flat
+// 110-key object ( verified against 3.6.0 ); the structs
+// below group the keys by their prefix for readability
 // =====================================================
+struct jsonSettingAllWebObjectStruct {
+    const char*                 webBasePath;
+    const char*                 webCertFile;
+    const char*                 webDomain;
+    const char*                 webKeyFile;
+    const char*                 webListen;
+    int64_t                     webPort;
+
+};
+
+struct jsonSettingAllTgObjectStruct {
+    const char*                 tgBotAPIServer;
+    unsigned char               tgBotBackup;
+    const char*                 tgBotChatId;
+    unsigned char               tgBotEnable;
+    const char*                 tgBotProxy;
+    const char*                 tgBotToken;
+    int64_t                     tgCpu;
+    const char*                 tgEnabledEvents; // e.g. "login.attempt,cpu.high"
+    const char*                 tgLang;
+    int64_t                     tgMemory;
+    const char*                 tgRunTime; // e.g. "@daily"
+
+};
+
+struct jsonSettingAllSmtpObjectStruct {
+    int64_t                     smtpCpu;
+    unsigned char               smtpEnable;
+    const char*                 smtpEnabledEvents; // e.g. "login.attempt,cpu.high"
+    const char*                 smtpEncryptionType; // e.g. "starttls"
+    const char*                 smtpFrom;
+    const char*                 smtpFromName;
+    const char*                 smtpHost;
+    int64_t                     smtpMemory;
+    const char*                 smtpPassword;
+    int64_t                     smtpPort;
+    const char*                 smtpTo;
+    const char*                 smtpUsername;
+
+};
+
+struct jsonSettingAllLdapObjectStruct {
+    unsigned char               ldapAutoCreate;
+    unsigned char               ldapAutoDelete;
+    const char*                 ldapBaseDN;
+    const char*                 ldapBindDN;
+    int64_t                     ldapDefaultExpiryDays;
+    int64_t                     ldapDefaultLimitIP;
+    int64_t                     ldapDefaultTotalGB;
+    unsigned char               ldapEnable;
+    const char*                 ldapFlagField;
+    const char*                 ldapHost;
+    const char*                 ldapInboundTags;
+    unsigned char               ldapInsecureSkipVerify;
+    unsigned char               ldapInvertFlag;
+    const char*                 ldapPassword;
+    int64_t                     ldapPort;
+    const char*                 ldapSyncCron; // e.g. "@every 1m"
+    const char*                 ldapTruthyValues; // e.g. "true,1,yes,on"
+    unsigned char               ldapUseTLS;
+    const char*                 ldapUserAttr;
+    const char*                 ldapUserFilter;
+    const char*                 ldapVlessField;
+
+};
+
+struct jsonSettingAllSubObjectStruct {
+    const char*                 subAnnounce;
+    const char*                 subCertFile;
+    unsigned char               subClashAutoDetect;
+    unsigned char               subClashEnable;
+    unsigned char               subClashEnableRouting;
+    const char*                 subClashPath;
+    const char*                 subClashRules;
+    const char*                 subClashURI;
+    const char*                 subClashUserAgentRegex;
+    const char*                 subDomain;
+    unsigned char               subEnable;
+    unsigned char               subEnableRouting;
+    unsigned char               subEncrypt;
+    unsigned char               subHideSettings;
+    unsigned char               subIncyEnableRouting;
+    const char*                 subIncyRoutingRules;
+    unsigned char               subJsonAlwaysArray;
+    unsigned char               subJsonAutoDetect;
+    unsigned char               subJsonEnable;
+    const char*                 subJsonFinalMask;
+    const char*                 subJsonMux;
+    const char*                 subJsonPath;
+    const char*                 subJsonRules;
+    const char*                 subJsonURI;
+    const char*                 subJsonUserAgentRegex;
+    const char*                 subKeyFile;
+    const char*                 subListen;
+    const char*                 subPath;
+    int64_t                     subPort;
+    const char*                 subProfileUrl;
+    const char*                 subRoutingRules;
+    unsigned char               subShowIdentityOnAllLinks;
+    const char*                 subSupportUrl;
+    const char*                 subThemeDir;
+    const char*                 subTitle;
+    const char*                 subURI;
+    int64_t                     subUpdates;
+
+};
+
+struct jsonSettingAllHasFlagsObjectStruct {
+    unsigned char               hasApiToken;
+    unsigned char               hasLdapPassword;
+    unsigned char               hasNordSecret;
+    unsigned char               hasSmtpPassword;
+    unsigned char               hasTgBotToken;
+    unsigned char               hasTwoFactorToken;
+    unsigned char               hasWarpSecret;
+
+};
+
+struct jsonSettingAllGeneralObjectStruct {
+    const char*                 datepicker; // e.g. "gregorian"
+    int64_t                     expireDiff;
+    unsigned char               externalTrafficInformEnable;
+    const char*                 externalTrafficInformURI;
+    int64_t                     outboundDownThreshold;
+    int64_t                     pageSize;
+    const char*                 panelOutbound;
+    const char*                 remarkTemplate;
+    unsigned char               restartXrayOnClientDisable;
+    int64_t                     sessionMaxAge;
+    const char*                 timeLocation; // e.g. "Local"
+    int64_t                     trafficDiff;
+    const char*                 trustedProxyCIDRs; // e.g. "127.0.0.1/32,::1/128"
+    unsigned char               twoFactorEnable;
+    const char*                 twoFactorToken;
+    int64_t                     warpUpdateInterval;
+
+};
+
+struct jsonSettingAllObjectStruct {
+    struct jsonSettingAllWebObjectStruct* setAllObjWebObjStruct;
+    struct jsonSettingAllTgObjectStruct* setAllObjTgObjStruct;
+    struct jsonSettingAllSmtpObjectStruct* setAllObjSmtpObjStruct;
+    struct jsonSettingAllLdapObjectStruct* setAllObjLdapObjStruct;
+    struct jsonSettingAllSubObjectStruct* setAllObjSubObjStruct;
+    struct jsonSettingAllHasFlagsObjectStruct* setAllObjHasFlagsObjStruct;
+    struct jsonSettingAllGeneralObjectStruct* setAllObjGeneralObjStruct;
+
+};
+
 struct jsonSettingAllResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // The full settings blob shape is not provided at the
-                                     // original documentation
+    struct jsonSettingAllObjectStruct* setAllObjStruct;
+
+};
+
+// =====================================================
+// Computed default settings ( 21 keys ) based on the
+// request host ( useful to preview what a fresh install
+// would use ) object struct
+// =====================================================
+struct jsonSettingDefaultSettingsObjectStruct {
+    unsigned char               accessLogEnable;
+    const char*                 datepicker;
+    const char*                 defaultCert;
+    const char*                 defaultKey;
+    unsigned char               devChannelEnable;
+    int64_t                     expireDiff;
+    unsigned char               ipLimitEnable;
+    unsigned char               isDevBuild;
+    int64_t                     pageSize;
+    unsigned char               subClashEnable;
+    const char*                 subClashURI;
+    const char*                 subDomain;
+    unsigned char               subEnable;
+    unsigned char               subJsonEnable;
+    const char*                 subJsonURI;
+    const char*                 subThemeDir;
+    const char*                 subTitle;
+    const char*                 subURI;
+    unsigned char               tgBotEnable;
+    int64_t                     trafficDiff;
+    const char*                 webDomain;
 
 };
 
@@ -2485,7 +2720,117 @@ struct jsonSettingAllResponseStruct {
 struct jsonSettingDefaultSettingsResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // This shall be null on normal ( not customized  ) setup
+    struct jsonSettingDefaultSettingsObjectStruct* defSettingsObjStruct;
+
+};
+
+// =====================================================
+// Shipped ( factory ) default value per browser-safe
+// setting key ( 99 keys, every value is a string even
+// for numeric/boolean defaults ) object struct.
+// Per-install material and credential fields are never
+// included
+// =====================================================
+struct jsonSettingFactoryDefaultsObjectStruct {
+    const char*                 datepicker;
+    const char*                 expireDiff;
+    const char*                 externalTrafficInformEnable;
+    const char*                 externalTrafficInformURI;
+    const char*                 ldapAutoCreate;
+    const char*                 ldapAutoDelete;
+    const char*                 ldapBaseDN;
+    const char*                 ldapBindDN;
+    const char*                 ldapDefaultExpiryDays;
+    const char*                 ldapDefaultLimitIP;
+    const char*                 ldapDefaultTotalGB;
+    const char*                 ldapEnable;
+    const char*                 ldapFlagField;
+    const char*                 ldapHost;
+    const char*                 ldapInboundTags;
+    const char*                 ldapInsecureSkipVerify;
+    const char*                 ldapInvertFlag;
+    const char*                 ldapPort;
+    const char*                 ldapSyncCron;
+    const char*                 ldapTruthyValues;
+    const char*                 ldapUseTLS;
+    const char*                 ldapUserAttr;
+    const char*                 ldapUserFilter;
+    const char*                 ldapVlessField;
+    const char*                 outboundDownThreshold;
+    const char*                 pageSize;
+    const char*                 panelOutbound;
+    const char*                 remarkTemplate;
+    const char*                 restartXrayOnClientDisable;
+    const char*                 sessionMaxAge;
+    const char*                 smtpCpu;
+    const char*                 smtpEnable;
+    const char*                 smtpEnabledEvents;
+    const char*                 smtpEncryptionType;
+    const char*                 smtpFrom;
+    const char*                 smtpFromName;
+    const char*                 smtpHost;
+    const char*                 smtpMemory;
+    const char*                 smtpPort;
+    const char*                 smtpTo;
+    const char*                 smtpUsername;
+    const char*                 subAnnounce;
+    const char*                 subCertFile;
+    const char*                 subClashAutoDetect;
+    const char*                 subClashEnable;
+    const char*                 subClashEnableRouting;
+    const char*                 subClashPath;
+    const char*                 subClashRules;
+    const char*                 subClashURI;
+    const char*                 subClashUserAgentRegex;
+    const char*                 subDomain;
+    const char*                 subEnable;
+    const char*                 subEnableRouting;
+    const char*                 subEncrypt;
+    const char*                 subHideSettings;
+    const char*                 subIncyEnableRouting;
+    const char*                 subIncyRoutingRules;
+    const char*                 subJsonAlwaysArray;
+    const char*                 subJsonAutoDetect;
+    const char*                 subJsonEnable;
+    const char*                 subJsonFinalMask;
+    const char*                 subJsonMux;
+    const char*                 subJsonPath;
+    const char*                 subJsonRules;
+    const char*                 subJsonURI;
+    const char*                 subJsonUserAgentRegex;
+    const char*                 subKeyFile;
+    const char*                 subListen;
+    const char*                 subPath;
+    const char*                 subPort;
+    const char*                 subProfileUrl;
+    const char*                 subRoutingRules;
+    const char*                 subShowIdentityOnAllLinks;
+    const char*                 subSupportUrl;
+    const char*                 subThemeDir;
+    const char*                 subTitle;
+    const char*                 subURI;
+    const char*                 subUpdates;
+    const char*                 tgBotAPIServer;
+    const char*                 tgBotBackup;
+    const char*                 tgBotChatId;
+    const char*                 tgBotEnable;
+    const char*                 tgBotProxy;
+    const char*                 tgCpu;
+    const char*                 tgEnabledEvents;
+    const char*                 tgLang;
+    const char*                 tgMemory;
+    const char*                 tgRunTime;
+    const char*                 timeLocation;
+    const char*                 trafficDiff;
+    const char*                 trustedProxyCIDRs;
+    const char*                 twoFactorEnable;
+    const char*                 warpUpdateInterval;
+    const char*                 webBasePath;
+    const char*                 webCertFile;
+    const char*                 webDomain;
+    const char*                 webKeyFile;
+    const char*                 webListen;
+    const char*                 webPort;
 
 };
 
@@ -2497,7 +2842,7 @@ struct jsonSettingDefaultSettingsResponseStruct {
 struct jsonSettingFactoryDefaultsResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // This shall be null on normal ( not customized  ) setup
+    struct jsonSettingFactoryDefaultsObjectStruct* factoryDefaultsObjStruct;
 
 };
 
@@ -2508,8 +2853,8 @@ struct jsonSettingFactoryDefaultsResponseStruct {
 // are rejected before write
 // =====================================================
 struct jsonSettingUpdatePostStruct {
-    // TODO: the shape of the settings blob is not provided at the
-    // original documentation
+    // body mirrors the shape of jsonSettingAllObjectStruct
+    // ( see the /all response structs above )
 
 };
 
@@ -2531,6 +2876,74 @@ struct jsonSettingValidateRegexPostStruct {
 };
 
 struct jsonSettingValidateRegexResponseStruct {
+    unsigned char               success;
+    const char*                 msg;
+
+};
+
+// =====================================================
+// List and manage API tokens ( used for the x-api-key
+// header authentication ) post and response structs.
+// Array element object struct
+// =====================================================
+struct jsonSettingApiTokensObjectStruct {
+    int64_t                     id;
+    const char*                 name;
+    unsigned char               enabled;
+    int64_t                     createdAt;
+
+};
+
+struct jsonSettingApiTokensListPostStruct {
+    unsigned char               success;
+    const char*                 msg;
+    struct jsonSettingApiTokensObjectStruct** objArrays;
+
+};
+
+// =====================================================
+// Create a new API token with the requested name post
+// and response structs
+// =====================================================
+struct jsonSettingApiTokenNewPostStruct {
+    const char*                 name;
+
+};
+
+struct jsonSettingApiTokenNewResponseStruct {
+    unsigned char               success;
+    const char*                 msg;
+    void*                       obj; // the secret API token value
+
+};
+
+// =====================================================
+// Delete an API token by id post and response structs
+// =====================================================
+struct jsonSettingApiTokenDeletePostStruct {
+    int64_t                     id;
+
+};
+
+struct jsonSettingApiTokenDeleteResponseStruct {
+    unsigned char               success;
+    const char*                 msg;
+
+};
+
+// =====================================================
+// Enable or disable an API token the full body is
+// required, a partial body fails post and response
+// structs
+// =====================================================
+struct jsonSettingApiTokenSetDBPostStruct {
+    int64_t                     id;
+    const char*                 name;
+    unsigned char               enabled;
+
+};
+
+struct jsonSettingApiTokenSetDBResponseStruct {
     unsigned char               success;
     const char*                 msg;
 
@@ -3164,6 +3577,8 @@ struct jsonSubServerClashResponseStruct {
 // outbounds of the selected inbounds
 // ( routing.balancers + burstObservatory ). Managed in
 // Settings → Sub Balancers.
+// NOTE: absent from the 3.6.0 OpenAPI ( all endpoints
+// 404 here ); requires a newer panel version
 // =====================================================
 
 // =====================================================
