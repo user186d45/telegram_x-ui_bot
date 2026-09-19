@@ -2,6 +2,7 @@
 #define CJSON_TELEGRAM_XUI_BOT
 
 #include <stdint.h>
+#include <stddef.h>
 
 // =====================================================
 // List every inbound owned by the authenticated user
@@ -42,7 +43,8 @@ struct jsonListInboundSettingsClientsArrayStruct {
 };
 
 struct jsonListInboundSettingsObjectStruct {
-    struct jsonListInboundSettingsClientsArrayStruct** listInSettingsCliArrStruct;
+    size_t jsonListInboundSettingsClientsArrayStructSize;
+    struct jsonListInboundSettingsClientsArrayStruct* listInSettingsCliArrStruct; // array
     const char*                 decryption;
     const char*                 encryption;
 
@@ -82,7 +84,8 @@ struct jsonListInboundObjectStruct {
     const char*                 trafficReset;
     int                         trafficResetDay;
     int64_t                     lastTrafficResetTime;
-    struct jsonListInboundClientStatsArrayStruct** listInCliStatsStruct;
+    size_t                      jsonListInboundClientStatsArrayStructSize; 
+    struct jsonListInboundClientStatsArrayStruct* listInCliStatsStruct; // array
     const char*                 listen;
     int                         port;
     const char*                 protocol;
@@ -99,7 +102,8 @@ struct jsonListInboundObjectStruct {
 struct jsonListInboundStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonListInboundObjectStruct* listInObjStruct;
+    size_t                      jsonListInboundObjectStructSize;
+    struct jsonListInboundObjectStruct* listInObjStruct; // array
 
 };
 
@@ -114,7 +118,8 @@ struct jsonListInboundSettingsClientsArraySlimStruct {
 };
 
 struct jsonListInboundSettingsObjectSlimStruct {
-    struct jsonListInboundSettingsClientsArraySlimStruct** listInSettingsCliArrSlimStruct;
+    size_t                      jsonListInboundSettingsClientsArraySlimStructSize;
+    struct jsonListInboundSettingsClientsArraySlimStruct* listInSettingsCliArrSlimStruct; // array
     const char*                 decryption;
     const char*                 encryption;
 
@@ -132,7 +137,8 @@ struct jsonListInboundObjectSlimStruct {
     const char*                 trafficReset;
     int                         trafficResetDay;
     int64_t                     lastTrafficResetTime;
-    struct jsonListInboundClientStatsArrayStruct** listInCliStatsStruct;
+    size_t                      jsonListInboundClientStatsArrayStructSize;
+    struct jsonListInboundClientStatsArrayStruct* listInCliStatsStruct; // array
     const char*                 listen;
     int                         port;
     const char*                 protocol;
@@ -149,7 +155,8 @@ struct jsonListInboundObjectSlimStruct {
 struct jsonListInboundSlimStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonListInboundObjectSlimStruct** listInObjSlimStruct;
+    size_t                      jsonListInboundObjectSlimStructSize;
+    struct jsonListInboundObjectSlimStruct* listInObjSlimStruct; // array
 
 };
 
@@ -172,7 +179,8 @@ struct jsonListInboundObjectOptionsArrayStruct {
 struct jsonListInboundOptionsStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonListInboundObjectOptionsArrayStruct* listInObjOptionsArrStruct;
+    size_t                      jsonListInboundObjectOptionsArrayStructSize;
+    struct jsonListInboundObjectOptionsArrayStruct* listInObjOptionsArrStruct; // array
 
 };
 
@@ -186,14 +194,24 @@ struct jsonAddInboundSettingsClientsArrayPostStruct {
 };
 
 struct jsonAddInboundSettingsFallbacksArrayPostStruct {
-    // TODO: its now known how the fallback works
+    const char*                 alpn;
+    int64_t                     childId;
+    const char*                 dest;
+    int64_t                     id;
+    int64_t                     masterId;
+    const char*                 name;
+    const char*                 path;
+    int                         sortOrder;
+    int                         xver;
 
 };
 
 struct jsonAddInboundSettingsObjPostStruct {
-    struct jsonAddInboundSettingsClientsArrayPostStruct* addInSettingsCliArrPStruct;
+    size_t                      jsonAddInboundSettingsClientsArrayPostStructSize;
+    struct jsonAddInboundSettingsClientsArrayPostStruct* addInSettingsCliArrPStruct; // array
     const char*                 decryption;
-    struct jsonAddInboundSettingsFallbacksArrayPostStruct* addInSettingsFalbackArrPStruct;
+    size_t                      jsonAddInboundSettingsFallbacksArrayPostStructSize;
+    struct jsonAddInboundSettingsFallbacksArrayPostStruct* addInSettingsFalbackArrPStruct; // array
 
 };
 
@@ -212,7 +230,8 @@ struct jsonAddInboundStreamSettingsObjPostStruct {
 
 struct jsonAddInboundSniffingObjectPostStruct {
     unsigned char               enabled;
-    struct jsonAddInboundSniffingObjectDestOverrideArrStruct* addInSniffingObjDestOverrideArrStruct;
+    size_t                      jsonAddInboundSniffingObjectDestOverrideArrStructSize;
+    struct jsonAddInboundSniffingObjectDestOverrideArrStruct* addInSniffingObjDestOverrideArrStruct; // array
 
 };
 
@@ -267,7 +286,8 @@ struct jsonDeleteMultipleInboundResponseStruct {
     unsigned char*              success;
     const char*                 msg;
     int64_t                     obj;
-    struct jsonDeleteMultipleInboundResponseSkippedArrayStruct* deleteMultiInResSkippedArrStruct;
+    size_t                      jsonDeleteMultipleInboundResponseSkippedArrayStructSize;
+    struct jsonDeleteMultipleInboundResponseSkippedArrayStruct* deleteMultiInResSkippedArrStruct; // array
 
 };
 
@@ -406,7 +426,8 @@ struct jsonImportInboundsPostStruct {
 struct jsonImportInboundsResponseStruct {
     const unsigned char         success;
     const char*                 msg;
-    struct jsonListInboundObjectStruct* listInObjStruct;
+    size_t                      jsonListInboundObjectStructSize;
+    struct jsonListInboundObjectStruct* listInObjStruct; // array
 
 };
 
@@ -474,7 +495,8 @@ struct jsonListEveryClientArrayStruct {
 struct jsonListEveryClientStruct {
     const unsigned char         success;
     const char*                 msg;
-    struct jsonListEveryClientArrayStruct** listEveryCliArrStruct;
+    size_t                      jsonListEveryClientArrayStructSize;
+    struct jsonListEveryClientArrayStruct* listEveryCliArrStruct; // array
 
 };
 
@@ -559,10 +581,8 @@ struct jsonFilterClientsObjectSummaryObjectResponseStruct {
 struct jsonFilterClientsObjectResponseStruct {
     int64_t                     filtered;
     const char**                groups; // every pointer presented is an element of the array
-    struct jsonFilterClientsObjectItemsArrayResponseStruct** filterCliObjItemsArrStruct; // every
-                                                                                          // pointer
-                                                                                          // presented is an
-                                                                                          // element of the array
+    size_t                      jsonFilterClientsObjectItemsArrayResponseStructSize;
+    struct jsonFilterClientsObjectItemsArrayResponseStruct* filterCliObjItemsArrStruct; // array
     int                         page;
     unsigned short              pageSize;
     struct jsonFilterClientsObjectSummaryObjectResponseStruct* filterCliObjSummaryObjRStruct; // Summary
@@ -579,7 +599,8 @@ struct jsonFilterClientsResponseStruct {
     unsigned char               success;
     const char*                 msg;
     struct jsonFilterClientsObjectResponseStruct* filterCliObjRStruct;
-    struct jsonFilterClientsGroupObjectResponseStruct* filterCliGroupObjRStruct;
+    size_t                      jsonFilterClientsGroupObjectResponseStructSize;
+    struct jsonFilterClientsGroupObjectResponseStruct* filterCliGroupObjRStruct; // array
 
 };
 
@@ -687,7 +708,8 @@ struct jsonFetchClientByEmailObjectExternalLinksArrayStruct {
 
 struct jsonFetchClientByEmailObjectStruct {
     struct jsonFetchClientByEmailObjectClientObjectStruct* fetchCliByEmailObjCliObjStruct;
-    struct jsonFetchClientByEmailObjectExternalLinksArrayStruct* fetchCliByEmailObjExternalLinksArrStruct;
+    size_t                      jsonFetchClientByEmailObjectExternalLinksArrayStructSize;
+    struct jsonFetchClientByEmailObjectExternalLinksArrayStruct* fetchCliByEmailObjExternalLinksArrStruct; // array
     int*                        inboundIds;
     const char*                 tunnelAllowedIPs;
     int64_t                     usedTraffic;
@@ -808,7 +830,8 @@ struct jsonFetchClientByTelegramIdObjectArrayExternalLinksArrayStruct {
 
 struct jsonFetchClientByTelegramIdObjectArrayStruct {
     struct jsonFetchClientByTelegramIdObjectArrayClientObjectStruct* fetchCliByTgIdObjArrCliObjStruct;
-    struct jsonFetchClientByTelegramIdObjectArrayExternalLinksArrayStruct* fetchCliByTgIArrdObjExternalLinksArrStruct;
+    size_t                      jsonFetchClientByTelegramIdObjectArrayExternalLinksArrayStructSize;
+    struct jsonFetchClientByTelegramIdObjectArrayExternalLinksArrayStruct* fetchCliByTgIArrdObjExternalLinksArrStruct; // array
     int*                        inboundIds;
     const char*                 tunnelAllowedIPs;
     int64_t                     usedTraffic;
@@ -818,7 +841,8 @@ struct jsonFetchClientByTelegramIdObjectArrayStruct {
 struct jsonFetchClientByTelegramIdStruct {
     unsigned char success;
     const char* msg;
-    struct jsonFetchClientByTelegramIdObjectArrayStruct** fetchCliByTgIdObjArrStruct;
+    size_t                      jsonFetchClientByTelegramIdObjectArrayStructSize;
+    struct jsonFetchClientByTelegramIdObjectArrayStruct* fetchCliByTgIdObjArrStruct; // array
 
 };
 
@@ -938,9 +962,9 @@ struct jsonExternalLinksObjectArrayPostStruct {
 };
 
 struct jsonReplaceClientExternalLinksPostStruct {
-    struct jsonExternalLinksObjectArrayPostStruct* rplExtLinksObjArrPStruct; // send empty
-                                                                             // array to clear
-                                                                             // all rows
+    // send empty array to clear all rows
+    size_t                      jsonExternalLinksObjectArrayPostStructSize;
+    struct jsonExternalLinksObjectArrayPostStruct* rplExtLinksObjArrPStruct; // array
 
 };
 
@@ -1088,7 +1112,8 @@ struct jsonExportAllClientsObjectArrayResponseStruct {
 struct jsonExportAllClientsResponseStruct {
     unsigned char success;
     const char* msg;
-    struct jsonExportAllClientsObjectArrayResponseStruct* exportAllClisObjArrRStruct;
+    size_t                      jsonExportAllClientsObjectArrayResponseStructSize;
+    struct jsonExportAllClientsObjectArrayResponseStruct* exportAllClisObjArrRStruct; // array
 
 };
 
@@ -1120,7 +1145,8 @@ struct jsonImportClientsDataObjectPostStruct {
 };
 
 struct jsonImportClientsPostStruct {
-    struct jsonImportClientsDataObjectPostStruct** importClientsDataObjPStruct;
+    size_t                      jsonImportClientsDataObjectPostStructSize;
+    struct jsonImportClientsDataObjectPostStruct* importClientsDataObjPStruct; // array
 
 };
 
@@ -1132,9 +1158,8 @@ struct jsonImportClientsObjectSkippedArrayResponseStruct {
 
 struct jsonImportClientsObjectResponseStruct {
     int64_t created;
-    struct jsonImportClientsObjectSkippedArrayResponseStruct** importClisObjSkippedArrRStruct; // skipped array
-                                                                                               // pointer presented is an
-                                                                                               // element of the array
+    size_t                      jsonImportClientsObjectSkippedArrayResponseStructSize;
+    struct jsonImportClientsObjectSkippedArrayResponseStruct* importClisObjSkippedArrRStruct; // array
 
 };
 
@@ -1182,9 +1207,8 @@ struct jsonBulkAdjustClientsObjectSkippedArrayResponseStruct {
 
 struct jsonBulkAdjustClientsObjectResponseStruct {
     int64_t                     adjusted;
-    struct jsonBulkAdjustClientsObjectSkippedArrayResponseStruct** bulkAdjClisObjSkippedArrRStruct; // skipped array, every
-                                                                                                     // pointer presented is an
-                                                                                                     // element of the array
+    size_t                      jsonBulkAdjustClientsObjectSkippedArrayResponseStructSize;
+    struct jsonBulkAdjustClientsObjectSkippedArrayResponseStruct* bulkAdjClisObjSkippedArrRStruct; // array
 
 };
 
@@ -1213,9 +1237,8 @@ struct jsonBulkEnableClientsObjectSkippedArrayResponseStruct {
 
 struct jsonBulkEnableClientsObjectResponseStruct {
     int64_t                     changed;
-    struct jsonBulkEnableClientsObjectSkippedArrayResponseStruct** bulkEnableClisObjSkippedArrRStruct; // skipped array, every
-                                                                                                     // pointer presented is an
-                                                                                                     // element of the array
+    size_t                      jsonBulkEnableClientsObjectSkippedArrayResponseStructSize;
+    struct jsonBulkEnableClientsObjectSkippedArrayResponseStruct* bulkEnableClisObjSkippedArrRStruct; // array
 
 };
 
@@ -1244,9 +1267,8 @@ struct jsonBulkDisableClientsObjectSkippedArrayResponseStruct {
 
 struct jsonBulkDisableClientsObjectResponseStruct {
     int64_t                     changed;
-    struct jsonBulkDisableClientsObjectSkippedArrayResponseStruct** bulkDisableClisObjSkippedArrRStruct; // skipped array, every
-                                                                                                          // pointer presented is an
-                                                                                                          // element of the array
+    size_t                      jsonBulkDisableClientsObjectSkippedArrayResponseStructSize;
+    struct jsonBulkDisableClientsObjectSkippedArrayResponseStruct* bulkDisableClisObjSkippedArrRStruct; // array
 
 };
 
@@ -1276,9 +1298,8 @@ struct jsonBulkDeleteClientsObjectSkippedArrayResponseStruct {
 
 struct jsonBulkDeleteClientsObjectResponseStruct {
     int64_t                     deleted;
-    struct jsonBulkDeleteClientsObjectSkippedArrayResponseStruct** bulkDelClisObjSkippedArrRStruct; // skipped array, every
-                                                                                                     // pointer presented is an
-                                                                                                     // element of the array
+    size_t                      jsonBulkDeleteClientsObjectSkippedArrayResponseStructSize;
+    struct jsonBulkDeleteClientsObjectSkippedArrayResponseStruct* bulkDelClisObjSkippedArrRStruct; // array
 
 };
 
@@ -1304,7 +1325,8 @@ struct jsonBulkCreateClientsMainObjectPostStruct {
 };
 
 struct jsonBulkCreateClientsPostStruct {
-    struct jsonBulkCreateClientsMainObjectPostStruct** bulkCreateClisMainObjPStruct;
+    size_t                      jsonBulkCreateClientsMainObjectPostStructSize;
+    struct jsonBulkCreateClientsMainObjectPostStruct* bulkCreateClisMainObjPStruct; // array
 
 };
 
@@ -1317,9 +1339,8 @@ struct jsonBulkCreateClientsObjectSkippedArrayResponseStruct {
 
 struct jsonBulkCreateClientsObjectResponseStruct {
     int64_t                     created;
-    struct jsonBulkCreateClientsObjectSkippedArrayResponseStruct** bulkCreateClisObjSkippedArrRStruct; // skipped array, every
-                                                                                                       // pointer presented is an
-                                                                                                       // element of the array
+    size_t                      jsonBulkCreateClientsObjectSkippedArrayResponseStructSize;
+    struct jsonBulkCreateClientsObjectSkippedArrayResponseStruct* bulkCreateClisObjSkippedArrRStruct; // array
 
 };
 
@@ -1485,9 +1506,8 @@ struct jsonListGroupsObjectArrayStruct {
 struct jsonListGroupsResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonListGroupsObjectArrayStruct** listGroupsObjArrStruct; // every pointer
-                                                                     // presented is an
-                                                                     // element of the array
+    size_t                      jsonListGroupsObjectArrayStructSize;
+    struct jsonListGroupsObjectArrayStruct* listGroupsObjArrStruct; // array
 
 };
 
@@ -1623,10 +1643,8 @@ struct jsonListClientHwidsObjectArrayStruct {
 struct jsonListClientHwidsResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonListClientHwidsObjectArrayStruct** listClientHwidsObjArrStruct; // every pointer
-                                                                               // presented is an
-                                                                               // element of the
-                                                                               // array
+    size_t                      jsonListClientHwidsObjectArrayStructSize;
+    struct jsonListClientHwidsObjectArrayStruct* listClientHwidsObjArrStruct; // array
 
 };
 
@@ -1871,10 +1889,8 @@ struct jsonServerCpuHistoryObjectArrayStruct {
 struct jsonServerCpuHistoryResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonServerCpuHistoryObjectArrayStruct** cpuHistoryObjArrStruct; // every
-                                                                           // pointer presented
-                                                                           // is an element of
-                                                                           // the array
+    size_t                      jsonServerCpuHistoryObjectArrayStructSize;
+    struct jsonServerCpuHistoryObjectArrayStruct* cpuHistoryObjArrStruct; // array
 
 };
 
@@ -1892,9 +1908,8 @@ struct jsonServerHistoryObjectArrayStruct {
 struct jsonServerHistoryResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonServerHistoryObjectArrayStruct** srvHistoryObjArrStruct; // every pointer
-                                                                        // presented is an
-                                                                        // element of the array
+    size_t                      jsonServerHistoryObjectArrayStructSize;
+    struct jsonServerHistoryObjectArrayStruct* srvHistoryObjArrStruct; // array
 
 };
 
@@ -2082,11 +2097,8 @@ struct jsonServerDescendantsObjectArrayStruct {
 struct jsonServerDescendantsResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonServerDescendantsObjectArrayStruct** descendantsObjArrStruct; // every
-                                                                            // pointer
-                                                                            // presented is
-                                                                            // an element of
-                                                                            // the array
+    size_t                      jsonServerDescendantsObjectArrayStructSize;
+    struct jsonServerDescendantsObjectArrayStruct* descendantsObjArrStruct; // array
 
 };
 
@@ -2154,12 +2166,8 @@ struct jsonServerGetNewVlessEncAuthsArrayStruct {
 };
 
 struct jsonServerGetNewVlessEncObjectStruct {
-    struct jsonServerGetNewVlessEncAuthsArrayStruct** getNewVlessEncObjAuthsArrStruct; // every
-                                                                                      // pointer
-                                                                                      // presented
-                                                                                      // is an
-                                                                                      // element of
-                                                                                      // the array
+    size_t                      jsonServerGetNewVlessEncAuthsArrayStructSize;
+    struct jsonServerGetNewVlessEncAuthsArrayStruct* getNewVlessEncObjAuthsArrStruct; // array
 
 };
 
@@ -2276,9 +2284,8 @@ struct jsonServerXrayLogsObjectArrayStruct {
 struct jsonServerXrayLogsResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonServerXrayLogsObjectArrayStruct** xrayLogsObjArrStruct; // every pointer
-                                                                       // presented is an
-                                                                       // element of the array
+    size_t                      jsonServerXrayLogsObjectArrayStructSize;
+    struct jsonServerXrayLogsObjectArrayStruct* xrayLogsObjArrStruct; // array
 
 };
 
@@ -2303,11 +2310,8 @@ struct jsonServerAmneziawgLogsPeersArrayStruct {
 
 struct jsonServerAmneziawgLogsObjectStruct {
     const char**                events; // every pointer presented is an element of the array
-    struct jsonServerAmneziawgLogsPeersArrayStruct** awgLogsObjPeersArrStruct; // every
-                                                                               // pointer
-                                                                               // presented is
-                                                                               // an element of
-                                                                               // the array
+    size_t                      jsonServerAmneziawgLogsPeersArrayStructSize;
+    struct jsonServerAmneziawgLogsPeersArrayStruct* awgLogsObjPeersArrStruct; // array
     unsigned char               running;
 
 };
@@ -2372,18 +2376,16 @@ struct jsonServerCertHashObjectArrayStruct {
 struct jsonServerGetCertHashResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonServerCertHashObjectArrayStruct** certHashObjArrStruct; // every pointer
-                                                                      // presented is an
-                                                                      // element of the array
+    size_t                      jsonServerCertHashObjectArrayStructSize;
+    struct jsonServerCertHashObjectArrayStruct* certHashObjArrStruct; // array
 
 };
 
 struct jsonServerGetRemoteCertHashResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonServerCertHashObjectArrayStruct** certHashObjArrStruct; // every pointer
-                                                                      // presented is an
-                                                                      // element of the array
+    size_t                      jsonServerCertHashObjectArrayStructSize;
+    struct jsonServerCertHashObjectArrayStruct* certHashObjArrStruct; // array
 
 };
 
@@ -2448,11 +2450,8 @@ struct jsonServerScanRealityTargetsPostStruct {
 struct jsonServerScanRealityTargetsResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonServerScanRealityTargetObjectStruct** scanRealityTargetsObjArrStruct; // every
-                                                                                    // pointer
-                                                                                    // presented is
-                                                                                    // an element of
-                                                                                    // the array
+    size_t                      jsonServerScanRealityTargetObjectStructSize;
+    struct jsonServerScanRealityTargetObjectStruct* scanRealityTargetsObjArrStruct; // array
 
 };
 
@@ -2470,20 +2469,17 @@ struct jsonServerClientIpsIpsItemStruct {
 struct jsonServerClientIpsObjectArrayStruct {
     const char*                 clientEmail;
     int                         id;
-    struct jsonServerClientIpsIpsItemStruct** clientIpsObjArrIpsArrStruct; // may be null;
-                                                                           // every pointer
-                                                                           // presented is an
-                                                                           // element of the
-                                                                           // array
+    // may be null
+    size_t                      jsonServerClientIpsIpsItemStructSize;
+    struct jsonServerClientIpsIpsItemStruct* clientIpsObjArrIpsArrStruct; // array
 
 };
 
 struct jsonServerClientIpsResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonServerClientIpsObjectArrayStruct** clientIpsObjArrStruct; // every pointer
-                                                                         // presented is an
-                                                                         // element of the array
+    size_t                      jsonServerClientIpsObjectArrayStructSize;
+    struct jsonServerClientIpsObjectArrayStruct* clientIpsObjArrStruct; // array
 
 };
 
@@ -2495,20 +2491,14 @@ struct jsonServerClientIpsResponseStruct {
 // =====================================================
 struct jsonServerSubmitClientIpsObjectPostStruct {
     const char*                 clientEmail;
-    struct jsonServerClientIpsIpsItemStruct** submitClientIpsObjIpsArrPStruct; // every
-                                                                               // pointer
-                                                                               // presented is
-                                                                               // an element of
-                                                                               // the array
+    size_t                      jsonServerClientIpsIpsItemStructSize;
+    struct jsonServerClientIpsIpsItemStruct* submitClientIpsObjIpsArrPStruct; // array
 
 };
 
 struct jsonServerSubmitClientIpsPostStruct {
-    struct jsonServerSubmitClientIpsObjectPostStruct** submitClientIpsObjArrPStruct; // every
-                                                                                    // pointer
-                                                                                    // presented is
-                                                                                    // an element of
-                                                                                    // the array
+    size_t                      jsonServerSubmitClientIpsObjectPostStructSize;
+    struct jsonServerSubmitClientIpsObjectPostStruct* submitClientIpsObjArrPStruct; // array
 
 };
 
@@ -2897,7 +2887,8 @@ struct jsonSettingApiTokensObjectStruct {
 struct jsonSettingApiTokensListPostStruct {
     unsigned char               success;
     const char*                 msg;
-    struct jsonSettingApiTokensObjectStruct** objArrays;
+    size_t                      jsonSettingApiTokensObjectStructSize;
+    struct jsonSettingApiTokensObjectStruct* objArrays; // array
 
 };
 
@@ -3606,11 +3597,8 @@ struct jsonSubBalancerObjectStruct {
 
 struct jsonListSubBalancersResponseStruct {
     unsigned char               success;
-    struct jsonSubBalancerObjectStruct** listSubBalancersObjArrStruct; // every
-                                                                       // pointer
-                                                                       // presented is
-                                                                       // an element of
-                                                                       // the array
+    size_t                      jsonSubBalancerObjectStructSize;
+    struct jsonSubBalancerObjectStruct* listSubBalancersObjArrStruct; // array
 
 };
 
@@ -3697,6 +3685,317 @@ struct jsonDeleteSubBalancerResponseStruct {
 // parses from JSON
 // =====================================================
 static unsigned char isJsonValid(const char* json);
+
+void        jsonListInboundClientStatsArrayStructDelete(struct jsonListInboundClientStatsArrayStruct* listInCliStatsStruct, size_t arraySize);
+void        jsonListInboundSettingsClientsArrayStructDelete(struct jsonListInboundSettingsClientsArrayStruct* listInSettingsCliArrStruct, size_t arraySize);
+void        jsonListInboundSettingsObjectStructDelete(struct jsonListInboundSettingsObjectStruct* listInSettingsObjStruct);
+void        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjStruct);
+void        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectStruct* listInStreamSettingsTcpSettingsObjStruct);
+void        jsonListInboundStreamSettingsObjectStructDelete(struct jsonListInboundStreamSettingsObjectStruct* listInStreamSettingsObjStruct);
+void        jsonListInboundSniffingObjectStructDelete(struct jsonListInboundSniffingObjectStruct* listInSniffingObjStruct);
+void        jsonListInboundObjectStructDelete(struct jsonListInboundObjectStruct* listInObjStruct, size_t arraySize);
+void        jsonListInboundStructDelete(struct jsonListInboundStruct* listInStruct);
+void        jsonListInboundSettingsClientsArraySlimStructDelete(struct jsonListInboundSettingsClientsArraySlimStruct* listInSettingsCliArrSlimStruct, size_t arraySize);
+void        jsonListInboundSettingsObjectSlimStructDelete(struct jsonListInboundSettingsObjectSlimStruct* listInSettingsObjSlimStruct);
+void        jsonListInboundObjectSlimStructDelete(struct jsonListInboundObjectSlimStruct* listInObjSlimStruct, size_t arraySize);
+void        jsonListInboundSlimStructDelete(struct jsonListInboundSlimStruct* listInSlimStruct);
+void        jsonListInboundObjectOptionsArrayStructDelete(struct jsonListInboundObjectOptionsArrayStruct* listInObjOptionsArrStruct, size_t arraySize);
+void        jsonListInboundOptionsStructDelete(struct jsonListInboundOptionsStruct* listInOptionsStruct);
+void        jsonAddInboundSettingsClientsArrayPostStructDelete(struct jsonAddInboundSettingsClientsArrayPostStruct* addInSettingsCliArrPStruct, size_t arraySize);
+void        jsonAddInboundSettingsFallbacksArrayPostStructDelete(struct jsonAddInboundSettingsFallbacksArrayPostStruct* addInSettingsFalbackArrPStruct, size_t arraySize);
+void        jsonAddInboundSettingsObjPostStructDelete(struct jsonAddInboundSettingsObjPostStruct* addInSettingsObjPStruct);
+void        jsonAddInboundStreamSettingsRealitySettingsObjectPostStructDelete(struct jsonAddInboundStreamSettingsRealitySettingsObjectPostStruct* addInStreamSettignsRealitySettingsObjPStruct);
+void        jsonAddInboundStreamSettingsObjPostStructDelete(struct jsonAddInboundStreamSettingsObjPostStruct* addInStreamSettingsObjPStruct);
+void        jsonAddInboundSniffingObjectPostStructDelete(struct jsonAddInboundSniffingObjectPostStruct* addInSniffingObjPStruct);
+void        jsonAddInboundPostStructDelete(struct jsonAddInboundPostStruct* addInboundPostStruct);
+void        jsonAddInboundResponseStructDelete(struct jsonAddInboundResponseStruct* addInRStruct);
+void        jsonDeleteSingleInboundPostStructDelete(struct jsonDeleteSingleInboundPostStruct* deleteSingleInboundPostStruct);
+void        jsonDeleteSingleInboundResponseStructDelete(struct jsonDeleteSingleInboundResponseStruct* deleteSingleInRStruct);
+void        jsonDeleteMultipleInboundsPostStructDelete(struct jsonDeleteMultipleInboundsPostStruct* deleteMultipleInboundsPostStruct);
+void        jsonDeleteMultipleInboundResponseSkippedArrayStructDelete(struct jsonDeleteMultipleInboundResponseSkippedArrayStruct* deleteMultiInResSkippedArrStruct, size_t arraySize);
+void        jsonDeleteMultipleInboundResponseStructDelete(struct jsonDeleteMultipleInboundResponseStruct* deleteMultiInRStruct);
+void        jsonSetEnableInboundPostStructDelete(struct jsonSetEnableInboundPostStruct* setEnableInboundPostStruct);
+void        jsonSetEnableInboundResponseStructDelete(struct jsonSetEnableInboundResponseStruct* setEnableInRStruct);
+void        jsonResetInboundPostStructDelete(struct jsonResetInboundPostStruct* resetInboundPostStruct);
+void        jsonResetInboundResponseStructDelete(struct jsonResetInboundResponseStruct* resetInRStruct);
+void        jsonRemoveEveryClientFromInboundPostStructDelete(struct jsonRemoveEveryClientFromInboundPostStruct* removeEveryClientFromInboundPostStruct);
+void        jsonRemoveEveryClientFromInboundResponseObjectStructDelete(struct jsonRemoveEveryClientFromInboundResponseObjectStruct* rmEveryCliFromInResObjStruct);
+void        jsonRemoveEveryClientFromInboundResponseStructDelete(struct jsonRemoveEveryClientFromInboundResponseStruct* rmEveryCliFromInRStruct);
+void        jsonResetAllInboundsUploadNDownloadStructDelete(struct jsonResetAllInboundsUploadNDownloadStruct* resetAllInboundsUploadNDownloadStruct);
+void        jsonImportInboundsPostStructDelete(struct jsonImportInboundsPostStruct* importInboundsPostStruct);
+void        jsonImportInboundsResponseStructDelete(struct jsonImportInboundsResponseStruct* importInboundsRStruct);
+void        jsonListEveryClientObjectTrafficObjectStructDelete(struct jsonListEveryClientObjectTrafficObjectStruct* listEveryCliObjTrafficObjStruct);
+void        jsonListEveryClientArrayStructDelete(struct jsonListEveryClientArrayStruct* listEveryCliArrStruct, size_t arraySize);
+void        jsonListEveryClientStructDelete(struct jsonListEveryClientStruct* listEveryCliStruct);
+void        jsonFilterClientsQueryStructDelete(struct jsonFilterClientsQueryStruct* filterCliQueryStruct);
+void        jsonFilterClientsObjectItemsArrayResponseStructDelete(struct jsonFilterClientsObjectItemsArrayResponseStruct* filterCliObjItemsArrStruct, size_t arraySize);
+void        jsonFilterClientsObjectSummaryObjectResponseStructDelete(struct jsonFilterClientsObjectSummaryObjectResponseStruct* filterCliObjSummaryObjRStruct);
+void        jsonFilterClientsObjectResponseStructDelete(struct jsonFilterClientsObjectResponseStruct* filterCliObjRStruct);
+void        jsonFilterClientsGroupObjectResponseStructDelete(struct jsonFilterClientsGroupObjectResponseStruct* filterCliGroupObjRStruct, size_t arraySize);
+void        jsonFilterClientsResponseStructDelete(struct jsonFilterClientsResponseStruct* filterCliRStruct);
+void        jsonFetchClientByEmailObjectClientObjectStructDelete(struct jsonFetchClientByEmailObjectClientObjectStruct* fetchCliByEmailObjCliObjStruct);
+void        jsonFetchClientByEmailObjectExternalLinksArrayStructDelete(struct jsonFetchClientByEmailObjectExternalLinksArrayStruct* fetchCliByEmailObjExternalLinksArrStruct, size_t arraySize);
+void        jsonFetchClientByEmailObjectStructDelete(struct jsonFetchClientByEmailObjectStruct* fetchCliByEmailObjStruct);
+void        jsonFetchClientByEmailStructDelete(struct jsonFetchClientByEmailStruct* fetchCliByEmailStruct);
+void        jsonFetchClientByTelegramIdObjectArrayClientObjectStructDelete(struct jsonFetchClientByTelegramIdObjectArrayClientObjectStruct* fetchCliByTgIdObjArrCliObjStruct);
+void        jsonFetchClientByTelegramIdObjectArrayExternalLinksArrayStructDelete(struct jsonFetchClientByTelegramIdObjectArrayExternalLinksArrayStruct* fetchCliByTgIArrdObjExternalLinksArrStruct, size_t arraySize);
+void        jsonFetchClientByTelegramIdObjectArrayStructDelete(struct jsonFetchClientByTelegramIdObjectArrayStruct* fetchCliByTgIdObjArrStruct, size_t arraySize);
+void        jsonFetchClientByTelegramIdStructDelete(struct jsonFetchClientByTelegramIdStruct* fetchCliByTelegramIdStruct);
+void        jsonCreateNewClientPostStructDelete(struct jsonCreateNewClientPostStruct* createNewClientPostStruct);
+void        jsonCreateNewClientResponseStructDelete(struct jsonCreateNewClientResponseStruct* createNewCliRStruct);
+void        jsonUpdateClientByEmailPostStructDelete(struct jsonUpdateClientByEmailPostStruct* updateClientByEmailPostStruct);
+void        jsonUpdateClientByEmailResponseStructDelete(struct jsonUpdateClientByEmailResponseStruct* updateCliByEmailRStruct);
+void        jsonDeleteClientByEmailResponseStructDelete(struct jsonDeleteClientByEmailResponseStruct* deleteCliByEmailRStruct);
+void        jsonAttachClient2AdditionalInboundsPostStructDelete(struct jsonAttachClient2AdditionalInboundsPostStruct* attachClient2AdditionalInboundsPostStruct);
+void        jsonAttachClient2AdditionalInboundsResponseStructDelete(struct jsonAttachClient2AdditionalInboundsResponseStruct* attachCli2AdditionalInboundsRStruct);
+void        jsonDetachClient2AdditionalInboundsPostStructDelete(struct jsonDetachClient2AdditionalInboundsPostStruct* detachClient2AdditionalInboundsPostStruct);
+void        jsonDetachClient2AdditionalInboundsResponseStructDelete(struct jsonDetachClient2AdditionalInboundsResponseStruct* detachCli2AdditionalInboundsRStruct);
+void        jsonExternalLinksObjectArrayPostStructDelete(struct jsonExternalLinksObjectArrayPostStruct* rplExtLinksObjArrPStruct, size_t arraySize);
+void        jsonReplaceClientExternalLinksPostStructDelete(struct jsonReplaceClientExternalLinksPostStruct* replaceClientExternalLinksPostStruct);
+void        jsonReplaceClientExternalLinksResponseStructDelete(struct jsonReplaceClientExternalLinksResponseStruct* replaceCliExternalLinksRStruct);
+void        jsonResetAllClientsTrafficsResponseStructDelete(struct jsonResetAllClientsTrafficsResponseStruct* resetAllCliTrafficsRStruct);
+void        jsonDeleteAllDepletedClientsResponseStructDelete(struct jsonDeleteAllDepletedClientsResponseStruct* deleteAllDepletedCliRStruct);
+void        jsonDeleteAllOrphanClientsResponseStructDelete(struct jsonDeleteAllOrphanClientsResponseStruct* deleteAllOrphanCliRStruct);
+void        jsonExportAllClientsObjectArrayClientObjectResponseStructDelete(struct jsonExportAllClientsObjectArrayClientObjectResponseStruct* exportAllCliObjArrCliObjRStruct);
+void        jsonExportAllClientsObjectArrayResponseStructDelete(struct jsonExportAllClientsObjectArrayResponseStruct* exportAllClisObjArrRStruct, size_t arraySize);
+void        jsonExportAllClientsResponseStructDelete(struct jsonExportAllClientsResponseStruct* exportAllCliRStruct);
+void        jsonImportClientsDataObjectPostStructDelete(struct jsonImportClientsDataObjectPostStruct* importClientsDataObjPStruct, size_t arraySize);
+void        jsonImportClientsPostStructDelete(struct jsonImportClientsPostStruct* importClientsPostStruct);
+void        jsonImportClientsObjectSkippedArrayResponseStructDelete(struct jsonImportClientsObjectSkippedArrayResponseStruct* importClisObjSkippedArrRStruct, size_t arraySize);
+void        jsonImportClientsObjectResponseStructDelete(struct jsonImportClientsObjectResponseStruct* importClisObjRStruct);
+void        jsonImportClientsResponseStructDelete(struct jsonImportClientsResponseStruct* importCliRStruct);
+void        jsonBulkAdjustClientsPostStructDelete(struct jsonBulkAdjustClientsPostStruct* bulkAdjustClientsPostStruct);
+void        jsonBulkAdjustClientsObjectSkippedArrayResponseStructDelete(struct jsonBulkAdjustClientsObjectSkippedArrayResponseStruct* bulkAdjClisObjSkippedArrRStruct, size_t arraySize);
+void        jsonBulkAdjustClientsObjectResponseStructDelete(struct jsonBulkAdjustClientsObjectResponseStruct* bulkAdjClisObjRStruct);
+void        jsonBulkAdjustClientsResponseStructDelete(struct jsonBulkAdjustClientsResponseStruct* bulkAdjustCliRStruct);
+void        jsonBulkEnableClientsPostStructDelete(struct jsonBulkEnableClientsPostStruct* bulkEnableClientsPostStruct);
+void        jsonBulkEnableClientsObjectSkippedArrayResponseStructDelete(struct jsonBulkEnableClientsObjectSkippedArrayResponseStruct* bulkEnableClisObjSkippedArrRStruct, size_t arraySize);
+void        jsonBulkEnableClientsObjectResponseStructDelete(struct jsonBulkEnableClientsObjectResponseStruct* bulkEnableClisObjRStruct);
+void        jsonBulkEnableClientsResponseStructDelete(struct jsonBulkEnableClientsResponseStruct* bulkEnableCliRStruct);
+void        jsonBulkDisableClientsPostStructDelete(struct jsonBulkDisableClientsPostStruct* bulkDisableClientsPostStruct);
+void        jsonBulkDisableClientsObjectSkippedArrayResponseStructDelete(struct jsonBulkDisableClientsObjectSkippedArrayResponseStruct* bulkDisableClisObjSkippedArrRStruct, size_t arraySize);
+void        jsonBulkDisableClientsObjectResponseStructDelete(struct jsonBulkDisableClientsObjectResponseStruct* bulkDisableClisObjRStruct);
+void        jsonBulkDisableClientsResponseStructDelete(struct jsonBulkDisableClientsResponseStruct* bulkDisableCliRStruct);
+void        jsonBulkDeleteClientsPostStructDelete(struct jsonBulkDeleteClientsPostStruct* bulkDeleteClientsPostStruct);
+void        jsonBulkDeleteClientsObjectSkippedArrayResponseStructDelete(struct jsonBulkDeleteClientsObjectSkippedArrayResponseStruct* bulkDelClisObjSkippedArrRStruct, size_t arraySize);
+void        jsonBulkDeleteClientsObjectResponseStructDelete(struct jsonBulkDeleteClientsObjectResponseStruct* bulkDelClisObjRStruct);
+void        jsonBulkDeleteClientsResponseStructDelete(struct jsonBulkDeleteClientsResponseStruct* bulkDeleteCliRStruct);
+void        jsonBulkCreateClientsMainObjectPostStructDelete(struct jsonBulkCreateClientsMainObjectPostStruct* bulkCreateClisMainObjPStruct, size_t arraySize);
+void        jsonBulkCreateClientsPostStructDelete(struct jsonBulkCreateClientsPostStruct* bulkCreateClientsPostStruct);
+void        jsonBulkCreateClientsObjectSkippedArrayResponseStructDelete(struct jsonBulkCreateClientsObjectSkippedArrayResponseStruct* bulkCreateClisObjSkippedArrRStruct, size_t arraySize);
+void        jsonBulkCreateClientsObjectResponseStructDelete(struct jsonBulkCreateClientsObjectResponseStruct* bulkCreateClisObjRStruct);
+void        jsonBulkCreateClientsResponseStructDelete(struct jsonBulkCreateClientsResponseStruct* bulkCreateCliRStruct);
+void        jsonBulkAddClients2GroupPostStructDelete(struct jsonBulkAddClients2GroupPostStruct* bulkAddClients2GroupPostStruct);
+void        jsonBulkAddClients2GroupObjectResponseStructDelete(struct jsonBulkAddClients2GroupObjectResponseStruct* bulkAddClis2GroupObjRStruct);
+void        jsonBulkAddClients2GroupResponseStructDelete(struct jsonBulkAddClients2GroupResponseStruct* bulkAddCli2GroupRStruct);
+void        jsonBulkRemoveClientsGroupPostStructDelete(struct jsonBulkRemoveClientsGroupPostStruct* bulkRemoveClientsGroupPostStruct);
+void        jsonBulkRemoveClientsGroupObjectResponseStructDelete(struct jsonBulkRemoveClientsGroupObjectResponseStruct* bulkRmCliGroupObjRStruct);
+void        jsonBulkRemoveClientsGroupResponseStructDelete(struct jsonBulkRemoveClientsGroupResponseStruct* bulkRmCliGroupRStruct);
+void        jsonBulkAttachClientsPostStructDelete(struct jsonBulkAttachClientsPostStruct* bulkAttachClientsPostStruct);
+void        jsonBulkAttachClientsObjectResponseStructDelete(struct jsonBulkAttachClientsObjectResponseStruct* bulkAttachClisObjRStruct);
+void        jsonBulkAttachClientsResponseStructDelete(struct jsonBulkAttachClientsResponseStruct* bulkAttachCliRStruct);
+void        jsonBulkDetachClientsPostStructDelete(struct jsonBulkDetachClientsPostStruct* bulkDetachClientsPostStruct);
+void        jsonBulkDetachClientsObjectResponseStructDelete(struct jsonBulkDetachClientsObjectResponseStruct* bulkDetachClisObjRStruct);
+void        jsonBulkDetachClientsResponseStructDelete(struct jsonBulkDetachClientsResponseStruct* bulkDetachCliRStruct);
+void        jsonBulkResetTrafficPostStructDelete(struct jsonBulkResetTrafficPostStruct* bulkResetTrafficPostStruct);
+void        jsonBulkResetTrafficObjectResponseStructDelete(struct jsonBulkResetTrafficObjectResponseStruct* bulkResetTrafficObjRStruct);
+void        jsonBulkResetTrafficResponseStructDelete(struct jsonBulkResetTrafficResponseStruct* bulkResetTrafficRStruct);
+void        jsonListGroupsObjectArrayStructDelete(struct jsonListGroupsObjectArrayStruct* listGroupsObjArrStruct, size_t arraySize);
+void        jsonListGroupsResponseStructDelete(struct jsonListGroupsResponseStruct* listGroupsRStruct);
+void        jsonListGroupEmailsResponseStructDelete(struct jsonListGroupEmailsResponseStruct* listGroupEmailsRStruct);
+void        jsonCreateGroupPostStructDelete(struct jsonCreateGroupPostStruct* createGroupPostStruct);
+void        jsonCreateGroupObjectResponseStructDelete(struct jsonCreateGroupObjectResponseStruct* createGroupObjRStruct);
+void        jsonCreateGroupResponseStructDelete(struct jsonCreateGroupResponseStruct* createGroupRStruct);
+void        jsonRenameGroupPostStructDelete(struct jsonRenameGroupPostStruct* renameGroupPostStruct);
+void        jsonRenameGroupObjectResponseStructDelete(struct jsonRenameGroupObjectResponseStruct* renameGroupObjRStruct);
+void        jsonRenameGroupResponseStructDelete(struct jsonRenameGroupResponseStruct* renameGroupRStruct);
+void        jsonDeleteGroupPostStructDelete(struct jsonDeleteGroupPostStruct* deleteGroupPostStruct);
+void        jsonDeleteGroupObjectResponseStructDelete(struct jsonDeleteGroupObjectResponseStruct* deleteGroupObjRStruct);
+void        jsonDeleteGroupResponseStructDelete(struct jsonDeleteGroupResponseStruct* deleteGroupRStruct);
+void        jsonResetGroupTrafficPostStructDelete(struct jsonResetGroupTrafficPostStruct* resetGroupTrafficPostStruct);
+void        jsonResetGroupTrafficObjectResponseStructDelete(struct jsonResetGroupTrafficObjectResponseStruct* resetGroupTrafficObjRStruct);
+void        jsonResetGroupTrafficResponseStructDelete(struct jsonResetGroupTrafficResponseStruct* resetGroupTrafficRStruct);
+void        jsonResetClientTrafficResponseStructDelete(struct jsonResetClientTrafficResponseStruct* resetCliTrafficRStruct);
+void        jsonUpdateClientTrafficPostStructDelete(struct jsonUpdateClientTrafficPostStruct* updateClientTrafficPostStruct);
+void        jsonUpdateClientTrafficResponseStructDelete(struct jsonUpdateClientTrafficResponseStruct* updateCliTrafficRStruct);
+void        jsonListClientIpsResponseStructDelete(struct jsonListClientIpsResponseStruct* listCliIpsRStruct);
+void        jsonClearClientIpsResponseStructDelete(struct jsonClearClientIpsResponseStruct* clearCliIpsRStruct);
+void        jsonListClientHwidsObjectArrayStructDelete(struct jsonListClientHwidsObjectArrayStruct* listClientHwidsObjArrStruct, size_t arraySize);
+void        jsonListClientHwidsResponseStructDelete(struct jsonListClientHwidsResponseStruct* listCliHwidsRStruct);
+void        jsonClearClientHwidsResponseStructDelete(struct jsonClearClientHwidsResponseStruct* clearCliHwidsRStruct);
+void        jsonDeleteClientHwidResponseStructDelete(struct jsonDeleteClientHwidResponseStruct* deleteCliHwidRStruct);
+void        jsonOnlinesResponseStructDelete(struct jsonOnlinesResponseStruct* onlinesRStruct);
+void        jsonOnlinesByGuidResponseStructDelete(struct jsonOnlinesByGuidResponseStruct* onlinesByGuidRStruct);
+void        jsonClientIpsByGuidResponseStructDelete(struct jsonClientIpsByGuidResponseStruct* cliIpsByGuidRStruct);
+void        jsonActiveInboundsResponseStructDelete(struct jsonActiveInboundsResponseStruct* activeInboundsRStruct);
+void        jsonLastOnlineResponseStructDelete(struct jsonLastOnlineResponseStruct* lastOnlineRStruct);
+void        jsonTrafficResponseStructDelete(struct jsonTrafficResponseStruct* trafficRStruct);
+void        jsonSubLinksResponseStructDelete(struct jsonSubLinksResponseStruct* subLinksRStruct);
+void        jsonLinksResponseStructDelete(struct jsonLinksResponseStruct* linksRStruct);
+void        jsonOpenApiResponseStructDelete(struct jsonOpenApiResponseStruct* openApiRStruct);
+void        jsonServerStatusMemObjectStructDelete(struct jsonServerStatusMemObjectStruct* srvStatusObjMemObjStruct);
+void        jsonServerStatusSwapObjectStructDelete(struct jsonServerStatusSwapObjectStruct* srvStatusObjSwapObjStruct);
+void        jsonServerStatusDiskObjectStructDelete(struct jsonServerStatusDiskObjectStruct* srvStatusObjDiskObjStruct);
+void        jsonServerStatusDiskIOObjectStructDelete(struct jsonServerStatusDiskIOObjectStruct* srvStatusObjDiskIOObjStruct);
+void        jsonServerStatusDiskTrafficObjectStructDelete(struct jsonServerStatusDiskTrafficObjectStruct* srvStatusObjDiskTrafficObjStruct);
+void        jsonServerStatusNetIOObjectStructDelete(struct jsonServerStatusNetIOObjectStruct* srvStatusObjNetIOObjStruct);
+void        jsonServerStatusNetTrafficObjectStructDelete(struct jsonServerStatusNetTrafficObjectStruct* srvStatusObjNetTrafficObjStruct);
+void        jsonServerStatusPublicIPObjectStructDelete(struct jsonServerStatusPublicIPObjectStruct* srvStatusObjPublicIPObjStruct);
+void        jsonServerStatusAppStatsObjectStructDelete(struct jsonServerStatusAppStatsObjectStruct* srvStatusObjAppStatsObjStruct);
+void        jsonServerStatusXrayObjectStructDelete(struct jsonServerStatusXrayObjectStruct* srvStatusObjXrayObjStruct);
+void        jsonServerStatusLoadObjectStructDelete(struct jsonServerStatusLoadObjectStruct* srvStatusObjLoadObjStruct);
+void        jsonServerStatusObjectStructDelete(struct jsonServerStatusObjectStruct* srvStatusObjStruct);
+void        jsonServerStatusResponseStructDelete(struct jsonServerStatusResponseStruct* serverStatusRStruct);
+void        jsonServerFail2banStatusObjectStructDelete(struct jsonServerFail2banStatusObjectStruct* fail2banStatusObjStruct);
+void        jsonServerFail2banStatusResponseStructDelete(struct jsonServerFail2banStatusResponseStruct* serverFail2banStatusRStruct);
+void        jsonServerCpuHistoryObjectArrayStructDelete(struct jsonServerCpuHistoryObjectArrayStruct* cpuHistoryObjArrStruct, size_t arraySize);
+void        jsonServerCpuHistoryResponseStructDelete(struct jsonServerCpuHistoryResponseStruct* serverCpuHistoryRStruct);
+void        jsonServerHistoryObjectArrayStructDelete(struct jsonServerHistoryObjectArrayStruct* srvHistoryObjArrStruct, size_t arraySize);
+void        jsonServerHistoryResponseStructDelete(struct jsonServerHistoryResponseStruct* serverHistoryRStruct);
+void        jsonServerXrayMetricsStateResponseStructDelete(struct jsonServerXrayMetricsStateResponseStruct* serverXrayMetricsStateRStruct);
+void        jsonServerXrayMetricsHistoryResponseStructDelete(struct jsonServerXrayMetricsHistoryResponseStruct* serverXrayMetricsHistoryRStruct);
+void        jsonServerXrayObservatoryResponseStructDelete(struct jsonServerXrayObservatoryResponseStruct* serverXrayObservatoryRStruct);
+void        jsonServerXrayObservatoryHistoryResponseStructDelete(struct jsonServerXrayObservatoryHistoryResponseStruct* serverXrayObservatoryHistoryRStruct);
+void        jsonServerGetXrayVersionResponseStructDelete(struct jsonServerGetXrayVersionResponseStruct* serverGetXrayVersionRStruct);
+void        jsonServerGetPanelUpdateInfoResponseStructDelete(struct jsonServerGetPanelUpdateInfoResponseStruct* serverGetPanelUpdateInfoRStruct);
+void        jsonServerGetUpdateStatusObjectStructDelete(struct jsonServerGetUpdateStatusObjectStruct* getUpdateStatusObjStruct);
+void        jsonServerGetUpdateStatusResponseStructDelete(struct jsonServerGetUpdateStatusResponseStruct* serverGetUpdateStatusRStruct);
+void        jsonServerGetConfigJsonResponseStructDelete(struct jsonServerGetConfigJsonResponseStruct* serverGetConfigJsonRStruct);
+void        jsonServerGetDbResponseStructDelete(struct jsonServerGetDbResponseStruct* serverGetDbRStruct);
+void        jsonServerGetMigrationResponseStructDelete(struct jsonServerGetMigrationResponseStruct* serverGetMigrationRStruct);
+void        jsonServerGetNewUUIDObjectStructDelete(struct jsonServerGetNewUUIDObjectStruct* getNewUUIDObjStruct);
+void        jsonServerGetNewUUIDResponseStructDelete(struct jsonServerGetNewUUIDResponseStruct* serverGetNewUUIDRStruct);
+void        jsonServerGetWebCertFilesObjectStructDelete(struct jsonServerGetWebCertFilesObjectStruct* getWebCertFilesObjStruct);
+void        jsonServerGetWebCertFilesResponseStructDelete(struct jsonServerGetWebCertFilesResponseStruct* serverGetWebCertFilesRStruct);
+void        jsonServerDescendantsObjectArrayStructDelete(struct jsonServerDescendantsObjectArrayStruct* descendantsObjArrStruct, size_t arraySize);
+void        jsonServerDescendantsResponseStructDelete(struct jsonServerDescendantsResponseStruct* serverDescendantsRStruct);
+void        jsonServerGetNewX25519CertObjectStructDelete(struct jsonServerGetNewX25519CertObjectStruct* getNewX25519ObjStruct);
+void        jsonServerGetNewX25519CertResponseStructDelete(struct jsonServerGetNewX25519CertResponseStruct* serverGetNewX25519CertRStruct);
+void        jsonServerGetNewMldsa65ObjectStructDelete(struct jsonServerGetNewMldsa65ObjectStruct* getNewMldsa65ObjStruct);
+void        jsonServerGetNewMldsa65ResponseStructDelete(struct jsonServerGetNewMldsa65ResponseStruct* serverGetNewMldsa65RStruct);
+void        jsonServerGetNewMlkem768ObjectStructDelete(struct jsonServerGetNewMlkem768ObjectStruct* getNewMlkem768ObjStruct);
+void        jsonServerGetNewMlkem768ResponseStructDelete(struct jsonServerGetNewMlkem768ResponseStruct* serverGetNewMlkem768RStruct);
+void        jsonServerGetNewVlessEncAuthsArrayStructDelete(struct jsonServerGetNewVlessEncAuthsArrayStruct* getNewVlessEncObjAuthsArrStruct, size_t arraySize);
+void        jsonServerGetNewVlessEncObjectStructDelete(struct jsonServerGetNewVlessEncObjectStruct* getNewVlessEncObjStruct);
+void        jsonServerGetNewVlessEncResponseStructDelete(struct jsonServerGetNewVlessEncResponseStruct* serverGetNewVlessEncRStruct);
+void        jsonServerStopXrayServiceResponseStructDelete(struct jsonServerStopXrayServiceResponseStruct* serverStopXrayServiceRStruct);
+void        jsonServerRestartXrayServiceResponseStructDelete(struct jsonServerRestartXrayServiceResponseStruct* serverRestartXrayServiceRStruct);
+void        jsonServerInstallXrayResponseStructDelete(struct jsonServerInstallXrayResponseStruct* serverInstallXrayRStruct);
+void        jsonServerUpdatePanelObjectStructDelete(struct jsonServerUpdatePanelObjectStruct* updatePanelObjStruct);
+void        jsonServerUpdatePanelResponseStructDelete(struct jsonServerUpdatePanelResponseStruct* serverUpdatePanelRStruct);
+void        jsonServerSetUpdateChannelPostStructDelete(struct jsonServerSetUpdateChannelPostStruct* serverSetUpdateChannelPostStruct);
+void        jsonServerSetUpdateChannelResponseStructDelete(struct jsonServerSetUpdateChannelResponseStruct* serverSetUpdateChannelRStruct);
+void        jsonServerUpdateGeofileResponseStructDelete(struct jsonServerUpdateGeofileResponseStruct* serverUpdateGeofileRStruct);
+void        jsonServerLogsResponseStructDelete(struct jsonServerLogsResponseStruct* serverLogsRStruct);
+void        jsonServerXrayLogsObjectArrayStructDelete(struct jsonServerXrayLogsObjectArrayStruct* xrayLogsObjArrStruct, size_t arraySize);
+void        jsonServerXrayLogsResponseStructDelete(struct jsonServerXrayLogsResponseStruct* serverXrayLogsRStruct);
+void        jsonServerAmneziawgLogsPeersArrayStructDelete(struct jsonServerAmneziawgLogsPeersArrayStruct* awgLogsObjPeersArrStruct, size_t arraySize);
+void        jsonServerAmneziawgLogsObjectStructDelete(struct jsonServerAmneziawgLogsObjectStruct* awgLogsObjStruct);
+void        jsonServerAmneziawgLogsResponseStructDelete(struct jsonServerAmneziawgLogsResponseStruct* serverAmneziawgLogsRStruct);
+void        jsonServerImportDbResponseStructDelete(struct jsonServerImportDbResponseStruct* serverImportDbRStruct);
+void        jsonServerGetNewEchCertPostStructDelete(struct jsonServerGetNewEchCertPostStruct* serverGetNewEchCertPostStruct);
+void        jsonServerGetNewEchCertResponseStructDelete(struct jsonServerGetNewEchCertResponseStruct* serverGetNewEchCertRStruct);
+void        jsonServerGetCertHashPostStructDelete(struct jsonServerGetCertHashPostStruct* serverGetCertHashPostStruct);
+void        jsonServerGetRemoteCertHashPostStructDelete(struct jsonServerGetRemoteCertHashPostStruct* serverGetRemoteCertHashPostStruct);
+void        jsonServerCertHashObjectArrayStructDelete(struct jsonServerCertHashObjectArrayStruct* certHashObjArrStruct, size_t arraySize);
+void        jsonServerGetCertHashResponseStructDelete(struct jsonServerGetCertHashResponseStruct* serverGetCertHashRStruct);
+void        jsonServerGetRemoteCertHashResponseStructDelete(struct jsonServerGetRemoteCertHashResponseStruct* serverGetRemoteCertHashRStruct);
+void        jsonServerScanRealityTargetPostStructDelete(struct jsonServerScanRealityTargetPostStruct* serverScanRealityTargetPostStruct);
+void        jsonServerScanRealityTargetObjectStructDelete(struct jsonServerScanRealityTargetObjectStruct* scanRealityTargetObjStruct, size_t arraySize);
+void        jsonServerScanRealityTargetResponseStructDelete(struct jsonServerScanRealityTargetResponseStruct* serverScanRealityTargetRStruct);
+void        jsonServerScanRealityTargetsPostStructDelete(struct jsonServerScanRealityTargetsPostStruct* serverScanRealityTargetsPostStruct);
+void        jsonServerScanRealityTargetsResponseStructDelete(struct jsonServerScanRealityTargetsResponseStruct* serverScanRealityTargetsRStruct);
+void        jsonServerClientIpsIpsItemStructDelete(struct jsonServerClientIpsIpsItemStruct* clientIpsObjArrIpsArrStruct, size_t arraySize);
+void        jsonServerClientIpsObjectArrayStructDelete(struct jsonServerClientIpsObjectArrayStruct* clientIpsObjArrStruct, size_t arraySize);
+void        jsonServerClientIpsResponseStructDelete(struct jsonServerClientIpsResponseStruct* serverCliIpsRStruct);
+void        jsonServerSubmitClientIpsObjectPostStructDelete(struct jsonServerSubmitClientIpsObjectPostStruct* submitClientIpsObjArrPStruct, size_t arraySize);
+void        jsonServerSubmitClientIpsPostStructDelete(struct jsonServerSubmitClientIpsPostStruct* serverSubmitClientIpsPostStruct);
+void        jsonServerSubmitClientIpsResponseStructDelete(struct jsonServerSubmitClientIpsResponseStruct* serverSubmitCliIpsRStruct);
+void        jsonSettingAllWebObjectStructDelete(struct jsonSettingAllWebObjectStruct* setAllObjWebObjStruct);
+void        jsonSettingAllTgObjectStructDelete(struct jsonSettingAllTgObjectStruct* setAllObjTgObjStruct);
+void        jsonSettingAllSmtpObjectStructDelete(struct jsonSettingAllSmtpObjectStruct* setAllObjSmtpObjStruct);
+void        jsonSettingAllLdapObjectStructDelete(struct jsonSettingAllLdapObjectStruct* setAllObjLdapObjStruct);
+void        jsonSettingAllSubObjectStructDelete(struct jsonSettingAllSubObjectStruct* setAllObjSubObjStruct);
+void        jsonSettingAllHasFlagsObjectStructDelete(struct jsonSettingAllHasFlagsObjectStruct* setAllObjHasFlagsObjStruct);
+void        jsonSettingAllGeneralObjectStructDelete(struct jsonSettingAllGeneralObjectStruct* setAllObjGeneralObjStruct);
+void        jsonSettingAllObjectStructDelete(struct jsonSettingAllObjectStruct* setAllObjStruct);
+void        jsonSettingAllResponseStructDelete(struct jsonSettingAllResponseStruct* settingAllRStruct);
+void        jsonSettingDefaultSettingsObjectStructDelete(struct jsonSettingDefaultSettingsObjectStruct* defSettingsObjStruct);
+void        jsonSettingDefaultSettingsResponseStructDelete(struct jsonSettingDefaultSettingsResponseStruct* settingDefaultSettingsRStruct);
+void        jsonSettingFactoryDefaultsObjectStructDelete(struct jsonSettingFactoryDefaultsObjectStruct* factoryDefaultsObjStruct);
+void        jsonSettingFactoryDefaultsResponseStructDelete(struct jsonSettingFactoryDefaultsResponseStruct* settingFactoryDefaultsRStruct);
+void        jsonSettingUpdatePostStructDelete(struct jsonSettingUpdatePostStruct* settingUpdatePostStruct);
+void        jsonSettingUpdateResponseStructDelete(struct jsonSettingUpdateResponseStruct* settingUpdateRStruct);
+void        jsonSettingValidateRegexPostStructDelete(struct jsonSettingValidateRegexPostStruct* settingValidateRegexPostStruct);
+void        jsonSettingValidateRegexResponseStructDelete(struct jsonSettingValidateRegexResponseStruct* settingValidateRegexRStruct);
+void        jsonSettingApiTokensObjectStructDelete(struct jsonSettingApiTokensObjectStruct* objArrays, size_t arraySize);
+void        jsonSettingApiTokensListPostStructDelete(struct jsonSettingApiTokensListPostStruct* settingApiTokensListPostStruct);
+void        jsonSettingApiTokenNewPostStructDelete(struct jsonSettingApiTokenNewPostStruct* settingApiTokenNewPostStruct);
+void        jsonSettingApiTokenNewResponseStructDelete(struct jsonSettingApiTokenNewResponseStruct* settingApiTokenNewRStruct);
+void        jsonSettingApiTokenDeletePostStructDelete(struct jsonSettingApiTokenDeletePostStruct* settingApiTokenDeletePostStruct);
+void        jsonSettingApiTokenDeleteResponseStructDelete(struct jsonSettingApiTokenDeleteResponseStruct* settingApiTokenDeleteRStruct);
+void        jsonSettingApiTokenSetDBPostStructDelete(struct jsonSettingApiTokenSetDBPostStruct* settingApiTokenSetDBPostStruct);
+void        jsonSettingApiTokenSetDBResponseStructDelete(struct jsonSettingApiTokenSetDBResponseStruct* settingApiTokenSetDBRStruct);
+void        jsonSettingUpdateUserPostStructDelete(struct jsonSettingUpdateUserPostStruct* settingUpdateUserPostStruct);
+void        jsonSettingUpdateUserResponseStructDelete(struct jsonSettingUpdateUserResponseStruct* settingUpdateUserRStruct);
+void        jsonSettingRestartPanelResponseStructDelete(struct jsonSettingRestartPanelResponseStruct* settingRestartPanelRStruct);
+void        jsonSettingTestSmtpResponseStructDelete(struct jsonSettingTestSmtpResponseStruct* settingTestSmtpRStruct);
+void        jsonSettingTestTgBotResponseStructDelete(struct jsonSettingTestTgBotResponseStruct* settingTestTgBotRStruct);
+void        jsonSettingGetDefaultJsonConfigResponseStructDelete(struct jsonSettingGetDefaultJsonConfigResponseStruct* settingGetDefaultJsonConfigRStruct);
+void        jsonXrayConfigObjectResponseStructDelete(struct jsonXrayConfigObjectResponseStruct* xrayConfigObjRStruct);
+void        jsonXrayConfigResponseStructDelete(struct jsonXrayConfigResponseStruct* xrayConfigRStruct);
+void        jsonXrayGetDefaultJsonConfigResponseStructDelete(struct jsonXrayGetDefaultJsonConfigResponseStruct* xrayGetDefaultJsonConfigRStruct);
+void        jsonXrayGetOutboundsTrafficResponseStructDelete(struct jsonXrayGetOutboundsTrafficResponseStruct* xrayGetOutboundsTrafficRStruct);
+void        jsonXrayGetXrayResultResponseStructDelete(struct jsonXrayGetXrayResultResponseStruct* xrayGetXrayResultRStruct);
+void        jsonXrayUpdatePostStructDelete(struct jsonXrayUpdatePostStruct* xrayUpdatePostStruct);
+void        jsonXrayUpdateResponseStructDelete(struct jsonXrayUpdateResponseStruct* xrayUpdateRStruct);
+void        jsonXrayWarpPostStructDelete(struct jsonXrayWarpPostStruct* xrayWarpPostStruct);
+void        jsonXrayWarpResponseStructDelete(struct jsonXrayWarpResponseStruct* xrayWarpRStruct);
+void        jsonXrayNordPostStructDelete(struct jsonXrayNordPostStruct* xrayNordPostStruct);
+void        jsonXrayNordResponseStructDelete(struct jsonXrayNordResponseStruct* xrayNordRStruct);
+void        jsonXrayPiaPostStructDelete(struct jsonXrayPiaPostStruct* xrayPiaPostStruct);
+void        jsonXrayPiaResponseStructDelete(struct jsonXrayPiaResponseStruct* xrayPiaRStruct);
+void        jsonXrayResetOutboundsTrafficPostStructDelete(struct jsonXrayResetOutboundsTrafficPostStruct* xrayResetOutboundsTrafficPostStruct);
+void        jsonXrayResetOutboundsTrafficResponseStructDelete(struct jsonXrayResetOutboundsTrafficResponseStruct* xrayResetOutboundsTrafficRStruct);
+void        jsonXrayTestOutboundPostStructDelete(struct jsonXrayTestOutboundPostStruct* xrayTestOutboundPostStruct);
+void        jsonXrayTestOutboundResponseStructDelete(struct jsonXrayTestOutboundResponseStruct* xrayTestOutboundRStruct);
+void        jsonXrayTestOutboundsPostStructDelete(struct jsonXrayTestOutboundsPostStruct* xrayTestOutboundsPostStruct);
+void        jsonXrayTestOutboundsResponseStructDelete(struct jsonXrayTestOutboundsResponseStruct* xrayTestOutboundsRStruct);
+void        jsonXrayBalancerStatusPostStructDelete(struct jsonXrayBalancerStatusPostStruct* xrayBalancerStatusPostStruct);
+void        jsonXrayBalancerStatusResponseStructDelete(struct jsonXrayBalancerStatusResponseStruct* xrayBalancerStatusRStruct);
+void        jsonXrayBalancerOverridePostStructDelete(struct jsonXrayBalancerOverridePostStruct* xrayBalancerOverridePostStruct);
+void        jsonXrayBalancerOverrideResponseStructDelete(struct jsonXrayBalancerOverrideResponseStruct* xrayBalancerOverrideRStruct);
+void        jsonXrayRouteTestPostStructDelete(struct jsonXrayRouteTestPostStruct* xrayRouteTestPostStruct);
+void        jsonXrayRouteTestResponseStructDelete(struct jsonXrayRouteTestResponseStruct* xrayRouteTestRStruct);
+void        jsonXrayGeoDataFilesResponseStructDelete(struct jsonXrayGeoDataFilesResponseStruct* xrayGeoDataFilesRStruct);
+void        jsonXrayGeoDataCategoriesQueryStructDelete(struct jsonXrayGeoDataCategoriesQueryStruct* xrayGeoDataCategoriesQueryStruct);
+void        jsonXrayGeoDataCategoriesResponseStructDelete(struct jsonXrayGeoDataCategoriesResponseStruct* xrayGeoDataCategoriesRStruct);
+void        jsonXrayGeoDataEntriesQueryStructDelete(struct jsonXrayGeoDataEntriesQueryStruct* xrayGeoDataEntriesQueryStruct);
+void        jsonXrayGeoDataEntriesResponseStructDelete(struct jsonXrayGeoDataEntriesResponseStruct* xrayGeoDataEntriesRStruct);
+void        jsonXrayGeoDataValidatePostStructDelete(struct jsonXrayGeoDataValidatePostStruct* xrayGeoDataValidatePostStruct);
+void        jsonXrayGeoDataValidateResponseStructDelete(struct jsonXrayGeoDataValidateResponseStruct* xrayGeoDataValidateRStruct);
+void        jsonXrayOutboundSubsListResponseStructDelete(struct jsonXrayOutboundSubsListResponseStruct* xrayOutboundSubsListRStruct);
+void        jsonXrayOutboundSubsCreatePostStructDelete(struct jsonXrayOutboundSubsCreatePostStruct* xrayOutboundSubsCreatePostStruct);
+void        jsonXrayOutboundSubsCreateResponseStructDelete(struct jsonXrayOutboundSubsCreateResponseStruct* xrayOutboundSubsCreateRStruct);
+void        jsonXrayOutboundSubsUpdatePostStructDelete(struct jsonXrayOutboundSubsUpdatePostStruct* xrayOutboundSubsUpdatePostStruct);
+void        jsonXrayOutboundSubsUpdateResponseStructDelete(struct jsonXrayOutboundSubsUpdateResponseStruct* xrayOutboundSubsUpdateRStruct);
+void        jsonXrayOutboundSubsDeleteResponseStructDelete(struct jsonXrayOutboundSubsDeleteResponseStruct* xrayOutboundSubsDeleteRStruct);
+void        jsonXrayOutboundSubsRefreshResponseStructDelete(struct jsonXrayOutboundSubsRefreshResponseStruct* xrayOutboundSubsRefreshRStruct);
+void        jsonXrayOutboundSubsMovePostStructDelete(struct jsonXrayOutboundSubsMovePostStruct* xrayOutboundSubsMovePostStruct);
+void        jsonXrayOutboundSubsMoveResponseStructDelete(struct jsonXrayOutboundSubsMoveResponseStruct* xrayOutboundSubsMoveRStruct);
+void        jsonXrayOutboundSubsParsePostStructDelete(struct jsonXrayOutboundSubsParsePostStruct* xrayOutboundSubsParsePostStruct);
+void        jsonXrayOutboundSubsParseResponseStructDelete(struct jsonXrayOutboundSubsParseResponseStruct* xrayOutboundSubsParseRStruct);
+void        jsonSubServerGetQueryStructDelete(struct jsonSubServerGetQueryStruct* subServerGetQueryStruct);
+void        jsonSubServerGetResponseStructDelete(struct jsonSubServerGetResponseStruct* subServerGetRStruct);
+void        jsonSubServerJsonResponseStructDelete(struct jsonSubServerJsonResponseStruct* subServerJsonRStruct);
+void        jsonSubServerClashResponseStructDelete(struct jsonSubServerClashResponseStruct* subServerClashRStruct);
+void        jsonSubBalancerObjectStructDelete(struct jsonSubBalancerObjectStruct* listSubBalancersObjArrStruct, size_t arraySize);
+void        jsonListSubBalancersResponseStructDelete(struct jsonListSubBalancersResponseStruct* listSubBalancersRStruct);
+void        jsonCreateSubBalancerPostStructDelete(struct jsonCreateSubBalancerPostStruct* createSubBalancerPostStruct);
+void        jsonCreateSubBalancerResponseStructDelete(struct jsonCreateSubBalancerResponseStruct* createSubBalancerRStruct);
+void        jsonUpdateSubBalancerPostStructDelete(struct jsonUpdateSubBalancerPostStruct* updateSubBalancerPostStruct);
+void        jsonUpdateSubBalancerResponseStructDelete(struct jsonUpdateSubBalancerResponseStruct* updateSubBalancerRStruct);
+void        jsonDeleteSubBalancerResponseStructDelete(struct jsonDeleteSubBalancerResponseStruct* deleteSubBalancerRStruct);
 
 struct jsonListInboundClientStatsArrayStruct*      jsonListInboundClientStatsArray(const char* json);
 struct jsonListInboundStruct*                      jsonListInbound(const char* json);
