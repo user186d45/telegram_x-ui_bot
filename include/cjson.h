@@ -52,6 +52,8 @@ struct jsonListInboundSettingsObjectStruct {
 
 struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct {
     const char*                 type;
+    struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct;
+    struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct;
 
 };
 
@@ -104,8 +106,8 @@ struct jsonListInboundStruct {
     const char*                 msg;
     size_t                      jsonListInboundObjectStructSize;
     struct jsonListInboundObjectStruct* listInObjStruct; // array
-
 };
+
 
 // =====================================================
 // List every inbound owned by the authenticated user ( slim version, uses some of the structs defined above )
