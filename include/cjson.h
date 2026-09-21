@@ -50,6 +50,32 @@ struct jsonListInboundSettingsObjectStruct {
 
 };
 
+struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct {
+    const char*                 name; // header key, e.g. "sdfasdaf"
+    const char**                value; // array of header values
+    int64_t                     valueCount;
+
+};
+
+struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStruct {
+    const char*                 version;
+    const char*                 method;
+    const char**                path; // array of path entries
+    int64_t                     pathCount;
+    size_t                      jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize;
+    struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct* listInStreamSettingsTcpSettingsObjHeaderObjReqHeadersStruct; // array
+
+};
+
+struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStruct {
+    const char*                 version;
+    const char*                 status;
+    const char*                 reason;
+    size_t                      jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize;
+    struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct* listInStreamSettingsTcpSettingsObjHeaderObjResHeadersStruct; // array
+
+};
+
 struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct {
     const char*                 type;
     struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct;
@@ -63,9 +89,127 @@ struct jsonListInboundStreamSettingsTcpSettingsObjectStruct {
 
 };
 
+struct jsonListInboundStreamSettingsKcpSettingsObjectStruct {
+    int64_t                     mtu;
+    int64_t                     tti;
+    int64_t                     uplinkCapacity;
+    int64_t                     downlinkCapacity;
+    int64_t                     cwndMultiplier;
+    int64_t                     maxSendingWindow;
+
+};
+
+struct jsonListInboundStreamSettingsFinalMaskUdpMkcpLegacyObjectStruct {
+    const char*                 header; // e.g. ""
+    const char*                 value; // e.g. "password1234"
+
+};
+
+struct jsonListInboundStreamSettingsFinalMaskUdpXdnsObjectStruct {
+    const char**                domains; // array of domain names
+    int64_t                     domainsCount;
+
+};
+
+struct jsonListInboundStreamSettingsFinalMaskUdpXicmpObjectStruct {
+    unsigned char               dgram;
+    const char**                ips; // array of ip addresses
+    int64_t                     ipsCount;
+
+};
+
+struct jsonListInboundStreamSettingsFinalMaskUdpRealmTlsConfigObjectStruct {
+    const char*                 serverName;
+    const char**                alpn; // array of alpn options, h3 / h2 / http/1.1
+    int64_t                     alpnCount;
+    const char*                 fingerprint; // chrome / firefox / safari / ios / android / edge / 360 / qq / random / randomizednoalpn / unsafe
+    unsigned char               allowInsecure;
+
+};
+
+struct jsonListInboundStreamSettingsFinalMaskUdpRealmObjectStruct {
+    const char*                 url; // always of the form realm://token@host:port/id
+    const char**                stunServers; // array of stun server addresses
+    int64_t                     stunServersCount;
+    struct jsonListInboundStreamSettingsFinalMaskUdpRealmTlsConfigObjectStruct* listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct; // optional, NULL when not present
+
+};
+
+struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct {
+    const char*                 type; // array / str / hex / base64
+    int64_t                     rand; // only present when type is "array"
+    const char*                 randRange; // only present when type is "array", e.g. "0-255"
+    const char*                 packet; // only present when type is "str" / "hex" / "base64"
+
+};
+
+struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomObjectStruct {
+    size_t                      jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomClientPacketStructSize;
+    struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct* listInStreamSettingsFinalMaskUdpHeaderCustomClientPacketStruct; // array
+    size_t                      jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomServerPacketStructSize;
+    struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct* listInStreamSettingsFinalMaskUdpHeaderCustomServerPacketStruct; // array
+
+};
+
+struct jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStruct {
+    const char*                 type; // array / str / hex / base64
+    const char*                 delay; // e.g. "10-20"
+    const char*                 rand; // only present when type is "array", e.g. "1-8192"
+    const char*                 randRange; // only present when type is "array", e.g. "0-255"
+    const char*                 packet; // only present when type is "str" / "hex" / "base64"
+
+};
+
+struct jsonListInboundStreamSettingsFinalMaskUdpNoiseObjectStruct {
+    int64_t                     reset;
+    size_t                      jsonListInboundStreamSettingsFinalMaskUdpNoisePacketStructSize;
+    struct jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStruct* listInStreamSettingsFinalMaskUdpNoisePacketStruct; // array
+
+};
+
+struct jsonListInboundStreamSettingsFinalMaskUdpObjectStruct {
+    const char*                 type; // mkcp-legacy / xdns / xicmp / realm / header-custom / noise
+    struct jsonListInboundStreamSettingsFinalMaskUdpMkcpLegacyObjectStruct* listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct;
+    struct jsonListInboundStreamSettingsFinalMaskUdpXdnsObjectStruct* listInStreamSettingsFinalMaskUdpXdnsObjStruct;
+    struct jsonListInboundStreamSettingsFinalMaskUdpXicmpObjectStruct* listInStreamSettingsFinalMaskUdpXicmpObjStruct;
+    struct jsonListInboundStreamSettingsFinalMaskUdpRealmObjectStruct* listInStreamSettingsFinalMaskUdpRealmObjStruct;
+    struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomObjectStruct* listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct;
+    struct jsonListInboundStreamSettingsFinalMaskUdpNoiseObjectStruct* listInStreamSettingsFinalMaskUdpNoiseObjStruct;
+
+};
+
+struct jsonListInboundStreamSettingsFinalMaskObjectStruct {
+    size_t                      jsonListInboundStreamSettingsFinalMaskUdpStructSize;
+    struct jsonListInboundStreamSettingsFinalMaskUdpObjectStruct* listInStreamSettingsFinalMaskUdpStruct; // array
+
+};
+
+struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct {
+    const char*                 system; // optional, e.g. "linux" / "windows"
+    const char*                 type; // int / string, determines how value must be interpreted
+    const char*                 level; // e.g. "6"
+    const char*                 opt; // e.g. "19"
+    const char*                 value; // numeric string when type is "int", arbitrary string when type is "string"
+
+};
+
+struct jsonListInboundStreamSettingsSockoptObjectStruct {
+    unsigned char               tcpFastOpen;
+    const char*                 tproxy; // off / redirect / tproxy
+    unsigned char               penetrate;
+    const char*                 tcpcongestion; // e.g. "bbr"
+    size_t                      jsonListInboundStreamSettingsSockoptCustomSockoptStructSize;
+    struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct* listInStreamSettingsSockoptCustomSockoptStruct; // array
+
+};
+
 struct jsonListInboundStreamSettingsObjectStruct {
     const char*                 network;
     struct jsonListInboundStreamSettingsTcpSettingsObjectStruct* listInStreamSettingsTcpSettingsObjStruct;
+    struct jsonListInboundStreamSettingsKcpSettingsObjectStruct* listInStreamSettingsKcpSettingsObjStruct;
+    const char*                 security; // for kcp: currently "none", TODO: different security values may carry extra settings, handle them at the settings field
+    struct jsonListInboundStreamSettingsFinalMaskObjectStruct* listInStreamSettingsFinalMaskObjStruct; // optional, NULL when the finalmask field is not present
+    struct jsonListInboundStreamSettingsSockoptObjectStruct* listInStreamSettingsSockoptObjStruct;
 
 };
 
@@ -3692,9 +3836,27 @@ void        jsonListInboundClientStatsArrayStructDelete(struct jsonListInboundCl
 void        jsonListInboundSettingsClientsArrayStructDelete(struct jsonListInboundSettingsClientsArrayStruct* listInSettingsCliArrStruct, size_t arraySize);
 void        jsonListInboundSettingsObjectStructDelete(struct jsonListInboundSettingsObjectStruct* listInSettingsObjStruct);
 void        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjStruct);
+void        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersArrayStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct* listInStreamSettingsTcpSettingsObjHeaderObjHeadersStruct, size_t arraySize);
+void        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct);
+void        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct);
 void        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectStruct* listInStreamSettingsTcpSettingsObjStruct);
+void        jsonListInboundStreamSettingsKcpSettingsObjectStructDelete(struct jsonListInboundStreamSettingsKcpSettingsObjectStruct* listInStreamSettingsKcpSettingsObjStruct);
+void        jsonListInboundStreamSettingsFinalMaskUdpMkcpLegacyObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpMkcpLegacyObjectStruct* listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct);
+void        jsonListInboundStreamSettingsFinalMaskUdpXdnsObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpXdnsObjectStruct* listInStreamSettingsFinalMaskUdpXdnsObjStruct);
+void        jsonListInboundStreamSettingsFinalMaskUdpXicmpObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpXicmpObjectStruct* listInStreamSettingsFinalMaskUdpXicmpObjStruct);
+void        jsonListInboundStreamSettingsFinalMaskUdpRealmTlsConfigObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpRealmTlsConfigObjectStruct* listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct);
+void        jsonListInboundStreamSettingsFinalMaskUdpRealmObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpRealmObjectStruct* listInStreamSettingsFinalMaskUdpRealmObjStruct);
+void        jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct* listInStreamSettingsFinalMaskUdpHeaderCustomPacketObjStruct, size_t arraySize);
+void        jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomObjectStruct* listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct);
+void        jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStruct* listInStreamSettingsFinalMaskUdpNoisePacketObjStruct, size_t arraySize);
+void        jsonListInboundStreamSettingsFinalMaskUdpNoiseObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpNoiseObjectStruct* listInStreamSettingsFinalMaskUdpNoiseObjStruct);
+void        jsonListInboundStreamSettingsFinalMaskUdpObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpObjectStruct* listInStreamSettingsFinalMaskUdpObjStruct);
+void        jsonListInboundStreamSettingsFinalMaskObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskObjectStruct* listInStreamSettingsFinalMaskObjStruct);
+void        jsonListInboundStreamSettingsSockoptCustomSockoptObjectStructDelete(struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct* listInStreamSettingsSockoptCustomSockoptObjStruct, size_t arraySize);
+void        jsonListInboundStreamSettingsSockoptObjectStructDelete(struct jsonListInboundStreamSettingsSockoptObjectStruct* listInStreamSettingsSockoptObjStruct);
 void        jsonListInboundStreamSettingsObjectStructDelete(struct jsonListInboundStreamSettingsObjectStruct* listInStreamSettingsObjStruct);
 void        jsonListInboundSniffingObjectStructDelete(struct jsonListInboundSniffingObjectStruct* listInSniffingObjStruct);
+void        jsonListInboundObjectStructDeleteElement(struct jsonListInboundObjectStruct* listInObj);
 void        jsonListInboundObjectStructDelete(struct jsonListInboundObjectStruct* listInObjStruct, size_t arraySize);
 void        jsonListInboundStructDelete(struct jsonListInboundStruct* listInStruct);
 void        jsonListInboundSettingsClientsArraySlimStructDelete(struct jsonListInboundSettingsClientsArraySlimStruct* listInSettingsCliArrSlimStruct, size_t arraySize);

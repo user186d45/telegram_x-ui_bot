@@ -48,22 +48,310 @@ static unsigned char isJsonValid(const char* json) {
 void jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectStruct* listInStreamSettingsTcpSettingsObjStruct) {
     if (listInStreamSettingsTcpSettingsObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct) {
         jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStructDelete(listInStreamSettingsTcpSettingsObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct);
+        listInStreamSettingsTcpSettingsObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
 
     }
 
-    listInStreamSettingsTcpSettingsObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+    free(listInStreamSettingsTcpSettingsObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersArrayStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct* listInStreamSettingsTcpSettingsObjHeaderObjHeadersStruct, size_t arraySize) {
+    for (size_t i = 0; i < arraySize; i++) {
+        struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct* headersItem = &listInStreamSettingsTcpSettingsObjHeaderObjHeadersStruct[i];
+        free((char*)headersItem->name);
+
+        for (size_t j = 0; j < (size_t)headersItem->valueCount; j++) {
+            free((char*)headersItem->value[j]);
+
+        }
+
+        free((char*)headersItem->value);
+
+    }
+
+    free(listInStreamSettingsTcpSettingsObjHeaderObjHeadersStruct);
+
+}
+
+void jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct) {
+    free((char*)listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct->version);
+    free((char*)listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct->method);
+
+    for (size_t i = 0; i < (size_t)listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct->pathCount; i++) {
+        free((char*)listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct->path[i]);
+
+    }
+
+    free((char*)listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct->path);
+
+    if (listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqHeadersStruct) {
+        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersArrayStructDelete(listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqHeadersStruct, listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct->jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize);
+
+        listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqHeadersStruct = NULL;
+
+    }
+
+    free(listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct) {
+    free((char*)listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct->version);
+    free((char*)listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct->status);
+    free((char*)listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct->reason);
+
+    if (listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjResHeadersStruct) {
+        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersArrayStructDelete(listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjResHeadersStruct, listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct->jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize);
+
+        listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjResHeadersStruct = NULL;
+
+    }
+
+    free(listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjStruct) {
+    free((char*)listInStreamSettingsTcpSettingsObjHeaderObjStruct->type);
+
+    if (listInStreamSettingsTcpSettingsObjHeaderObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct) {
+        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStructDelete(listInStreamSettingsTcpSettingsObjHeaderObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct);
+        listInStreamSettingsTcpSettingsObjHeaderObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct = NULL;
+
+    }
+
+    if (listInStreamSettingsTcpSettingsObjHeaderObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct) {
+        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStructDelete(listInStreamSettingsTcpSettingsObjHeaderObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct);
+        listInStreamSettingsTcpSettingsObjHeaderObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct = NULL;
+
+    }
+
+    free(listInStreamSettingsTcpSettingsObjHeaderObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsKcpSettingsObjectStructDelete(struct jsonListInboundStreamSettingsKcpSettingsObjectStruct* listInStreamSettingsKcpSettingsObjStruct) {
+    free(listInStreamSettingsKcpSettingsObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsFinalMaskUdpMkcpLegacyObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpMkcpLegacyObjectStruct* listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct) {
+    free((char*)listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct->header);
+    free((char*)listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct->value);
+
+    free(listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsFinalMaskUdpXdnsObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpXdnsObjectStruct* listInStreamSettingsFinalMaskUdpXdnsObjStruct) {
+    for (size_t i = 0; i < (size_t)listInStreamSettingsFinalMaskUdpXdnsObjStruct->domainsCount; i++) {
+        free((char*)listInStreamSettingsFinalMaskUdpXdnsObjStruct->domains[i]);
+
+    }
+
+    free((char*)listInStreamSettingsFinalMaskUdpXdnsObjStruct->domains);
+
+    free(listInStreamSettingsFinalMaskUdpXdnsObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsFinalMaskUdpXicmpObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpXicmpObjectStruct* listInStreamSettingsFinalMaskUdpXicmpObjStruct) {
+    for (size_t i = 0; i < (size_t)listInStreamSettingsFinalMaskUdpXicmpObjStruct->ipsCount; i++) {
+        free((char*)listInStreamSettingsFinalMaskUdpXicmpObjStruct->ips[i]);
+
+    }
+
+    free((char*)listInStreamSettingsFinalMaskUdpXicmpObjStruct->ips);
+
+    free(listInStreamSettingsFinalMaskUdpXicmpObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsFinalMaskUdpRealmTlsConfigObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpRealmTlsConfigObjectStruct* listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct) {
+    free((char*)listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct->serverName);
+    free((char*)listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct->fingerprint);
+
+    for (size_t i = 0; i < (size_t)listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct->alpnCount; i++) {
+        free((char*)listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct->alpn[i]);
+
+    }
+
+    free((char*)listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct->alpn);
+
+    free(listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsFinalMaskUdpRealmObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpRealmObjectStruct* listInStreamSettingsFinalMaskUdpRealmObjStruct) {
+    free((char*)listInStreamSettingsFinalMaskUdpRealmObjStruct->url);
+
+    for (size_t i = 0; i < (size_t)listInStreamSettingsFinalMaskUdpRealmObjStruct->stunServersCount; i++) {
+        free((char*)listInStreamSettingsFinalMaskUdpRealmObjStruct->stunServers[i]);
+
+    }
+
+    free((char*)listInStreamSettingsFinalMaskUdpRealmObjStruct->stunServers);
+
+    if (listInStreamSettingsFinalMaskUdpRealmObjStruct->listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct) {
+        jsonListInboundStreamSettingsFinalMaskUdpRealmTlsConfigObjectStructDelete(listInStreamSettingsFinalMaskUdpRealmObjStruct->listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct);
+        listInStreamSettingsFinalMaskUdpRealmObjStruct->listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct = NULL;
+
+    }
+
+    free(listInStreamSettingsFinalMaskUdpRealmObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct* listInStreamSettingsFinalMaskUdpHeaderCustomPacketObjStruct, size_t arraySize) {
+    for (size_t i = 0; i < arraySize; i++) {
+        struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct* headerCustomPacket = &listInStreamSettingsFinalMaskUdpHeaderCustomPacketObjStruct[i];
+        free((char*)headerCustomPacket->type);
+        free((char*)headerCustomPacket->randRange);
+        free((char*)headerCustomPacket->packet);
+
+    }
+
+    free(listInStreamSettingsFinalMaskUdpHeaderCustomPacketObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomObjectStruct* listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct) {
+    if (listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct->listInStreamSettingsFinalMaskUdpHeaderCustomClientPacketStruct) {
+        jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStructDelete(listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct->listInStreamSettingsFinalMaskUdpHeaderCustomClientPacketStruct, listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct->jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomClientPacketStructSize);
+        listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct->listInStreamSettingsFinalMaskUdpHeaderCustomClientPacketStruct = NULL;
+
+    }
+
+    if (listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct->listInStreamSettingsFinalMaskUdpHeaderCustomServerPacketStruct) {
+        jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStructDelete(listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct->listInStreamSettingsFinalMaskUdpHeaderCustomServerPacketStruct, listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct->jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomServerPacketStructSize);
+        listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct->listInStreamSettingsFinalMaskUdpHeaderCustomServerPacketStruct = NULL;
+
+    }
+
+    free(listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStruct* listInStreamSettingsFinalMaskUdpNoisePacketObjStruct, size_t arraySize) {
+    for (size_t i = 0; i < arraySize; i++) {
+        struct jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStruct* noisePacket = &listInStreamSettingsFinalMaskUdpNoisePacketObjStruct[i];
+        free((char*)noisePacket->type);
+        free((char*)noisePacket->delay);
+        free((char*)noisePacket->rand);
+        free((char*)noisePacket->randRange);
+        free((char*)noisePacket->packet);
+
+    }
+
+    free(listInStreamSettingsFinalMaskUdpNoisePacketObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsFinalMaskUdpNoiseObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpNoiseObjectStruct* listInStreamSettingsFinalMaskUdpNoiseObjStruct) {
+    if (listInStreamSettingsFinalMaskUdpNoiseObjStruct->listInStreamSettingsFinalMaskUdpNoisePacketStruct) {
+        jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStructDelete(listInStreamSettingsFinalMaskUdpNoiseObjStruct->listInStreamSettingsFinalMaskUdpNoisePacketStruct, listInStreamSettingsFinalMaskUdpNoiseObjStruct->jsonListInboundStreamSettingsFinalMaskUdpNoisePacketStructSize);
+        listInStreamSettingsFinalMaskUdpNoiseObjStruct->listInStreamSettingsFinalMaskUdpNoisePacketStruct = NULL;
+
+    }
+
+    free(listInStreamSettingsFinalMaskUdpNoiseObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsFinalMaskUdpObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskUdpObjectStruct* listInStreamSettingsFinalMaskUdpObjStruct) {
+    free((char*)listInStreamSettingsFinalMaskUdpObjStruct->type);
+
+    if (listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct) {
+        jsonListInboundStreamSettingsFinalMaskUdpMkcpLegacyObjectStructDelete(listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct);
+        listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct = NULL;
+
+    }
+
+    if (listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpXdnsObjStruct) {
+        jsonListInboundStreamSettingsFinalMaskUdpXdnsObjectStructDelete(listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpXdnsObjStruct);
+        listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpXdnsObjStruct = NULL;
+
+    }
+
+    if (listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpXicmpObjStruct) {
+        jsonListInboundStreamSettingsFinalMaskUdpXicmpObjectStructDelete(listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpXicmpObjStruct);
+        listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpXicmpObjStruct = NULL;
+
+    }
+
+    if (listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpRealmObjStruct) {
+        jsonListInboundStreamSettingsFinalMaskUdpRealmObjectStructDelete(listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpRealmObjStruct);
+        listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpRealmObjStruct = NULL;
+
+    }
+
+    if (listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct) {
+        jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomObjectStructDelete(listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct);
+        listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct = NULL;
+
+    }
+
+    if (listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpNoiseObjStruct) {
+        jsonListInboundStreamSettingsFinalMaskUdpNoiseObjectStructDelete(listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpNoiseObjStruct);
+        listInStreamSettingsFinalMaskUdpObjStruct->listInStreamSettingsFinalMaskUdpNoiseObjStruct = NULL;
+
+    }
+
+    }
+
+void jsonListInboundStreamSettingsFinalMaskObjectStructDelete(struct jsonListInboundStreamSettingsFinalMaskObjectStruct* listInStreamSettingsFinalMaskObjStruct) {
+    for (size_t i = 0; i < listInStreamSettingsFinalMaskObjStruct->jsonListInboundStreamSettingsFinalMaskUdpStructSize; i++) {
+        struct jsonListInboundStreamSettingsFinalMaskUdpObjectStruct* finalMaskUdp = &listInStreamSettingsFinalMaskObjStruct->listInStreamSettingsFinalMaskUdpStruct[i];
+        jsonListInboundStreamSettingsFinalMaskUdpObjectStructDelete(finalMaskUdp);
+
+    }
+
+    free(listInStreamSettingsFinalMaskObjStruct->listInStreamSettingsFinalMaskUdpStruct);
+
+    free(listInStreamSettingsFinalMaskObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsSockoptCustomSockoptObjectStructDelete(struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct* listInStreamSettingsSockoptCustomSockoptObjStruct, size_t arraySize) {
+    for (size_t i = 0; i < arraySize; i++) {
+        struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct* customSockopt = &listInStreamSettingsSockoptCustomSockoptObjStruct[i];
+        free((char*)customSockopt->system);
+        free((char*)customSockopt->type);
+        free((char*)customSockopt->level);
+        free((char*)customSockopt->opt);
+        free((char*)customSockopt->value);
+
+    }
+
+    free(listInStreamSettingsSockoptCustomSockoptObjStruct);
+
+}
+
+void jsonListInboundStreamSettingsSockoptObjectStructDelete(struct jsonListInboundStreamSettingsSockoptObjectStruct* listInStreamSettingsSockoptObjStruct) {
+    free((char*)listInStreamSettingsSockoptObjStruct->tproxy);
+    free((char*)listInStreamSettingsSockoptObjStruct->tcpcongestion);
+
+    if (listInStreamSettingsSockoptObjStruct->listInStreamSettingsSockoptCustomSockoptStruct) {
+        jsonListInboundStreamSettingsSockoptCustomSockoptObjectStructDelete(listInStreamSettingsSockoptObjStruct->listInStreamSettingsSockoptCustomSockoptStruct, listInStreamSettingsSockoptObjStruct->jsonListInboundStreamSettingsSockoptCustomSockoptStructSize);
+        listInStreamSettingsSockoptObjStruct->listInStreamSettingsSockoptCustomSockoptStruct = NULL;
+
+    }
+
+    free(listInStreamSettingsSockoptObjStruct);
 
 }
 
 void jsonListInboundSettingsClientsArrayStructDelete(struct jsonListInboundSettingsClientsArrayStruct* listInSettingsCliArrStruct, size_t arraySize) {
     for (size_t i = 0; i < arraySize; i++) {
-        free((char*)listInSettingsCliArrStruct[i].auth);
-        free((char*)listInSettingsCliArrStruct[i].comment);
-        free((char*)listInSettingsCliArrStruct[i].email);
-        free((char*)listInSettingsCliArrStruct[i].id);
-        free((char*)listInSettingsCliArrStruct[i].password);
-        free((char*)listInSettingsCliArrStruct[i].security);
-        free((char*)listInSettingsCliArrStruct[i].subId);
+        struct jsonListInboundSettingsClientsArrayStruct* settingsClients = &listInSettingsCliArrStruct[i];
+        free((char*)settingsClients->auth);
+        free((char*)settingsClients->comment);
+        free((char*)settingsClients->email);
+        free((char*)settingsClients->id);
+        free((char*)settingsClients->password);
+        free((char*)settingsClients->security);
+        free((char*)settingsClients->subId);
 
     }
 
@@ -73,9 +361,10 @@ void jsonListInboundSettingsClientsArrayStructDelete(struct jsonListInboundSetti
 
 void jsonListInboundClientStatsArrayStructDelete(struct jsonListInboundClientStatsArrayStruct* listInCliStatsStruct, size_t arraySize) {
     for (size_t i = 0; i < arraySize; i++) {
-        free((char*)listInCliStatsStruct[i].email);
-        free((char*)listInCliStatsStruct[i].uuid);
-        free((char*)listInCliStatsStruct[i].subId);
+        struct jsonListInboundClientStatsArrayStruct* cliStats = &listInCliStatsStruct[i];
+        free((char*)cliStats->email);
+        free((char*)cliStats->uuid);
+        free((char*)cliStats->subId);
 
     }
 
@@ -85,78 +374,98 @@ void jsonListInboundClientStatsArrayStructDelete(struct jsonListInboundClientSta
 
 void jsonListInboundSettingsObjectStructDelete(struct jsonListInboundSettingsObjectStruct* listInSettingsObjStruct) {
     if (listInSettingsObjStruct->listInSettingsCliArrStruct) {
-        for (size_t i = 0; i < listInSettingsObjStruct->jsonListInboundSettingsClientsArrayStructSize; i++) {
-            free((char*)listInSettingsObjStruct->listInSettingsCliArrStruct[i].auth);
-            free((char*)listInSettingsObjStruct->listInSettingsCliArrStruct[i].comment);
-            free((char*)listInSettingsObjStruct->listInSettingsCliArrStruct[i].email);
-            free((char*)listInSettingsObjStruct->listInSettingsCliArrStruct[i].id);
-            free((char*)listInSettingsObjStruct->listInSettingsCliArrStruct[i].password);
-            free((char*)listInSettingsObjStruct->listInSettingsCliArrStruct[i].security);
-            free((char*)listInSettingsObjStruct->listInSettingsCliArrStruct[i].subId);
-    
-        }
+        jsonListInboundSettingsClientsArrayStructDelete(listInSettingsObjStruct->listInSettingsCliArrStruct, listInSettingsObjStruct->jsonListInboundSettingsClientsArrayStructSize);
 
         listInSettingsObjStruct->listInSettingsCliArrStruct = NULL;
 
     }
 
-    free(listInSettingsObjStruct->listInSettingsCliArrStruct);
-
     free((char*)listInSettingsObjStruct->decryption);
     free((char*)listInSettingsObjStruct->encryption);
+
+    free(listInSettingsObjStruct);
 
 }
 
 void jsonListInboundStreamSettingsObjectStructDelete(struct jsonListInboundStreamSettingsObjectStruct* listInStreamSettingsObjStruct) {
     free((char*)listInStreamSettingsObjStruct->network);
+    free((char*)listInStreamSettingsObjStruct->security);
 
     if (listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct) {
         jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct);
+        listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
 
     }
+
+    if (listInStreamSettingsObjStruct->listInStreamSettingsKcpSettingsObjStruct) {
+        jsonListInboundStreamSettingsKcpSettingsObjectStructDelete(listInStreamSettingsObjStruct->listInStreamSettingsKcpSettingsObjStruct);
+        listInStreamSettingsObjStruct->listInStreamSettingsKcpSettingsObjStruct = NULL;
+
+    }
+
+    if (listInStreamSettingsObjStruct->listInStreamSettingsFinalMaskObjStruct) {
+        jsonListInboundStreamSettingsFinalMaskObjectStructDelete(listInStreamSettingsObjStruct->listInStreamSettingsFinalMaskObjStruct);
+        listInStreamSettingsObjStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+
+    }
+
+    if (listInStreamSettingsObjStruct->listInStreamSettingsSockoptObjStruct) {
+        jsonListInboundStreamSettingsSockoptObjectStructDelete(listInStreamSettingsObjStruct->listInStreamSettingsSockoptObjStruct);
+        listInStreamSettingsObjStruct->listInStreamSettingsSockoptObjStruct = NULL;
+
+    }
+
+    free(listInStreamSettingsObjStruct);
 
 }
 
 void jsonListInboundSniffingObjectStructDelete(struct jsonListInboundSniffingObjectStruct* listInSniffingObjStruct) {
     free((char*)listInSniffingObjStruct->enabled);
 
+    free(listInSniffingObjStruct);
+
+}
+
+void jsonListInboundObjectStructDeleteElement(struct jsonListInboundObjectStruct* listInObj) {
+    free((char*)listInObj->remark);
+    free((char*)listInObj->trafficReset);
+
+    if (listInObj->listInCliStatsStruct) {
+        jsonListInboundClientStatsArrayStructDelete(listInObj->listInCliStatsStruct, listInObj->jsonListInboundClientStatsArrayStructSize);
+        listInObj->listInCliStatsStruct = NULL;
+
+    }
+
+    free((char*)listInObj->listen);
+    free((char*)listInObj->protocol);
+    free((char*)listInObj->tag);
+    free((char*)listInObj->shareAddrStrategy);
+    free((char*)listInObj->shareAddr);
+    free((char*)listInObj->originNodeGuid);
+    
+    if (listInObj->listInSettingsObjStruct) {
+        jsonListInboundSettingsObjectStructDelete(listInObj->listInSettingsObjStruct);
+        listInObj->listInSettingsObjStruct = NULL;
+
+    }
+
+    if (listInObj->listInStreamSettingsObjStruct) {
+        jsonListInboundStreamSettingsObjectStructDelete(listInObj->listInStreamSettingsObjStruct);
+        listInObj->listInStreamSettingsObjStruct = NULL;
+
+    }
+
+    if (listInObj->listInSniffingObjStruct) {
+        jsonListInboundSniffingObjectStructDelete(listInObj->listInSniffingObjStruct);
+        listInObj->listInSniffingObjStruct = NULL;
+
+    }
+
 }
 
 void jsonListInboundObjectStructDelete(struct jsonListInboundObjectStruct* listInObjStruct, size_t arraySize) {
     for (size_t i = 0; i < arraySize; i++) {
-        free((char*)listInObjStruct[i].remark);
-        free((char*) listInObjStruct[i].trafficReset);
-
-        if (listInObjStruct[i].listInCliStatsStruct) {
-            jsonListInboundClientStatsArrayStructDelete(listInObjStruct[i].listInCliStatsStruct, listInObjStruct[i].jsonListInboundClientStatsArrayStructSize);
-            listInObjStruct[i].listInCliStatsStruct = NULL;
-
-        }
-
-        free((char*)listInObjStruct[i].listen);
-        free((char*)listInObjStruct[i].protocol);
-        free((char*)listInObjStruct[i].tag);
-        free((char*)listInObjStruct[i].shareAddrStrategy);
-        free((char*)listInObjStruct[i].shareAddr);
-        free((char*)listInObjStruct[i].originNodeGuid);
-        
-        if (listInObjStruct[i].listInSettingsObjStruct) {
-            jsonListInboundSettingsObjectStructDelete(listInObjStruct[i].listInSettingsObjStruct);
-            listInObjStruct[i].listInSettingsObjStruct = NULL;
-
-        }
-
-        if (listInObjStruct[i].listInStreamSettingsObjStruct) {
-            jsonListInboundStreamSettingsObjectStructDelete(listInObjStruct[i].listInStreamSettingsObjStruct);
-            listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-
-        }
-
-        if (listInObjStruct[i].listInSniffingObjStruct) {
-            jsonListInboundSniffingObjectStructDelete(listInObjStruct[i].listInSniffingObjStruct);
-            listInObjStruct[i].listInSniffingObjStruct = NULL;
-
-        }
+        jsonListInboundObjectStructDeleteElement(&listInObjStruct[i]);
 
     }
 
@@ -172,6 +481,8 @@ void jsonListInboundStructDelete(struct jsonListInboundStruct* listInStruct) {
         listInStruct->listInObjStruct = NULL;
 
     }
+
+    free(listInStruct);
 
 }
 
@@ -242,6 +553,7 @@ struct jsonListInboundClientStatsArrayStruct* jsonListInboundClientStatsArray(co
         }
 
         for (size_t i = 0; i < arraySize; i++) {
+            struct jsonListInboundClientStatsArrayStruct* cliStats = &listInCliStatsArrStruct[i];
             cJSON* arrItem = cJSON_GetArrayItem(arrayObj, i);
             if (
                 cJSON_HasObjectItem(arrItem, "id") &&
@@ -257,34 +569,34 @@ struct jsonListInboundClientStatsArrayStruct* jsonListInboundClientStatsArray(co
                 cJSON_HasObjectItem(arrItem, "reset") &&
                 cJSON_HasObjectItem(arrItem, "lastOnline")
                ) {
-                listInCliStatsArrStruct[i].id = (int64_t)cJSON_GetObjectItem(arrItem, "id")->valuedouble;
-                listInCliStatsArrStruct[i].inboundId = (int64_t)cJSON_GetObjectItem(arrItem, "inboundId")->valuedouble;
-                listInCliStatsArrStruct[i].enable = (unsigned char)cJSON_GetObjectItem(arrItem, "enable")->valueint;
+                cliStats->id = (int64_t)cJSON_GetObjectItem(arrItem, "id")->valuedouble;
+                cliStats->inboundId = (int64_t)cJSON_GetObjectItem(arrItem, "inboundId")->valuedouble;
+                cliStats->enable = (unsigned char)cJSON_GetObjectItem(arrItem, "enable")->valueint;
 
                 char* email = cJSON_GetObjectItem(arrItem, "email")->valuestring;
                 size_t emailLen = strlen(email);
                 char* emailCopy = (char*)malloc((emailLen + 1) * sizeof(char));
                 strncpy(emailCopy, email, emailLen);
                 emailCopy[emailLen] = '\0';
-                listInCliStatsArrStruct[i].email = emailCopy;
+                cliStats->email = emailCopy;
 
                 char* uuid = cJSON_GetObjectItem(arrItem, "uuid")->valuestring;
                 size_t uuidLen = strlen(uuid);
                 char* uuidCopy = (char*)malloc((uuidLen + 1) * sizeof(char));
                 strncpy(uuidCopy, uuid, uuidLen);
                 uuidCopy[uuidLen] = '\0';
-                listInCliStatsArrStruct[i].uuid = uuidCopy;
+                cliStats->uuid = uuidCopy;
 
                 char* subId = cJSON_GetObjectItem(arrItem, "subId")->valuestring;
                 size_t subIdLen = strlen(subId);
                 char* subIdCopy = (char*)malloc((subIdLen + 1) * sizeof(char));
                 strncpy(subIdCopy, subId, subIdLen);
                 subIdCopy[subIdLen] = '\0';
-                listInCliStatsArrStruct[i].subId = subIdCopy;
+                cliStats->subId = subIdCopy;
 
-                listInCliStatsArrStruct[i].up = (int64_t)cJSON_GetObjectItem(arrItem, "up")->valuedouble;
-                listInCliStatsArrStruct[i].down = (int64_t)cJSON_GetObjectItem(arrItem, "down")->valuedouble;
-                listInCliStatsArrStruct[i].expiryTime = (int64_t)cJSON_GetObjectItem(arrItem, "expiryTime")->valuedouble;
+                cliStats->up = (int64_t)cJSON_GetObjectItem(arrItem, "up")->valuedouble;
+                cliStats->down = (int64_t)cJSON_GetObjectItem(arrItem, "down")->valuedouble;
+                cliStats->expiryTime = (int64_t)cJSON_GetObjectItem(arrItem, "expiryTime")->valuedouble;
 
             } else {
                 applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "Some item is not present in the array elelement, skipping the element...");
@@ -306,6 +618,252 @@ struct jsonListInboundClientStatsArrayStruct* jsonListInboundClientStatsArray(co
         return NULL;
 
     }
+
+}
+
+enum networkTypesEnum {
+    NETWORKTYPE_TCP,
+    NETWORKTYPE_KCP,
+    NETWORKTYPE_WS,
+    NETWORKTYPE_GRPC,
+    NETWORKTYPE_HTTPUPGRADE,
+    NETWORKTYPE_XHTTP,
+    NETWORKTYPE_COUNT
+
+};
+
+static int jsonListInboundStreamSettingsSockoptParse(cJSON* streamSettingsObj, struct jsonListInboundStreamSettingsObjectStruct* streamSettingsStruct, struct jsonListInboundObjectStruct* listInObjStruct, size_t i, struct jsonListInboundStruct* listInStruct, cJSON* jsonParser) {
+    // sockopt holds the socket options, when real client ip is off/direct the
+    // trusted X-Forwarded-For field is always empty, the real client ip field
+    // itself is not present in this variant
+    // TODO: parse the real client ip field and the trusted X-Forwarded-For
+    // field when the json for the other real client ip options gets provided,
+    // the allowed options depend on the transmission: the cloudflare cdn
+    // option only works with websocket, and the "l4 relay / spectrum ( PROXY )"
+    // option only works with tcp, websocket, httpupgrade, grpc and xhttp
+    if (
+        cJSON_HasObjectItem(streamSettingsObj, "sockopt") &&
+        cJSON_IsObject(cJSON_GetObjectItem(streamSettingsObj, "sockopt"))
+       ) {
+        cJSON* sockoptObj = cJSON_GetObjectItem(streamSettingsObj, "sockopt");
+        if (!sockoptObj) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "sockoptObj is a null pointer");
+
+            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+            listInObjStruct->listInStreamSettingsObjStruct = NULL;
+            listInObjStruct->listInSniffingObjStruct = NULL;
+            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+            listInStruct->listInObjStruct = NULL;
+            jsonListInboundStructDelete(listInStruct);
+
+            cJSON_Delete(jsonParser);
+
+            return 0;
+
+        }
+
+        streamSettingsStruct->listInStreamSettingsSockoptObjStruct = (struct jsonListInboundStreamSettingsSockoptObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsSockoptObjectStruct));
+        if (!streamSettingsStruct->listInStreamSettingsSockoptObjStruct) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsSockoptObjStruct is a null pointer, failed to allocate space");
+
+            streamSettingsStruct->listInStreamSettingsSockoptObjStruct = NULL;
+            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+            listInObjStruct->listInStreamSettingsObjStruct = NULL;
+            listInObjStruct->listInSniffingObjStruct = NULL;
+            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+            listInStruct->listInObjStruct = NULL;
+            jsonListInboundStructDelete(listInStruct);
+
+            cJSON_Delete(jsonParser);
+
+            return 0;
+
+        }
+
+        struct jsonListInboundStreamSettingsSockoptObjectStruct* sockoptStruct = streamSettingsStruct->listInStreamSettingsSockoptObjStruct;
+        sockoptStruct->tproxy = NULL;
+        sockoptStruct->tcpcongestion = NULL;
+        sockoptStruct->listInStreamSettingsSockoptCustomSockoptStruct = NULL;
+        sockoptStruct->jsonListInboundStreamSettingsSockoptCustomSockoptStructSize = 0;
+
+        if (
+            cJSON_HasObjectItem(sockoptObj, "tcpFastOpen") &&
+            cJSON_IsBool(cJSON_GetObjectItem(sockoptObj, "tcpFastOpen"))
+           ) {
+            sockoptStruct->tcpFastOpen = (unsigned char)cJSON_IsTrue(cJSON_GetObjectItem(sockoptObj, "tcpFastOpen"));
+
+        } else {
+            sockoptStruct->tcpFastOpen = 0;
+
+        }
+
+        // the tproxy field has 3 options: off, redirect, tproxy
+        if (
+            cJSON_HasObjectItem(sockoptObj, "tproxy") &&
+            cJSON_IsString(cJSON_GetObjectItem(sockoptObj, "tproxy"))
+           ) {
+            char* tproxy = cJSON_GetObjectItem(sockoptObj, "tproxy")->valuestring;
+            size_t tproxyLen = strlen(tproxy);
+            char* tproxyCopy = (char*)malloc((tproxyLen + 1) * sizeof(char));
+            strncpy(tproxyCopy, tproxy, tproxyLen);
+            tproxyCopy[tproxyLen] = '\0';
+            sockoptStruct->tproxy = tproxyCopy;
+
+        }
+
+        if (
+            cJSON_HasObjectItem(sockoptObj, "penetrate") &&
+            cJSON_IsBool(cJSON_GetObjectItem(sockoptObj, "penetrate"))
+           ) {
+            sockoptStruct->penetrate = (unsigned char)cJSON_IsTrue(cJSON_GetObjectItem(sockoptObj, "penetrate"));
+
+        } else {
+            sockoptStruct->penetrate = 0;
+
+        }
+
+        if (
+            cJSON_HasObjectItem(sockoptObj, "tcpcongestion") &&
+            cJSON_IsString(cJSON_GetObjectItem(sockoptObj, "tcpcongestion"))
+           ) {
+            char* tcpcongestion = cJSON_GetObjectItem(sockoptObj, "tcpcongestion")->valuestring;
+            size_t tcpcongestionLen = strlen(tcpcongestion);
+            char* tcpcongestionCopy = (char*)malloc((tcpcongestionLen + 1) * sizeof(char));
+            strncpy(tcpcongestionCopy, tcpcongestion, tcpcongestionLen);
+            tcpcongestionCopy[tcpcongestionLen] = '\0';
+            sockoptStruct->tcpcongestion = tcpcongestionCopy;
+
+        }
+
+        if (
+            cJSON_HasObjectItem(sockoptObj, "customSockopt") &&
+            cJSON_IsArray(cJSON_GetObjectItem(sockoptObj, "customSockopt"))
+           ) {
+            cJSON* customSockoptArr = cJSON_GetObjectItem(sockoptObj, "customSockopt");
+            size_t customSockoptCount = cJSON_GetArraySize(customSockoptArr);
+            struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct* customSockoptCopy = (struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct*)malloc((customSockoptCount ? customSockoptCount : 1) * sizeof(struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct));
+            if (!customSockoptCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "customSockoptCopy is a null pointer, failed to allocate space");
+
+                jsonListInboundStreamSettingsSockoptObjectStructDelete(sockoptStruct);
+
+                streamSettingsStruct->listInStreamSettingsSockoptObjStruct = NULL;
+                jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                listInObjStruct->listInStreamSettingsObjStruct = NULL;
+                listInObjStruct->listInSniffingObjStruct = NULL;
+                jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                listInStruct->listInObjStruct = NULL;
+                jsonListInboundStructDelete(listInStruct);
+
+                cJSON_Delete(jsonParser);
+
+                return 0;
+
+            }
+
+            for (size_t cs = 0; cs < customSockoptCount; cs++) {
+                customSockoptCopy[cs].system = NULL;
+                customSockoptCopy[cs].type = NULL;
+                customSockoptCopy[cs].level = NULL;
+                customSockoptCopy[cs].opt = NULL;
+                customSockoptCopy[cs].value = NULL;
+
+            }
+
+            for (size_t cs = 0; cs < customSockoptCount; cs++) {
+                cJSON* customSockoptItem = cJSON_GetArrayItem(customSockoptArr, cs);
+                struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct* customSockoptStruct = &customSockoptCopy[cs];
+
+                // the system field is optional, e.g. "linux" / "windows"
+                if (
+                    cJSON_HasObjectItem(customSockoptItem, "system") &&
+                    cJSON_IsString(cJSON_GetObjectItem(customSockoptItem, "system"))
+                   ) {
+                    char* system = cJSON_GetObjectItem(customSockoptItem, "system")->valuestring;
+                    size_t systemLen = strlen(system);
+                    char* systemCopy = (char*)malloc((systemLen + 1) * sizeof(char));
+                    strncpy(systemCopy, system, systemLen);
+                    systemCopy[systemLen] = '\0';
+                    customSockoptStruct->system = systemCopy;
+
+                }
+
+                // the type field has two values, int and string, the value
+                // field is interpreted respectively
+                if (
+                    cJSON_HasObjectItem(customSockoptItem, "type") &&
+                    cJSON_IsString(cJSON_GetObjectItem(customSockoptItem, "type"))
+                   ) {
+                    char* customSockoptType = cJSON_GetObjectItem(customSockoptItem, "type")->valuestring;
+                    size_t customSockoptTypeLen = strlen(customSockoptType);
+                    char* customSockoptTypeCopy = (char*)malloc((customSockoptTypeLen + 1) * sizeof(char));
+                    strncpy(customSockoptTypeCopy, customSockoptType, customSockoptTypeLen);
+                    customSockoptTypeCopy[customSockoptTypeLen] = '\0';
+                    customSockoptStruct->type = customSockoptTypeCopy;
+
+                }
+
+                if (
+                    cJSON_HasObjectItem(customSockoptItem, "level") &&
+                    cJSON_IsString(cJSON_GetObjectItem(customSockoptItem, "level"))
+                   ) {
+                    char* level = cJSON_GetObjectItem(customSockoptItem, "level")->valuestring;
+                    size_t levelLen = strlen(level);
+                    char* levelCopy = (char*)malloc((levelLen + 1) * sizeof(char));
+                    strncpy(levelCopy, level, levelLen);
+                    levelCopy[levelLen] = '\0';
+                    customSockoptStruct->level = levelCopy;
+
+                }
+
+                if (
+                    cJSON_HasObjectItem(customSockoptItem, "opt") &&
+                    cJSON_IsString(cJSON_GetObjectItem(customSockoptItem, "opt"))
+                   ) {
+                    char* opt = cJSON_GetObjectItem(customSockoptItem, "opt")->valuestring;
+                    size_t optLen = strlen(opt);
+                    char* optCopy = (char*)malloc((optLen + 1) * sizeof(char));
+                    strncpy(optCopy, opt, optLen);
+                    optCopy[optLen] = '\0';
+                    customSockoptStruct->opt = optCopy;
+
+                }
+
+                if (
+                    cJSON_HasObjectItem(customSockoptItem, "value") &&
+                    cJSON_IsString(cJSON_GetObjectItem(customSockoptItem, "value"))
+                   ) {
+                    char* value = cJSON_GetObjectItem(customSockoptItem, "value")->valuestring;
+                    size_t valueLen = strlen(value);
+                    char* valueCopy = (char*)malloc((valueLen + 1) * sizeof(char));
+                    strncpy(valueCopy, value, valueLen);
+                    valueCopy[valueLen] = '\0';
+                    customSockoptStruct->value = valueCopy;
+
+                }
+
+            }
+
+            sockoptStruct->listInStreamSettingsSockoptCustomSockoptStruct = customSockoptCopy;
+            sockoptStruct->jsonListInboundStreamSettingsSockoptCustomSockoptStructSize = customSockoptCount;
+
+        }
+
+    }
+
+    return 1;
 
 }
 
@@ -392,6 +950,20 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
         }
 
         for (size_t i = 0; i < listInStruct->jsonListInboundObjectStructSize; i++) {
+            struct jsonListInboundObjectStruct* inboundObj = &listInStruct->listInObjStruct[i];
+            inboundObj->remark = NULL;
+            inboundObj->trafficReset = NULL;
+            inboundObj->listInCliStatsStruct = NULL;
+            inboundObj->jsonListInboundClientStatsArrayStructSize = 0;
+            inboundObj->listen = NULL;
+            inboundObj->protocol = NULL;
+            inboundObj->tag = NULL;
+            inboundObj->shareAddrStrategy = NULL;
+            inboundObj->shareAddr = NULL;
+            inboundObj->originNodeGuid = NULL;
+            inboundObj->listInSettingsObjStruct = NULL;
+            inboundObj->listInStreamSettingsObjStruct = NULL;
+            inboundObj->listInSniffingObjStruct = NULL;
             cJSON* arrItem = cJSON_GetArrayItem(arrayObj, i);
             if (
                 cJSON_HasObjectItem(arrItem, "id") &&
@@ -405,7 +977,7 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                 cJSON_HasObjectItem(arrItem, "trafficReset") &&
                 cJSON_HasObjectItem(arrItem, "trafficResetDay") &&
                 cJSON_HasObjectItem(arrItem, "lastTrafficResetTime") &&
-                cJSON_HasObjectItem(arrItem, "listInCliStatsStruct") &&
+                cJSON_HasObjectItem(arrItem, "clientStats") &&
                 cJSON_IsArray(cJSON_GetObjectItem(arrItem, "clientStats")) &&
                 cJSON_HasObjectItem(arrItem, "listen") &&
                 cJSON_HasObjectItem(arrItem, "port") &&
@@ -421,52 +993,56 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                 cJSON_HasObjectItem(arrItem, "sniffing") &&
                 cJSON_IsObject(cJSON_GetObjectItem(arrItem, "sniffing"))
                ) {
-                listInStruct->listInObjStruct[i].id = (int64_t)cJSON_GetObjectItem(arrItem, "id")->valuedouble;
-                listInStruct->listInObjStruct[i].up = (int64_t)cJSON_GetObjectItem(arrItem, "up")->valuedouble;
-                listInStruct->listInObjStruct[i].down = (int64_t)cJSON_GetObjectItem(arrItem, "down")->valuedouble;
-                listInStruct->listInObjStruct[i].total = (int64_t)cJSON_GetObjectItem(arrItem, "total")->valuedouble;
+                inboundObj->id = (int64_t)cJSON_GetObjectItem(arrItem, "id")->valuedouble;
+                inboundObj->up = (int64_t)cJSON_GetObjectItem(arrItem, "up")->valuedouble;
+                inboundObj->down = (int64_t)cJSON_GetObjectItem(arrItem, "down")->valuedouble;
+                inboundObj->total = (int64_t)cJSON_GetObjectItem(arrItem, "total")->valuedouble;
 
                 char* remark = cJSON_GetObjectItem(arrItem, "remark")->valuestring;
                 size_t remarkLen = strlen(remark);
                 char* remarkCopy = (char*)malloc((remarkLen + 1) * sizeof(char));
                 strncpy(remarkCopy, remark, remarkLen);
                 remarkCopy[remarkLen] = '\0';
-                listInStruct->listInObjStruct[i].remark = remarkCopy;
+                inboundObj->remark = remarkCopy;
 
-                listInStruct->listInObjStruct[i].subSortIndex = cJSON_GetObjectItem(arrItem, "subSortIndex")->valueint;
-                listInStruct->listInObjStruct[i].enable = (unsigned char)cJSON_GetObjectItem(arrItem, "enable")->valueint;
-                listInStruct->listInObjStruct[i].expiryTime = (int64_t)cJSON_GetObjectItem(arrItem, "expiryTime")->valuedouble;
+                inboundObj->subSortIndex = cJSON_GetObjectItem(arrItem, "subSortIndex")->valueint;
+                inboundObj->enable = (unsigned char)cJSON_GetObjectItem(arrItem, "enable")->valueint;
+                inboundObj->expiryTime = (int64_t)cJSON_GetObjectItem(arrItem, "expiryTime")->valuedouble;
 
                 char* trafficReset = cJSON_GetObjectItem(arrItem, "trafficReset")->valuestring;
                 size_t trafficResetLen = strlen(trafficReset);
                 char* trafficResetCopy = (char*)malloc((trafficResetLen + 1) * sizeof(char));
                 strncpy(trafficResetCopy, trafficReset, trafficResetLen);
                 trafficResetCopy[trafficResetLen] = '\0';
-                listInStruct->listInObjStruct[i].trafficReset = trafficResetCopy;
+                inboundObj->trafficReset = trafficResetCopy;
 
-                listInStruct->listInObjStruct[i].trafficResetDay = cJSON_GetObjectItem(arrItem, "trafficResetDay")->valueint;
-                listInStruct->listInObjStruct[i].lastTrafficResetTime = (int64_t)cJSON_GetObjectItem(arrItem, "lastTrafficResetTime")->valuedouble;
+                inboundObj->trafficResetDay = cJSON_GetObjectItem(arrItem, "trafficResetDay")->valueint;
+                inboundObj->lastTrafficResetTime = (int64_t)cJSON_GetObjectItem(arrItem, "lastTrafficResetTime")->valuedouble;
 
-                cJSON* clientStatsArray = cJSON_GetObjectItem(jsonParser, "clientStats");
-                listInStruct->listInObjStruct[i].jsonListInboundClientStatsArrayStructSize = cJSON_GetArraySize(clientStatsArray);
-                if (!listInStruct->listInObjStruct[i].jsonListInboundClientStatsArrayStructSize) {
+                cJSON* clientStatsArray = cJSON_GetObjectItem(arrItem, "clientStats");
+                inboundObj->jsonListInboundClientStatsArrayStructSize = cJSON_GetArraySize(clientStatsArray);
+                if (!inboundObj->jsonListInboundClientStatsArrayStructSize) {
                     applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "clientStatsArray is empty"); // TODO: make this message consistent across this file
 
+                    inboundObj->listInCliStatsStruct = NULL;
+
                 } else {
-                    listInStruct->listInObjStruct[i].listInCliStatsStruct = (struct jsonListInboundClientStatsArrayStruct*)malloc(listInStruct->listInObjStruct[i].jsonListInboundClientStatsArrayStructSize * sizeof(struct jsonListInboundClientStatsArrayStruct));
-                    if (!listInStruct->listInObjStruct[i].listInCliStatsStruct) {
+                    inboundObj->listInCliStatsStruct = (struct jsonListInboundClientStatsArrayStruct*)malloc(inboundObj->jsonListInboundClientStatsArrayStructSize * sizeof(struct jsonListInboundClientStatsArrayStruct));
+                    if (!inboundObj->listInCliStatsStruct) {
                         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInCliStatsStruct is a null pointer, failed to allocate space"); // TODO: make this messag econsistent across this file
 
-                        listInStruct->listInObjStruct[i].listInCliStatsStruct = NULL;
-                        listInStruct->listInObjStruct[i].listen = NULL;
-                        listInStruct->listInObjStruct[i].protocol = NULL;
-                        listInStruct->listInObjStruct[i].tag = NULL;
-                        listInStruct->listInObjStruct[i].shareAddrStrategy = NULL;
-                        listInStruct->listInObjStruct[i].shareAddr = NULL;
-                        listInStruct->listInObjStruct[i].originNodeGuid = NULL;
-                        listInStruct->listInObjStruct[i].listInSettingsObjStruct = NULL;
-                        listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-                        listInStruct->listInObjStruct[i].listInSniffingObjStruct = NULL;
+                        inboundObj->listInCliStatsStruct = NULL;
+                        inboundObj->listen = NULL;
+                        inboundObj->protocol = NULL;
+                        inboundObj->tag = NULL;
+                        inboundObj->shareAddrStrategy = NULL;
+                        inboundObj->shareAddr = NULL;
+                        inboundObj->originNodeGuid = NULL;
+                        inboundObj->listInSettingsObjStruct = NULL;
+                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                        inboundObj->listInSniffingObjStruct = NULL;
+                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
                         jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
 
                         listInStruct->listInObjStruct = NULL;
@@ -478,8 +1054,9 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
 
                     }
 
-                    for (size_t j = 0; j < listInStruct->listInObjStruct[i].jsonListInboundClientStatsArrayStructSize; j++) {
-                        cJSON* clientStatsItem = cJSON_GetArrayItem(clientStatsArray, i);
+                    for (size_t j = 0; j < inboundObj->jsonListInboundClientStatsArrayStructSize; j++) {
+                        struct jsonListInboundClientStatsArrayStruct* cliStats = inboundObj->listInCliStatsStruct;
+                        cJSON* clientStatsItem = cJSON_GetArrayItem(clientStatsArray, j);
                         if (
                             cJSON_HasObjectItem(clientStatsItem, "id") &&
                             cJSON_HasObjectItem(clientStatsItem, "inboundId") &&
@@ -494,41 +1071,45 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                             cJSON_HasObjectItem(clientStatsItem, "reset") &&
                             cJSON_HasObjectItem(clientStatsItem, "lastOnline")
                            ) {
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].id = (int64_t)cJSON_GetObjectItem(clientStatsItem, "id")->valuedouble;
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].inboundId = (int64_t)cJSON_GetObjectItem(clientStatsItem, "inboundId")->valuedouble;
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].enable = (unsigned char)cJSON_GetObjectItem(clientStatsItem, "enable")->valueint;
+                            cliStats[j].id = (int64_t)cJSON_GetObjectItem(clientStatsItem, "id")->valuedouble;
+                            cliStats[j].inboundId = (int64_t)cJSON_GetObjectItem(clientStatsItem, "inboundId")->valuedouble;
+                            cliStats[j].enable = (unsigned char)cJSON_GetObjectItem(clientStatsItem, "enable")->valueint;
 
                             char* email = cJSON_GetObjectItem(clientStatsItem, "email")->valuestring;
                             size_t emailLen = strlen(email);
                             char* emailCopy = (char*)malloc((emailLen + 1) * sizeof(char));
                             strncpy(emailCopy, email, emailLen);
                             emailCopy[emailLen] = '\0';
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].email = emailCopy;
+                            cliStats[j].email = emailCopy;
 
                             char* uuid = cJSON_GetObjectItem(clientStatsItem, "uuid")->valuestring;
                             size_t uuidLen = strlen(uuid);
                             char* uuidCopy = (char*)malloc((uuidLen + 1) * sizeof(char));
                             strncpy(uuidCopy, uuid, uuidLen);
                             uuidCopy[uuidLen] = '\0';
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].uuid = uuidCopy;
+                            cliStats[j].uuid = uuidCopy;
 
                             char* subId = cJSON_GetObjectItem(clientStatsItem, "subId")->valuestring;
                             size_t subIdLen = strlen(subId);
                             char* subIdCopy = (char*)malloc((subIdLen + 1) * sizeof(char));
                             strncpy(subIdCopy, subId, subIdLen);
                             subIdCopy[subIdLen] = '\0';
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].subId = subIdCopy;
+                            cliStats[j].subId = subIdCopy;
 
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].up = (int64_t)cJSON_GetObjectItem(clientStatsItem, "up")->valuedouble;
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].down = (int64_t)cJSON_GetObjectItem(clientStatsItem, "down")->valuedouble;
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].expiryTime = (int64_t)cJSON_GetObjectItem(clientStatsItem, "expiryTime")->valuedouble;
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].total = (int64_t)cJSON_GetObjectItem(clientStatsItem, "total")->valuedouble;
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].reset = cJSON_GetObjectItem(clientStatsItem, "reset")->valueint;
-                            listInStruct->listInObjStruct[i].listInCliStatsStruct[j].lastOnline = (int64_t)cJSON_GetObjectItem(clientStatsItem, "lastOnline")->valuedouble;
+                            cliStats[j].up = (int64_t)cJSON_GetObjectItem(clientStatsItem, "up")->valuedouble;
+                            cliStats[j].down = (int64_t)cJSON_GetObjectItem(clientStatsItem, "down")->valuedouble;
+                            cliStats[j].expiryTime = (int64_t)cJSON_GetObjectItem(clientStatsItem, "expiryTime")->valuedouble;
+                            cliStats[j].total = (int64_t)cJSON_GetObjectItem(clientStatsItem, "total")->valuedouble;
+                            cliStats[j].reset = cJSON_GetObjectItem(clientStatsItem, "reset")->valueint;
+                            cliStats[j].lastOnline = (int64_t)cJSON_GetObjectItem(clientStatsItem, "lastOnline")->valuedouble;
 
 
                         } else {
                             applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "Some item is not present in the client stats array element, skipping the element...");
+
+                            cliStats[j].email = NULL;
+                            cliStats[j].uuid = NULL;
+                            cliStats[j].subId = NULL;
 
                         }
 
@@ -541,52 +1122,54 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                 char* listenCopy = (char*)malloc((listenLen + 1) * sizeof(char));
                 strncpy(listenCopy, listen, listenLen);
                 listenCopy[listenLen] = '\0';
-                listInStruct->listInObjStruct[i].listen = listenCopy;
+                inboundObj->listen = listenCopy;
 
-                listInStruct->listInObjStruct[i].port = cJSON_GetObjectItem(arrItem, "port")->valueint;
+                inboundObj->port = cJSON_GetObjectItem(arrItem, "port")->valueint;
 
                 char* protocol = cJSON_GetObjectItem(arrItem, "protocol")->valuestring;
                 size_t protocolLen = strlen(protocol);
                 char* protocolCopy = (char*)malloc((protocolLen + 1) * sizeof(char));
                 strncpy(protocolCopy, protocol, protocolLen);
                 protocolCopy[protocolLen] = '\0';
-                listInStruct->listInObjStruct[i].protocol = protocolCopy;
+                inboundObj->protocol = protocolCopy;
 
                 char* tag = cJSON_GetObjectItem(arrItem, "tag")->valuestring;
                 size_t tagLen = strlen(tag);
                 char* tagCopy = (char*)malloc((tagLen + 1) * sizeof(char));
                 strncpy(tagCopy, tag, tagLen);
                 tagCopy[tagLen] = '\0';
-                listInStruct->listInObjStruct[i].tag = tagCopy;
+                inboundObj->tag = tagCopy;
 
                 char* shareAddrStrategy = cJSON_GetObjectItem(arrItem, "shareAddrStrategy")->valuestring;
                 size_t shareAddrStrategyLen = strlen(shareAddrStrategy);
                 char* shareAddrStrategyCopy = (char*)malloc((shareAddrStrategyLen + 1) * sizeof(char));
                 strncpy(shareAddrStrategyCopy, shareAddrStrategy, shareAddrStrategyLen);
                 shareAddrStrategyCopy[shareAddrStrategyLen] = '\0';
-                listInStruct->listInObjStruct[i].shareAddrStrategy = shareAddrStrategyCopy;
+                inboundObj->shareAddrStrategy = shareAddrStrategyCopy;
 
                 char* shareAddr = cJSON_GetObjectItem(arrItem, "shareAddr")->valuestring;
                 size_t shareAddrLen = strlen(shareAddr);
                 char* shareAddrCopy = (char*)malloc((shareAddrLen + 1) * sizeof(char));
                 strncpy(shareAddrCopy, shareAddr, shareAddrLen);
                 shareAddrCopy[shareAddrLen] = '\0';
-                listInStruct->listInObjStruct[i].shareAddr = shareAddrCopy;
+                inboundObj->shareAddr = shareAddrCopy;
 
                 char* originNodeGuid = cJSON_GetObjectItem(arrItem, "originNodeGuid")->valuestring;
                 size_t originNodeGuidLen = strlen(originNodeGuid);
                 char* originNodeGuidCopy = (char*)malloc((originNodeGuidLen + 1) * sizeof(char));
                 strncpy(originNodeGuidCopy, originNodeGuid, originNodeGuidLen);
                 originNodeGuidCopy[originNodeGuidLen] = '\0';
-                listInStruct->listInObjStruct[i].originNodeGuid = originNodeGuidCopy;
+                inboundObj->originNodeGuid = originNodeGuidCopy;
 
-                listInStruct->listInObjStruct[i].listInSettingsObjStruct = (struct jsonListInboundSettingsObjectStruct*)malloc(sizeof(struct jsonListInboundSettingsObjectStruct));
-                if (!listInStruct->listInObjStruct[i].listInSettingsObjStruct) {
+                inboundObj->listInSettingsObjStruct = (struct jsonListInboundSettingsObjectStruct*)malloc(sizeof(struct jsonListInboundSettingsObjectStruct));
+                if (!inboundObj->listInSettingsObjStruct) {
                     applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInSettingsObjStruct is a null pointer, failed to allocate space");
 
-                    listInStruct->listInObjStruct[i].listInSettingsObjStruct = NULL;
-                    listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-                    listInStruct->listInObjStruct[i].listInSniffingObjStruct = NULL;
+                    inboundObj->listInSettingsObjStruct = NULL;
+                    inboundObj->listInStreamSettingsObjStruct = NULL;
+                    inboundObj->listInSniffingObjStruct = NULL;
+                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
                     jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
 
                     listInStruct->listInObjStruct = NULL;
@@ -598,14 +1181,23 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
 
                 }
 
+                inboundObj->listInSettingsObjStruct->listInSettingsCliArrStruct = NULL;
+                inboundObj->listInSettingsObjStruct->decryption = NULL;
+                inboundObj->listInSettingsObjStruct->encryption = NULL;
+
+                struct jsonListInboundSettingsObjectStruct* settingsStruct = inboundObj->listInSettingsObjStruct;
                 cJSON* settingsObj = cJSON_GetObjectItem(arrItem, "settings");
                 if (!settingsObj) {
                     applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "settingsObj is a null pointer");
 
-                    listInStruct->listInObjStruct[i].listInSettingsObjStruct = NULL;
-                    listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-                    listInStruct->listInObjStruct[i].listInSniffingObjStruct = NULL;
+                    jsonListInboundSettingsObjectStructDelete(inboundObj->listInSettingsObjStruct);
+                    inboundObj->listInSettingsObjStruct = NULL;
+                    inboundObj->listInStreamSettingsObjStruct = NULL;
+                    inboundObj->listInSniffingObjStruct = NULL;
+                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
                     jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+                    listInStruct->listInObjStruct = NULL;
                     jsonListInboundStructDelete(listInStruct);
 
                     cJSON_Delete(jsonParser);
@@ -618,10 +1210,14 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                 if (!settingsObjClientsArray) {
                     applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "settingsObjClientsArray is a null pointer");
 
-                    listInStruct->listInObjStruct[i].listInSettingsObjStruct = NULL;
-                    listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-                    listInStruct->listInObjStruct[i].listInSniffingObjStruct = NULL;
+                    jsonListInboundSettingsObjectStructDelete(inboundObj->listInSettingsObjStruct);
+                    inboundObj->listInSettingsObjStruct = NULL;
+                    inboundObj->listInStreamSettingsObjStruct = NULL;
+                    inboundObj->listInSniffingObjStruct = NULL;
+                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
                     jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+                    listInStruct->listInObjStruct = NULL;
                     jsonListInboundStructDelete(listInStruct);
 
                     cJSON_Delete(jsonParser);
@@ -630,21 +1226,27 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
 
                 }
 
-                listInStruct->listInObjStruct[i].listInSettingsObjStruct->jsonListInboundSettingsClientsArrayStructSize = cJSON_GetArraySize(settingsObjClientsArray);
-                if (!listInStruct->listInObjStruct[i].listInSettingsObjStruct->jsonListInboundSettingsClientsArrayStructSize) {
+                settingsStruct->jsonListInboundSettingsClientsArrayStructSize = cJSON_GetArraySize(settingsObjClientsArray);
+                if (!settingsStruct->jsonListInboundSettingsClientsArrayStructSize) {
                     applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "settingsObjClientsArray is empty");
 
+                    settingsStruct->listInSettingsCliArrStruct = NULL;
+
                 } else {
-                    listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct = (struct jsonListInboundSettingsClientsArrayStruct*)malloc(listInStruct->listInObjStruct[i].listInSettingsObjStruct->jsonListInboundSettingsClientsArrayStructSize * sizeof(struct jsonListInboundSettingsClientsArrayStruct));
-                    if (listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct) {
+                    settingsStruct->listInSettingsCliArrStruct = (struct jsonListInboundSettingsClientsArrayStruct*)malloc(settingsStruct->jsonListInboundSettingsClientsArrayStructSize * sizeof(struct jsonListInboundSettingsClientsArrayStruct));
+                    if (!settingsStruct->listInSettingsCliArrStruct) {
                         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInSettingsCliArrStruct is a null pointer, failed to allocate space");
 
-                        jsonListInboundSettingsClientsArrayStructDelete(listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct, listInStruct->listInObjStruct[i].listInSettingsObjStruct->jsonListInboundSettingsClientsArrayStructSize);
+                        settingsStruct->listInSettingsCliArrStruct = NULL;
+                        settingsStruct->decryption = NULL;
+                        settingsStruct->encryption = NULL;
+                        jsonListInboundSettingsObjectStructDelete(settingsStruct);
 
-                        listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct = NULL;
-                        jsonListInboundSettingsObjectStructDelete(listInStruct->listInObjStruct[i].listInSettingsObjStruct);
+                        inboundObj->listInSettingsObjStruct = NULL;
+                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                        inboundObj->listInSniffingObjStruct = NULL;
+                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
 
-                        listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct = NULL;
                         jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
 
                         listInStruct->listInObjStruct = NULL;
@@ -656,113 +1258,128 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
 
                     }
 
-                    for (size_t j = 0; j < listInStruct->listInObjStruct[i].listInSettingsObjStruct->jsonListInboundSettingsClientsArrayStructSize; j++) {
+                    for (size_t j = 0; j < settingsStruct->jsonListInboundSettingsClientsArrayStructSize; j++) {
+                        struct jsonListInboundSettingsClientsArrayStruct* settingsClients = settingsStruct->listInSettingsCliArrStruct;
                         cJSON* settingsObjClientsItem = cJSON_GetArrayItem(settingsObjClientsArray, j);
                         if (
-                            cJSON_HasObjectItem(settingsObjClientsArray, "auth") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "comment") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "created_at") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "email") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "enable") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "expiryTime") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "id") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "limitIp") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "password") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "reset") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "security") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "subId") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "tgId") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "totalGB") &&
-                            cJSON_HasObjectItem(settingsObjClientsArray, "updated_at")
+                            cJSON_HasObjectItem(settingsObjClientsItem, "auth") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "comment") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "created_at") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "email") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "enable") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "expiryTime") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "id") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "limitIp") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "password") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "reset") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "security") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "subId") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "tgId") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "totalGB") &&
+                            cJSON_HasObjectItem(settingsObjClientsItem, "updated_at")
                            ) {
                             char* auth = cJSON_GetObjectItem(settingsObjClientsItem, "auth")->valuestring;
                             size_t authLen = strlen(auth);
                             char* authCopy = (char*)malloc((authLen + 1) * sizeof(char));
                             strncpy(authCopy, auth, authLen);
                             authCopy[authLen] = '\0';
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].auth = authCopy;
+                            settingsClients[j].auth = authCopy;
 
                             char* comment = cJSON_GetObjectItem(settingsObjClientsItem, "comment")->valuestring;
                             size_t commentLen = strlen(comment);
                             char* commentCopy = (char*)malloc((commentLen + 1) * sizeof(char));
                             strncpy(commentCopy, comment, commentLen);
                             commentCopy[commentLen] = '\0';
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].comment = commentCopy;
+                            settingsClients[j].comment = commentCopy;
 
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].createdAt = (int64_t)cJSON_GetObjectItem(settingsObjClientsItem, "created_at")->valuedouble;
+                            settingsClients[j].createdAt = (int64_t)cJSON_GetObjectItem(settingsObjClientsItem, "created_at")->valuedouble;
 
                             char* email = cJSON_GetObjectItem(settingsObjClientsItem, "email")->valuestring;
                             size_t emailLen = strlen(email);
                             char* emailCopy = (char*)malloc((emailLen + 1) * sizeof(char));
                             strncpy(emailCopy, email, emailLen);
                             emailCopy[emailLen] = '\0';
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].email = emailCopy;
+                            settingsClients[j].email = emailCopy;
 
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].enable = cJSON_IsTrue(cJSON_GetObjectItem(settingsObjClientsItem, "enable"));
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].expiryTime = (int64_t)cJSON_GetObjectItem(settingsObjClientsItem, "expiryTime")->valuedouble;
+                            settingsClients[j].enable = cJSON_IsTrue(cJSON_GetObjectItem(settingsObjClientsItem, "enable"));
+                            settingsClients[j].expiryTime = (int64_t)cJSON_GetObjectItem(settingsObjClientsItem, "expiryTime")->valuedouble;
 
                             char* id = cJSON_GetObjectItem(settingsObjClientsItem, "id")->valuestring;
                             size_t idLen = strlen(id);
                             char* idCopy = (char*)malloc((idLen + 1) * sizeof(char));
                             strncpy(idCopy, id, idLen);
                             idCopy[idLen] = '\0';
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].id = idCopy;
+                            settingsClients[j].id = idCopy;
 
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].limitIp = cJSON_GetObjectItem(settingsObjClientsItem, "limitIp")->valueint;
+                            settingsClients[j].limitIp = cJSON_GetObjectItem(settingsObjClientsItem, "limitIp")->valueint;
 
                             char* password = cJSON_GetObjectItem(settingsObjClientsItem, "password")->valuestring;
                             size_t passwordLen = strlen(password);
                             char* passwordCopy = (char*)malloc((passwordLen + 1) * sizeof(char));
                             strncpy(passwordCopy, password, passwordLen);
                             passwordCopy[passwordLen] = '\0';
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].password = passwordCopy;
+                            settingsClients[j].password = passwordCopy;
 
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].reset = cJSON_GetObjectItem(settingsObjClientsItem, "reset")->valueint;
+                            settingsClients[j].reset = cJSON_GetObjectItem(settingsObjClientsItem, "reset")->valueint;
 
                             char* security = cJSON_GetObjectItem(settingsObjClientsItem, "security")->valuestring;
                             size_t securityLen = strlen(security);
                             char* securityCopy = (char*)malloc((securityLen + 1) * sizeof(char));
                             strncpy(securityCopy, security, securityLen);
                             securityCopy[securityLen] = '\0';
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].security = securityCopy;
+                            settingsClients[j].security = securityCopy;
 
                             char* subId = cJSON_GetObjectItem(settingsObjClientsItem, "subId")->valuestring;
                             size_t subIdLen = strlen(subId);
                             char* subIdCopy = (char*)malloc((subIdLen + 1) * sizeof(char));
                             strncpy(subIdCopy, subId, subIdLen);
                             subIdCopy[subIdLen] = '\0';
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].subId = subIdCopy;
+                            settingsClients[j].subId = subIdCopy;
 
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].tgId = (int64_t)cJSON_GetObjectItem(settingsObjClientsItem, "tgId")->valuedouble;
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].totalGB = (int64_t)cJSON_GetObjectItem(settingsObjClientsItem, "totalGB")->valuedouble;
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].updatedAt = (int64_t)cJSON_GetObjectItem(settingsObjClientsItem, "updated_at")->valuedouble;
+                            settingsClients[j].tgId = (int64_t)cJSON_GetObjectItem(settingsObjClientsItem, "tgId")->valuedouble;
+                            settingsClients[j].totalGB = (int64_t)cJSON_GetObjectItem(settingsObjClientsItem, "totalGB")->valuedouble;
+                            settingsClients[j].updatedAt = (int64_t)cJSON_GetObjectItem(settingsObjClientsItem, "updated_at")->valuedouble;
 
                         } else {
                             applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "some element is not present in the array, skipping...");
 
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].auth = NULL;
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].comment = NULL;
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].email = NULL;
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].id = NULL;
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].password = NULL;
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].security = NULL;
-                            listInStruct->listInObjStruct[i].listInSettingsObjStruct->listInSettingsCliArrStruct[j].subId = NULL;
+                            settingsClients[j].auth = NULL;
+                            settingsClients[j].comment = NULL;
+                            settingsClients[j].email = NULL;
+                            settingsClients[j].id = NULL;
+                            settingsClients[j].password = NULL;
+                            settingsClients[j].security = NULL;
+                            settingsClients[j].subId = NULL;
 
                         }
 
                     }
 
+                }
+
+                if (
+                    cJSON_HasObjectItem(settingsObj, "decryption") &&
+                    cJSON_IsString(cJSON_GetObjectItem(settingsObj, "decryption")) &&
+                    cJSON_HasObjectItem(settingsObj, "encryption") &&
+                    cJSON_IsString(cJSON_GetObjectItem(settingsObj, "encryption"))
+                   ) {
                     char* decryption = cJSON_GetObjectItem(settingsObj, "decryption")->valuestring;
                     size_t decryptionLen = strlen(decryption);
                     char* decryptionCopy = (char*)malloc((decryptionLen + 1) * sizeof(char));
                     strncpy(decryptionCopy, decryption, decryptionLen);
-                    decryptionCopy[decryptionLen + 1] = '\0';
+                    decryptionCopy[decryptionLen] = '\0';
+                    settingsStruct->decryption = decryptionCopy;
 
                     char* encryption = cJSON_GetObjectItem(settingsObj, "encryption")->valuestring;
                     size_t encryptionLen = strlen(encryption);
                     char* encryptionCopy = (char*)malloc((encryptionLen + 1) * sizeof(char));
                     strncpy(encryptionCopy, encryption, encryptionLen);
-                    encryptionCopy[encryptionLen + 1] = '\0';
+                    encryptionCopy[encryptionLen] = '\0';
+                    settingsStruct->encryption = encryptionCopy;
+
+                } else {
+                    settingsStruct->decryption = NULL;
+                    settingsStruct->encryption = NULL;
 
                 }
 
@@ -771,8 +1388,10 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                 if (!streamSettingsObj) {
                     applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "streamSettings is a null pointer");
 
-                    listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-                    listInStruct->listInObjStruct[i].listInSniffingObjStruct = NULL;
+                    inboundObj->listInStreamSettingsObjStruct = NULL;
+                    inboundObj->listInSniffingObjStruct = NULL;
+                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
                     jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
 
                     listInStruct->listInObjStruct = NULL;
@@ -784,12 +1403,14 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
 
                 }
 
-                listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = (struct jsonListInboundStreamSettingsObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsObjectStruct));
-                if (!listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct) {
+                inboundObj->listInStreamSettingsObjStruct = (struct jsonListInboundStreamSettingsObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsObjectStruct));
+                if (!inboundObj->listInStreamSettingsObjStruct) {
                     applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsObjStruct is a null pointer, failed to allocate space");
 
-                    listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-                    listInStruct->listInObjStruct[i].listInSniffingObjStruct = NULL;
+                    inboundObj->listInStreamSettingsObjStruct = NULL;
+                    inboundObj->listInSniffingObjStruct = NULL;
+                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
                     jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
 
                     listInStruct->listInObjStruct = NULL;
@@ -800,13 +1421,21 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                     return NULL;
 
                 }
+
+                struct jsonListInboundStreamSettingsObjectStruct* streamSettingsStruct = inboundObj->listInStreamSettingsObjStruct;
+
+                streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                streamSettingsStruct->listInStreamSettingsKcpSettingsObjStruct = NULL;
+                streamSettingsStruct->security = NULL;
+                streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                streamSettingsStruct->listInStreamSettingsSockoptObjStruct = NULL;
 
                 char* network = cJSON_GetObjectItem(streamSettingsObj, "network")->valuestring;
                 size_t networkLen = strlen(network);
                 char* networkCopy = (char*)malloc((networkLen + 1) * sizeof(char));
                 strncpy(networkCopy, network, networkLen);
                 networkCopy[networkLen] = '\0';
-                listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct->network = networkCopy;
+                streamSettingsStruct->network = networkCopy;
 
                 const char* networkTypes[] = {
                     "tcp", // raw
@@ -818,157 +1447,25 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
 
                 };
 
-                enum networkTypesEnum {
-                    NETWORKTYPE_TCP,
-                    NETWORKTYPE_KCP,
-                    NETWORKTYPE_WS,
-                    NETWORKTYPE_GRPC,
-                    NETWORKTYPE_HTTPUPGRADE,
-                    NETWORKTYPE_XHTTP,
-                    NETWORKTYPE_COUNT
-
-                };
-
-                enum networkTypesEnum nType;
-                for (int i = 0; i < NETWORKTYPE_COUNT; i++) {
-                    if (strncmp(networkTypes[i], listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct->network, strlen(networkTypes[i])) == 0) {
-                        nType = i;
-
-                    } else if (i == (NETWORKTYPE_COUNT - 1)) {
-                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Unable to detect network type");
-
-                        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct);
-
-                        listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-                        listInStruct->listInObjStruct[i].listInSniffingObjStruct = NULL;
-                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
-
-                        listInStruct->listInObjStruct = NULL;
-                        jsonListInboundStructDelete(listInStruct);
-
-                        return NULL;
+                enum networkTypesEnum nType = NETWORKTYPE_COUNT;
+                for (int n = 0; n < NETWORKTYPE_COUNT; n++) {
+                    if (strncmp(networkTypes[n], streamSettingsStruct->network, strlen(networkTypes[n])) == 0) {
+                        nType = (enum networkTypesEnum)n;
+                        break;
 
                     }
 
                 }
+                if (nType == NETWORKTYPE_COUNT) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Unable to detect network type");
 
-                switch (nType) {
-                    case NETWORKTYPE_TCP:
-                        listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct = (struct jsonListInboundStreamSettingsTcpSettingsObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsTcpSettingsObjectStruct));
-                        if (!listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct) {
-                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTcpSettingsObjStruct is a null pointer, failed to allocate space");
+                    streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                    jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
 
-                            listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
-                            jsonListInboundStreamSettingsObjectStructDelete(listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct);
+                    inboundObj->listInStreamSettingsObjStruct = NULL;
+                    inboundObj->listInSniffingObjStruct = NULL;
+                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
 
-                            listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-                            listInStruct->listInObjStruct[i].listInSniffingObjStruct = NULL;
-                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
-
-                            listInStruct->listInObjStruct = NULL;
-                            jsonListInboundStructDelete(listInStruct);
-
-                            cJSON_Delete(jsonParser);
-
-                            return NULL;
-
-                        }
-
-//struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct {
-//    const char*                 type;
-//    struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct;
-//    struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct;
-//
-//};
-//
-//struct jsonListInboundStreamSettingsTcpSettingsObjectStruct {
-//    unsigned char               acceptProxyProtocol;
-//    struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct* listInStreamSettingsTcpSettingsObjHeaderObjStruct;
-//
-//};
-//"tcpSettings": {
-//          "acceptProxyProtocol": false,
-//          "header": {
-//            "type": "http",
-//            "request": {
-//              "version": "1.1",
-//              "method": "GET",
-//              "path": [
-//                "/"
-//              ],
-//              "headers": {
-//                "safsdf": [
-//                  "safsafsd"
-//                ]
-//              }
-//            },
-//            "response": {
-//              "version": "1.1",
-//              "status": "200",
-//              "reason": "OK",
-//              "headers": {}
-//            }
-//          }
-//        }
-
-                        if (
-                            cJSON_HasObjectItem(streamSettingsObj, "acceptProxyProtocol") &&
-                            cJSON_IsBool(cJSON_GetObjectItem(streamSettingsObj, "acceptProxyProtocol")) &&
-                            cJSON_HasObjectItem(streamSettingsObj, "tcpSettings") &&
-                            cJSON_IsObject(cJSON_GetObjectItem(streamSettingsObj, "tcpSettings"))
-                           ) {
-                            listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct->acceptProxyProtocol = cJSON_IsTrue(cJSON_GetObjectItem(streamSettingsObj, "acceptProxyProtocol"));
-
-                            cJSON* tcpSettingsObj = cJSON_GetObjectItem(streamSettingsObj, "tcpSettings");
-                            if (
-                                cJSON_HasObjectItem(tcpSettingsObj, "header") &&
-                                cJSON_IsObject(cJSON_GetObjectItem(tcpSettingsObj, "header"))
-                               ) {
-                                listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = (struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct));
-                                if (!listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct) {
-                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTcpSettingsObjHeaderObjStruct is a null pointer, failed to allocate space");
-
-                                    listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
-                                    jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct);
-
-                                    listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-                                    listInStruct->listInObjStruct[i].listInSniffingObjStruct = NULL;
-                                    jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
-
-                                    listInStruct->listInObjStruct = NULL;
-                                    jsonListInboundStructDelete(listInStruct);
-
-                                    cJSON_Delete(jsonParser);
-
-                                    return NULL;
-
-                                }
-
-                        }
-
-
-                        break;
-
-                    case NETWORKTYPE_KCP:
-
-                    case NETWORKTYPE_WS:
-
-                    case NETWORKTYPE_GRPC:
-
-                    case NETWORKTYPE_HTTPUPGRADE:
-
-                    case NETWORKTYPE_XHTTP:
-
-                    default:
-
-                }
-
-                listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = (struct jsonListInboundStreamSettingsObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsObjectStruct));
-                if (!listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct) {
-                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsObjStruct is a null pointer, failed to allocate space");
-
-                    listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-                    listInStruct->listInObjStruct[i].listInSniffingObjStruct = NULL;
                     jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
 
                     listInStruct->listInObjStruct = NULL;
@@ -980,21 +1477,1733 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
 
                 }
 
+                switch (nType) {
+                    case NETWORKTYPE_TCP:
+                        if (
+                            cJSON_HasObjectItem(streamSettingsObj, "tcpSettings") &&
+                            cJSON_IsObject(cJSON_GetObjectItem(streamSettingsObj, "tcpSettings"))
+                           ) {
+                            cJSON* tcpSettingsObj = cJSON_GetObjectItem(streamSettingsObj, "tcpSettings");
+                            if (!tcpSettingsObj) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "tcpSettingsObj is a null pointer");
+
+                                streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                inboundObj->listInStreamSettingsObjStruct = NULL;
+                                inboundObj->listInSniffingObjStruct = NULL;
+                                jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                listInStruct->listInObjStruct = NULL;
+                                jsonListInboundStructDelete(listInStruct);
+
+                                cJSON_Delete(jsonParser);
+
+                                return NULL;
+
+                            }
+
+                            if (
+                                cJSON_HasObjectItem(tcpSettingsObj, "acceptProxyProtocol") &&
+                                cJSON_HasObjectItem(tcpSettingsObj, "header") &&
+                                cJSON_IsObject(cJSON_GetObjectItem(tcpSettingsObj, "header"))
+                               ) {
+                                streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = (struct jsonListInboundStreamSettingsTcpSettingsObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsTcpSettingsObjectStruct));
+                                if (!streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTcpSettingsObjStruct is a null pointer, failed to allocate space");
+
+                                    streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                    jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                    inboundObj->listInStreamSettingsObjStruct = NULL;
+                                    inboundObj->listInSniffingObjStruct = NULL;
+                                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                    jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                    listInStruct->listInObjStruct = NULL;
+                                    jsonListInboundStructDelete(listInStruct);
+
+                                    cJSON_Delete(jsonParser);
+
+                                    return NULL;
+
+                                }
+
+                                struct jsonListInboundStreamSettingsTcpSettingsObjectStruct* tcpSettingsStruct = streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct;
+
+                                tcpSettingsStruct->acceptProxyProtocol = cJSON_IsTrue(cJSON_GetObjectItem(tcpSettingsObj, "acceptProxyProtocol"));
+
+                                cJSON* tcpHeaderObj = cJSON_GetObjectItem(tcpSettingsObj, "header");
+                                if (!tcpHeaderObj) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "tcpHeaderObj is a null pointer");
+
+                                    tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+                                    jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(tcpSettingsStruct);
+
+
+                                    streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                    jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                    inboundObj->listInStreamSettingsObjStruct = NULL;
+                                    inboundObj->listInSniffingObjStruct = NULL;
+                                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                    jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                    listInStruct->listInObjStruct = NULL;
+                                    jsonListInboundStructDelete(listInStruct);
+
+                                    cJSON_Delete(jsonParser);
+
+                                    return NULL;
+
+                                }
+
+                                if (
+                                    cJSON_HasObjectItem(tcpHeaderObj, "type") &&
+                                    cJSON_IsString(cJSON_GetObjectItem(tcpHeaderObj, "type")) &&
+                                    cJSON_HasObjectItem(tcpHeaderObj, "request") &&
+                                    cJSON_IsObject(cJSON_GetObjectItem(tcpHeaderObj, "request")) &&
+                                    cJSON_HasObjectItem(tcpHeaderObj, "response") &&
+                                    cJSON_IsObject(cJSON_GetObjectItem(tcpHeaderObj, "response"))
+                                   ) {
+                                    tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = (struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct));
+                                    if (!tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTcpSettingsObjHeaderObjStruct is a null pointer, failed to allocate space");
+
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(tcpSettingsStruct);
+
+                                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                        inboundObj->listInSniffingObjStruct = NULL;
+                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                        listInStruct->listInObjStruct = NULL;
+                                        jsonListInboundStructDelete(listInStruct);
+
+                                        cJSON_Delete(jsonParser);
+
+                                        return NULL;
+
+                                    }
+
+                                    struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct* headerStruct = tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct;
+
+                                    char* type = cJSON_GetObjectItem(tcpHeaderObj, "type")->valuestring;
+                                    size_t typeLen = strlen(type);
+                                    char* typeCopy = (char*)malloc((typeLen + 1) * sizeof(char));
+                                    strncpy(typeCopy, type, typeLen);
+                                    typeCopy[typeLen] = '\0';
+                                    headerStruct->type = typeCopy;
+
+                                    headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct = (struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStruct));
+                                    if (!headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct is a null pointer, failed to allocate space");
+
+                                        headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct = NULL;
+                                        headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStructDelete(headerStruct);
+
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(tcpSettingsStruct);
+
+                                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                        inboundObj->listInSniffingObjStruct = NULL;
+                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                        listInStruct->listInObjStruct = NULL;
+                                        jsonListInboundStructDelete(listInStruct);
+
+                                        cJSON_Delete(jsonParser);
+
+                                        return NULL;
+
+                                    }
+
+                                    struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStruct* headerReqStruct = headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct;
+
+                                    headerReqStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqHeadersStruct = NULL; // FIX: not necessary, this is only needed on something failing, the clear path will handle these nullification, check the entire code for it
+
+                                    cJSON* requestHeaderObj = cJSON_GetObjectItem(tcpHeaderObj, "request");
+                                    if (!requestHeaderObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "requestHeaderObj is a null pointer");
+
+                                        headerReqStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqHeadersStruct = NULL;
+                                        headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStructDelete(headerStruct);
+
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(tcpSettingsStruct);
+
+                                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                        inboundObj->listInSniffingObjStruct = NULL;
+                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                        listInStruct->listInObjStruct = NULL;
+                                        jsonListInboundStructDelete(listInStruct);
+
+                                        cJSON_Delete(jsonParser);
+
+                                        return NULL;
+
+                                    }
+
+                                    char* requestVersion = cJSON_GetObjectItem(requestHeaderObj, "version")->valuestring;
+                                    size_t requestVersionLen = strlen(requestVersion);
+                                    char* requestVersionCopy = (char*)malloc((requestVersionLen + 1) * sizeof(char));
+                                    strncpy(requestVersionCopy, requestVersion, requestVersionLen);
+                                    requestVersionCopy[requestVersionLen] = '\0';
+                                    headerReqStruct->version = requestVersionCopy;
+
+                                    char* requestMethod = cJSON_GetObjectItem(requestHeaderObj, "method")->valuestring;
+                                    size_t requestMethodLen = strlen(requestMethod);
+                                    char* requestMethodCopy = (char*)malloc((requestMethodLen + 1) * sizeof(char));
+                                    strncpy(requestMethodCopy, requestMethod, requestMethodLen);
+                                    requestMethodCopy[requestMethodLen] = '\0';
+                                    headerReqStruct->method = requestMethodCopy;
+
+                                    cJSON* requestPathObj = cJSON_GetObjectItem(requestHeaderObj, "path");
+                                    size_t requestPathCount = cJSON_GetArraySize(requestPathObj);
+                                    const char** requestPathCopy = (const char**)malloc((requestPathCount ? requestPathCount : 1) * sizeof(char*));
+                                    for (size_t requestPathIdx = 0; requestPathIdx < requestPathCount; requestPathIdx++) {
+                                        char* requestPathItem = cJSON_GetArrayItem(requestPathObj, requestPathIdx)->valuestring;
+                                        size_t requestPathItemLen = strlen(requestPathItem);
+                                        char* requestPathItemCopy = (char*)malloc((requestPathItemLen + 1) * sizeof(char));
+                                        strncpy(requestPathItemCopy, requestPathItem, requestPathItemLen);
+                                        requestPathItemCopy[requestPathItemLen] = '\0';
+                                        requestPathCopy[requestPathIdx] = requestPathItemCopy;
+                                    }
+                                    headerReqStruct->path = requestPathCopy;
+                                    headerReqStruct->pathCount = requestPathCount;
+
+                                    if (
+                                        cJSON_HasObjectItem(requestHeaderObj, "headers") &&
+                                        cJSON_IsObject(cJSON_GetObjectItem(requestHeaderObj, "headers"))
+                                       ) {
+                                        cJSON* requestHeadersObj = cJSON_GetObjectItem(requestHeaderObj, "headers");
+                                        size_t requestHeadersCount = cJSON_GetArraySize(requestHeadersObj);
+                                        struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct* requestHeadersCopy = (struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct*)malloc((requestHeadersCount ? requestHeadersCount : 1) * sizeof(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct));
+                                        for (size_t headerIdx = 0; headerIdx < requestHeadersCount; headerIdx++) {
+                                            cJSON* requestHeadersItem = cJSON_GetArrayItem(requestHeadersObj, headerIdx);
+
+                                            char* headerName = requestHeadersItem->string;
+                                            size_t headerNameLen = strlen(headerName);
+                                            char* headerNameCopy = (char*)malloc((headerNameLen + 1) * sizeof(char));
+                                            strncpy(headerNameCopy, headerName, headerNameLen);
+                                            headerNameCopy[headerNameLen] = '\0';
+                                            requestHeadersCopy[headerIdx].name = headerNameCopy;
+
+                                            size_t headerValueCount = cJSON_GetArraySize(requestHeadersItem);
+                                            const char** headerValueCopy = (const char**)malloc((headerValueCount ? headerValueCount : 1) * sizeof(char*));
+                                            for (size_t valueIdx = 0; valueIdx < headerValueCount; valueIdx++) {
+                                                char* headerValueItem = cJSON_GetArrayItem(requestHeadersItem, valueIdx)->valuestring;
+                                                size_t headerValueItemLen = strlen(headerValueItem);
+                                                char* headerValueItemCopy = (char*)malloc((headerValueItemLen + 1) * sizeof(char));
+                                                strncpy(headerValueItemCopy, headerValueItem, headerValueItemLen);
+                                                headerValueItemCopy[headerValueItemLen] = '\0';
+                                                headerValueCopy[valueIdx] = headerValueItemCopy;
+                                            }
+                                            requestHeadersCopy[headerIdx].value = headerValueCopy;
+                                            requestHeadersCopy[headerIdx].valueCount = headerValueCount;
+
+                                        }
+                                        headerReqStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqHeadersStruct = requestHeadersCopy;
+                                        headerReqStruct->jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize = requestHeadersCount;
+                                    }
+
+                                    headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct = (struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStruct));
+                                    if (!headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct is a null pointer, failed to allocate space");
+
+                                        headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStructDelete(headerStruct);
+
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(tcpSettingsStruct);
+
+                                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                        inboundObj->listInSniffingObjStruct = NULL;
+                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                        listInStruct->listInObjStruct = NULL;
+                                        jsonListInboundStructDelete(listInStruct);
+
+                                        cJSON_Delete(jsonParser);
+
+                                        return NULL;
+
+                                    }
+
+                                    struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStruct* headerResStruct = headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct;
+
+                                    headerResStruct->listInStreamSettingsTcpSettingsObjHeaderObjResHeadersStruct = NULL;
+
+                                    cJSON* responseHeaderObj = cJSON_GetObjectItem(tcpHeaderObj, "response");
+                                    if (!responseHeaderObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "responseHeaderObj is a null pointer");
+
+                                        headerResStruct->listInStreamSettingsTcpSettingsObjHeaderObjResHeadersStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStructDelete(headerStruct);
+
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(tcpSettingsStruct);
+
+                                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                        inboundObj->listInSniffingObjStruct = NULL;
+                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                        listInStruct->listInObjStruct = NULL;
+                                        jsonListInboundStructDelete(listInStruct);
+
+                                        cJSON_Delete(jsonParser);
+
+                                        return NULL;
+
+                                    }
+
+                                    char* responseVersion = cJSON_GetObjectItem(responseHeaderObj, "version")->valuestring;
+                                    size_t responseVersionLen = strlen(responseVersion);
+                                    char* responseVersionCopy = (char*)malloc((responseVersionLen + 1) * sizeof(char));
+                                    strncpy(responseVersionCopy, responseVersion, responseVersionLen);
+                                    responseVersionCopy[responseVersionLen] = '\0';
+                                    headerResStruct->version = responseVersionCopy;
+
+                                    char* responseStatus = cJSON_GetObjectItem(responseHeaderObj, "status")->valuestring;
+                                    size_t responseStatusLen = strlen(responseStatus);
+                                    char* responseStatusCopy = (char*)malloc((responseStatusLen + 1) * sizeof(char));
+                                    strncpy(responseStatusCopy, responseStatus, responseStatusLen);
+                                    responseStatusCopy[responseStatusLen] = '\0';
+                                    headerResStruct->status = responseStatusCopy;
+
+                                    char* responseReason = cJSON_GetObjectItem(responseHeaderObj, "reason")->valuestring;
+                                    size_t responseReasonLen = strlen(responseReason);
+                                    char* responseReasonCopy = (char*)malloc((responseReasonLen + 1) * sizeof(char));
+                                    strncpy(responseReasonCopy, responseReason, responseReasonLen);
+                                    responseReasonCopy[responseReasonLen] = '\0';
+                                    headerResStruct->reason = responseReasonCopy;
+
+                                    if (
+                                        cJSON_HasObjectItem(responseHeaderObj, "headers") &&
+                                        cJSON_IsObject(cJSON_GetObjectItem(responseHeaderObj, "headers"))
+                                       ) {
+                                        cJSON* responseHeadersObj = cJSON_GetObjectItem(responseHeaderObj, "headers");
+                                        size_t responseHeadersCount = cJSON_GetArraySize(responseHeadersObj);
+                                        struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct* responseHeadersCopy = (struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct*)malloc((responseHeadersCount ? responseHeadersCount : 1) * sizeof(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct));
+                                        for (size_t headerIdx = 0; headerIdx < responseHeadersCount; headerIdx++) {
+                                            cJSON* responseHeadersItem = cJSON_GetArrayItem(responseHeadersObj, headerIdx);
+
+                                            char* headerName = responseHeadersItem->string;
+                                            size_t headerNameLen = strlen(headerName);
+                                            char* headerNameCopy = (char*)malloc((headerNameLen + 1) * sizeof(char));
+                                            strncpy(headerNameCopy, headerName, headerNameLen);
+                                            headerNameCopy[headerNameLen] = '\0';
+                                            responseHeadersCopy[headerIdx].name = headerNameCopy;
+
+                                            size_t headerValueCount = cJSON_GetArraySize(responseHeadersItem);
+                                            const char** headerValueCopy = (const char**)malloc((headerValueCount ? headerValueCount : 1) * sizeof(char*));
+                                            for (size_t valueIdx = 0; valueIdx < headerValueCount; valueIdx++) {
+                                                char* headerValueItem = cJSON_GetArrayItem(responseHeadersItem, valueIdx)->valuestring;
+                                                size_t headerValueItemLen = strlen(headerValueItem);
+                                                char* headerValueItemCopy = (char*)malloc((headerValueItemLen + 1) * sizeof(char));
+                                                strncpy(headerValueItemCopy, headerValueItem, headerValueItemLen);
+                                                headerValueItemCopy[headerValueItemLen] = '\0';
+                                                headerValueCopy[valueIdx] = headerValueItemCopy;
+                                            }
+                                            responseHeadersCopy[headerIdx].value = headerValueCopy;
+                                            responseHeadersCopy[headerIdx].valueCount = headerValueCount;
+                                        }
+                                        headerResStruct->listInStreamSettingsTcpSettingsObjHeaderObjResHeadersStruct = responseHeadersCopy;
+                                        headerResStruct->jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize = responseHeadersCount;
+                                    }
+
+                                    } else {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Some elements are missing from the tcpSettings header object, type/request/response are not present");
+
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(tcpSettingsStruct);
+
+                                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                        inboundObj->listInSniffingObjStruct = NULL;
+                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                        listInStruct->listInObjStruct = NULL;
+                                        jsonListInboundStructDelete(listInStruct);
+
+                                        cJSON_Delete(jsonParser);
+
+                                        return NULL;
+
+                                    }
+
+                            } else {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Some elements are missing from the tcpSettings object, acceptProxyProtocol/header are not present");
+
+                                streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                inboundObj->listInStreamSettingsObjStruct = NULL;
+                                inboundObj->listInSniffingObjStruct = NULL;
+                                jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                listInStruct->listInObjStruct = NULL;
+                                jsonListInboundStructDelete(listInStruct);
+
+                                cJSON_Delete(jsonParser);
+
+                                return NULL;
+
+                            }
+
+                        } else {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Some elements are missing from the streamSettings object, tcpSettings is not present");
+
+                            streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        break;
+
+                    case NETWORKTYPE_KCP:
+                        if (
+                            cJSON_HasObjectItem(streamSettingsObj, "kcpSettings") &&
+                            cJSON_IsObject(cJSON_GetObjectItem(streamSettingsObj, "kcpSettings"))
+                           ) {
+                            cJSON* kcpSettingsObj = cJSON_GetObjectItem(streamSettingsObj, "kcpSettings");
+                            if (!kcpSettingsObj) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "kcpSettingsObj is a null pointer");
+
+                                jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                inboundObj->listInStreamSettingsObjStruct = NULL;
+                                inboundObj->listInSniffingObjStruct = NULL;
+                                jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                listInStruct->listInObjStruct = NULL;
+                                jsonListInboundStructDelete(listInStruct);
+
+                                cJSON_Delete(jsonParser);
+
+                                return NULL;
+
+                            }
+
+                            streamSettingsStruct->listInStreamSettingsKcpSettingsObjStruct = (struct jsonListInboundStreamSettingsKcpSettingsObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsKcpSettingsObjectStruct));
+                            if (!streamSettingsStruct->listInStreamSettingsKcpSettingsObjStruct) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsKcpSettingsObjStruct is a null pointer, failed to allocate space");
+
+                                streamSettingsStruct->listInStreamSettingsKcpSettingsObjStruct = NULL;
+                                jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                inboundObj->listInStreamSettingsObjStruct = NULL;
+                                inboundObj->listInSniffingObjStruct = NULL;
+                                jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                listInStruct->listInObjStruct = NULL;
+                                jsonListInboundStructDelete(listInStruct);
+
+                                cJSON_Delete(jsonParser);
+
+                                return NULL;
+
+                            }
+
+                            struct jsonListInboundStreamSettingsKcpSettingsObjectStruct* kcpSettingsStruct = streamSettingsStruct->listInStreamSettingsKcpSettingsObjStruct;
+
+                            if (
+                                cJSON_HasObjectItem(kcpSettingsObj, "mtu") &&
+                                cJSON_HasObjectItem(kcpSettingsObj, "tti") &&
+                                cJSON_HasObjectItem(kcpSettingsObj, "uplinkCapacity") &&
+                                cJSON_HasObjectItem(kcpSettingsObj, "downlinkCapacity") &&
+                                cJSON_HasObjectItem(kcpSettingsObj, "cwndMultiplier") &&
+                                cJSON_HasObjectItem(kcpSettingsObj, "maxSendingWindow")
+                               ) {
+                                kcpSettingsStruct->mtu = (int64_t)cJSON_GetObjectItem(kcpSettingsObj, "mtu")->valuedouble;
+                                kcpSettingsStruct->tti = (int64_t)cJSON_GetObjectItem(kcpSettingsObj, "tti")->valuedouble;
+                                kcpSettingsStruct->uplinkCapacity = (int64_t)cJSON_GetObjectItem(kcpSettingsObj, "uplinkCapacity")->valuedouble;
+                                kcpSettingsStruct->downlinkCapacity = (int64_t)cJSON_GetObjectItem(kcpSettingsObj, "downlinkCapacity")->valuedouble;
+                                kcpSettingsStruct->cwndMultiplier = (int64_t)cJSON_GetObjectItem(kcpSettingsObj, "cwndMultiplier")->valuedouble;
+                                kcpSettingsStruct->maxSendingWindow = (int64_t)cJSON_GetObjectItem(kcpSettingsObj, "maxSendingWindow")->valuedouble;
+
+                            } else {
+                                applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "Some item is not present in the kcpSettings object, leaving the kcp settings fields unset");
+
+                                kcpSettingsStruct->mtu = 0;
+                                kcpSettingsStruct->tti = 0;
+                                kcpSettingsStruct->uplinkCapacity = 0;
+                                kcpSettingsStruct->downlinkCapacity = 0;
+                                kcpSettingsStruct->cwndMultiplier = 0;
+                                kcpSettingsStruct->maxSendingWindow = 0;
+
+                            }
+
+                        }
+
+                        // The security field is a plain string and currently "none" for every kcp variant.
+                        // TODO: when the security field shows a different value, it may carry extra
+                        // settings ( e.g. a tls configuration ), take care of them at the settings field
+                        if (
+                            cJSON_HasObjectItem(streamSettingsObj, "security") &&
+                            cJSON_IsString(cJSON_GetObjectItem(streamSettingsObj, "security"))
+                           ) {
+                            char* security = cJSON_GetObjectItem(streamSettingsObj, "security")->valuestring;
+                            size_t securityLen = strlen(security);
+                            char* securityCopy = (char*)malloc((securityLen + 1) * sizeof(char));
+                            strncpy(securityCopy, security, securityLen);
+                            securityCopy[securityLen] = '\0';
+                            streamSettingsStruct->security = securityCopy;
+
+                        }
+
+                        // The udp mask ( finalmask ) is an optional field, it holds a "udp" array
+                        // whose elements carry a "type" ( mkcp-legacy, xdns, xicmp, realm,
+                        // header-custom, noise ) and a "settings" object shaped by that type
+                        if (
+                            cJSON_HasObjectItem(streamSettingsObj, "finalmask") &&
+                            cJSON_IsObject(cJSON_GetObjectItem(streamSettingsObj, "finalmask"))
+                           ) {
+                            cJSON* finalMaskObj = cJSON_GetObjectItem(streamSettingsObj, "finalmask");
+                            if (!finalMaskObj) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "finalMaskObj is a null pointer");
+
+                                jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                inboundObj->listInStreamSettingsObjStruct = NULL;
+                                inboundObj->listInSniffingObjStruct = NULL;
+                                jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                listInStruct->listInObjStruct = NULL;
+                                jsonListInboundStructDelete(listInStruct);
+
+                                cJSON_Delete(jsonParser);
+
+                                return NULL;
+
+                            }
+
+                            streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = (struct jsonListInboundStreamSettingsFinalMaskObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsFinalMaskObjectStruct));
+                            if (!streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsFinalMaskObjStruct is a null pointer, failed to allocate space");
+
+                                streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                inboundObj->listInStreamSettingsObjStruct = NULL;
+                                inboundObj->listInSniffingObjStruct = NULL;
+                                jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                listInStruct->listInObjStruct = NULL;
+                                jsonListInboundStructDelete(listInStruct);
+
+                                cJSON_Delete(jsonParser);
+
+                                return NULL;
+
+                            }
+
+                            struct jsonListInboundStreamSettingsFinalMaskObjectStruct* finalMaskStruct = streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct;
+                            finalMaskStruct->listInStreamSettingsFinalMaskUdpStruct = NULL;
+                            finalMaskStruct->jsonListInboundStreamSettingsFinalMaskUdpStructSize = 0;
+
+                            const char* udpMaskTypes[] = {
+                                "mkcp-legacy", // mKCP Legacy
+                                "xdns", // xDNS
+                                "xicmp", // xICMP
+                                "realm", // Realm
+                                "header-custom", // Header Custom
+                                "noise" // Noise
+
+                            };
+
+                            enum udpMaskTypesEnum {
+                                UDPMASKTYPE_MKCPLEGACY,
+                                UDPMASKTYPE_XDNS,
+                                UDPMASKTYPE_XICMP,
+                                UDPMASKTYPE_REALM,
+                                UDPMASKTYPE_HEADERCUSTOM,
+                                UDPMASKTYPE_NOISE,
+                                UDPMASKTYPE_COUNT
+
+                            };
+
+                            if (
+                                cJSON_HasObjectItem(finalMaskObj, "udp") &&
+                                cJSON_IsArray(cJSON_GetObjectItem(finalMaskObj, "udp"))
+                               ) {
+                                cJSON* udpObj = cJSON_GetObjectItem(finalMaskObj, "udp");
+                                if (!udpObj) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "udpObj is a null pointer");
+
+                                    jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                    streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                    jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                    inboundObj->listInStreamSettingsObjStruct = NULL;
+                                    inboundObj->listInSniffingObjStruct = NULL;
+                                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                    jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                    listInStruct->listInObjStruct = NULL;
+                                    jsonListInboundStructDelete(listInStruct);
+
+                                    cJSON_Delete(jsonParser);
+
+                                    return NULL;
+
+                                }
+
+                                size_t udpCount = cJSON_GetArraySize(udpObj);
+                                struct jsonListInboundStreamSettingsFinalMaskUdpObjectStruct* udpCopy = (struct jsonListInboundStreamSettingsFinalMaskUdpObjectStruct*)malloc((udpCount ? udpCount : 1) * sizeof(struct jsonListInboundStreamSettingsFinalMaskUdpObjectStruct));
+                                if (!udpCopy) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "udpCopy is a null pointer, failed to allocate space");
+
+                                    jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                    streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                    jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                    inboundObj->listInStreamSettingsObjStruct = NULL;
+                                    inboundObj->listInSniffingObjStruct = NULL;
+                                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                    jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                    listInStruct->listInObjStruct = NULL;
+                                    jsonListInboundStructDelete(listInStruct);
+
+                                    cJSON_Delete(jsonParser);
+
+                                    return NULL;
+
+                                }
+
+                                finalMaskStruct->listInStreamSettingsFinalMaskUdpStruct = udpCopy;
+                                finalMaskStruct->jsonListInboundStreamSettingsFinalMaskUdpStructSize = udpCount;
+
+                                for (size_t u = 0; u < udpCount; u++) {
+                                    udpCopy[u].type = NULL;
+                                    udpCopy[u].listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct = NULL;
+                                    udpCopy[u].listInStreamSettingsFinalMaskUdpXdnsObjStruct = NULL;
+                                    udpCopy[u].listInStreamSettingsFinalMaskUdpXicmpObjStruct = NULL;
+                                    udpCopy[u].listInStreamSettingsFinalMaskUdpRealmObjStruct = NULL;
+                                    udpCopy[u].listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct = NULL;
+                                    udpCopy[u].listInStreamSettingsFinalMaskUdpNoiseObjStruct = NULL;
+
+                                }
+
+                                for (size_t u = 0; u < udpCount; u++) {
+                                    cJSON* udpItem = cJSON_GetArrayItem(udpObj, u);
+                                    struct jsonListInboundStreamSettingsFinalMaskUdpObjectStruct* udpStruct = &udpCopy[u];
+
+                                    if (
+                                        cJSON_HasObjectItem(udpItem, "type") &&
+                                        cJSON_IsString(cJSON_GetObjectItem(udpItem, "type"))
+                                       ) {
+                                        char* udpType = cJSON_GetObjectItem(udpItem, "type")->valuestring;
+                                        size_t udpTypeLen = strlen(udpType);
+                                        char* udpTypeCopy = (char*)malloc((udpTypeLen + 1) * sizeof(char));
+                                        strncpy(udpTypeCopy, udpType, udpTypeLen);
+                                        udpTypeCopy[udpTypeLen] = '\0';
+                                        udpStruct->type = udpTypeCopy;
+
+                                        enum udpMaskTypesEnum uType = UDPMASKTYPE_COUNT;
+                                        for (int u2 = 0; u2 < UDPMASKTYPE_COUNT; u2++) {
+                                            if (strncmp(udpMaskTypes[u2], udpStruct->type, strlen(udpMaskTypes[u2])) == 0) {
+                                                uType = (enum udpMaskTypesEnum)u2;
+                                                break;
+
+                                            }
+
+                                        }
+                                        if (uType == UDPMASKTYPE_COUNT) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Unable to detect udp mask type");
+
+                                            jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                            streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                                            inboundObj->listInSniffingObjStruct = NULL;
+                                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                            listInStruct->listInObjStruct = NULL;
+                                            jsonListInboundStructDelete(listInStruct);
+
+                                            cJSON_Delete(jsonParser);
+
+                                            return NULL;
+
+                                        }
+
+                                        if (
+                                            cJSON_HasObjectItem(udpItem, "settings") &&
+                                            cJSON_IsObject(cJSON_GetObjectItem(udpItem, "settings"))
+                                           ) {
+                                            cJSON* udpSettingsObj = cJSON_GetObjectItem(udpItem, "settings");
+                                            if (!udpSettingsObj) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "udpSettingsObj is a null pointer");
+
+                                                jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                inboundObj->listInSniffingObjStruct = NULL;
+                                                jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                listInStruct->listInObjStruct = NULL;
+                                                jsonListInboundStructDelete(listInStruct);
+
+                                                cJSON_Delete(jsonParser);
+
+                                                return NULL;
+
+                                            }
+
+                                            switch (uType) {
+                                                case UDPMASKTYPE_MKCPLEGACY:
+                                                    udpStruct->listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct = (struct jsonListInboundStreamSettingsFinalMaskUdpMkcpLegacyObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsFinalMaskUdpMkcpLegacyObjectStruct));
+                                                    if (!udpStruct->listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct) {
+                                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct is a null pointer, failed to allocate space");
+
+                                                        jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                        streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                        inboundObj->listInSniffingObjStruct = NULL;
+                                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                        listInStruct->listInObjStruct = NULL;
+                                                        jsonListInboundStructDelete(listInStruct);
+
+                                                        cJSON_Delete(jsonParser);
+
+                                                        return NULL;
+
+                                                    }
+
+                                                    struct jsonListInboundStreamSettingsFinalMaskUdpMkcpLegacyObjectStruct* mkcpLegacyStruct = udpStruct->listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct;
+                                                    mkcpLegacyStruct->header = NULL;
+                                                    mkcpLegacyStruct->value = NULL;
+
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "header") &&
+                                                        cJSON_IsString(cJSON_GetObjectItem(udpSettingsObj, "header"))
+                                                       ) {
+                                                        char* mkcpHeader = cJSON_GetObjectItem(udpSettingsObj, "header")->valuestring;
+                                                        size_t mkcpHeaderLen = strlen(mkcpHeader);
+                                                        char* mkcpHeaderCopy = (char*)malloc((mkcpHeaderLen + 1) * sizeof(char));
+                                                        strncpy(mkcpHeaderCopy, mkcpHeader, mkcpHeaderLen);
+                                                        mkcpHeaderCopy[mkcpHeaderLen] = '\0';
+                                                        mkcpLegacyStruct->header = mkcpHeaderCopy;
+
+                                                    }
+
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "value") &&
+                                                        cJSON_IsString(cJSON_GetObjectItem(udpSettingsObj, "value"))
+                                                       ) {
+                                                        char* mkcpValue = cJSON_GetObjectItem(udpSettingsObj, "value")->valuestring;
+                                                        size_t mkcpValueLen = strlen(mkcpValue);
+                                                        char* mkcpValueCopy = (char*)malloc((mkcpValueLen + 1) * sizeof(char));
+                                                        strncpy(mkcpValueCopy, mkcpValue, mkcpValueLen);
+                                                        mkcpValueCopy[mkcpValueLen] = '\0';
+                                                        mkcpLegacyStruct->value = mkcpValueCopy;
+
+                                                    }
+
+                                                    break;
+
+                                                case UDPMASKTYPE_XDNS:
+                                                    udpStruct->listInStreamSettingsFinalMaskUdpXdnsObjStruct = (struct jsonListInboundStreamSettingsFinalMaskUdpXdnsObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsFinalMaskUdpXdnsObjectStruct));
+                                                    if (!udpStruct->listInStreamSettingsFinalMaskUdpXdnsObjStruct) {
+                                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsFinalMaskUdpXdnsObjStruct is a null pointer, failed to allocate space");
+
+                                                        jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                        streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                        inboundObj->listInSniffingObjStruct = NULL;
+                                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                        listInStruct->listInObjStruct = NULL;
+                                                        jsonListInboundStructDelete(listInStruct);
+
+                                                        cJSON_Delete(jsonParser);
+
+                                                        return NULL;
+
+                                                    }
+
+                                                    struct jsonListInboundStreamSettingsFinalMaskUdpXdnsObjectStruct* xdnsStruct = udpStruct->listInStreamSettingsFinalMaskUdpXdnsObjStruct;
+                                                    xdnsStruct->domains = NULL;
+                                                    xdnsStruct->domainsCount = 0;
+
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "domains") &&
+                                                        cJSON_IsArray(cJSON_GetObjectItem(udpSettingsObj, "domains"))
+                                                       ) {
+                                                        cJSON* domainsObj = cJSON_GetObjectItem(udpSettingsObj, "domains");
+                                                        size_t domainsCount = cJSON_GetArraySize(domainsObj);
+                                                        const char** domainsCopy = (const char**)malloc((domainsCount ? domainsCount : 1) * sizeof(char*));
+                                                        if (!domainsCopy) {
+                                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "domainsCopy is a null pointer, failed to allocate space");
+
+                                                            jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                            streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                            inboundObj->listInSniffingObjStruct = NULL;
+                                                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                            listInStruct->listInObjStruct = NULL;
+                                                            jsonListInboundStructDelete(listInStruct);
+
+                                                            cJSON_Delete(jsonParser);
+
+                                                            return NULL;
+
+                                                        }
+
+                                                        for (size_t d = 0; d < domainsCount; d++) {
+                                                            domainsCopy[d] = NULL;
+
+                                                        }
+
+                                                        for (size_t d = 0; d < domainsCount; d++) {
+                                                            cJSON* domainsItem = cJSON_GetArrayItem(domainsObj, d);
+                                                            if (cJSON_IsString(domainsItem)) {
+                                                                char* domain = domainsItem->valuestring;
+                                                                size_t domainLen = strlen(domain);
+                                                                char* domainCopy = (char*)malloc((domainLen + 1) * sizeof(char));
+                                                                strncpy(domainCopy, domain, domainLen);
+                                                                domainCopy[domainLen] = '\0';
+                                                                domainsCopy[d] = domainCopy;
+
+                                                            }
+
+                                                        }
+
+                                                        xdnsStruct->domains = domainsCopy;
+                                                        xdnsStruct->domainsCount = domainsCount;
+
+                                                    }
+
+                                                    break;
+
+                                                case UDPMASKTYPE_XICMP:
+                                                    udpStruct->listInStreamSettingsFinalMaskUdpXicmpObjStruct = (struct jsonListInboundStreamSettingsFinalMaskUdpXicmpObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsFinalMaskUdpXicmpObjectStruct));
+                                                    if (!udpStruct->listInStreamSettingsFinalMaskUdpXicmpObjStruct) {
+                                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsFinalMaskUdpXicmpObjStruct is a null pointer, failed to allocate space");
+
+                                                        jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                        streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                        inboundObj->listInSniffingObjStruct = NULL;
+                                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                        listInStruct->listInObjStruct = NULL;
+                                                        jsonListInboundStructDelete(listInStruct);
+
+                                                        cJSON_Delete(jsonParser);
+
+                                                        return NULL;
+
+                                                    }
+
+                                                    struct jsonListInboundStreamSettingsFinalMaskUdpXicmpObjectStruct* xicmpStruct = udpStruct->listInStreamSettingsFinalMaskUdpXicmpObjStruct;
+                                                    xicmpStruct->ips = NULL;
+                                                    xicmpStruct->ipsCount = 0;
+
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "dgram") &&
+                                                        cJSON_IsNumber(cJSON_GetObjectItem(udpSettingsObj, "dgram"))
+                                                       ) {
+                                                        xicmpStruct->dgram = (unsigned char)cJSON_GetObjectItem(udpSettingsObj, "dgram")->valuedouble;
+
+                                                    } else {
+                                                        xicmpStruct->dgram = 0;
+
+                                                    }
+
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "ips") &&
+                                                        cJSON_IsArray(cJSON_GetObjectItem(udpSettingsObj, "ips"))
+                                                       ) {
+                                                        cJSON* ipsObj = cJSON_GetObjectItem(udpSettingsObj, "ips");
+                                                        size_t ipsCount = cJSON_GetArraySize(ipsObj);
+                                                        const char** ipsCopy = (const char**)malloc((ipsCount ? ipsCount : 1) * sizeof(char*));
+                                                        if (!ipsCopy) {
+                                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "ipsCopy is a null pointer, failed to allocate space");
+
+                                                            jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                            streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                            inboundObj->listInSniffingObjStruct = NULL;
+                                                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                            listInStruct->listInObjStruct = NULL;
+                                                            jsonListInboundStructDelete(listInStruct);
+
+                                                            cJSON_Delete(jsonParser);
+
+                                                            return NULL;
+
+                                                        }
+
+                                                        for (size_t ip = 0; ip < ipsCount; ip++) {
+                                                            ipsCopy[ip] = NULL;
+
+                                                        }
+
+                                                        for (size_t ip = 0; ip < ipsCount; ip++) {
+                                                            cJSON* ipsItem = cJSON_GetArrayItem(ipsObj, ip);
+                                                            if (cJSON_IsString(ipsItem)) {
+                                                                char* ipAddr = ipsItem->valuestring;
+                                                                size_t ipAddrLen = strlen(ipAddr);
+                                                                char* ipAddrCopy = (char*)malloc((ipAddrLen + 1) * sizeof(char));
+                                                                strncpy(ipAddrCopy, ipAddr, ipAddrLen);
+                                                                ipAddrCopy[ipAddrLen] = '\0';
+                                                                ipsCopy[ip] = ipAddrCopy;
+
+                                                            }
+
+                                                        }
+
+                                                        xicmpStruct->ips = ipsCopy;
+                                                        xicmpStruct->ipsCount = ipsCount;
+
+                                                    }
+
+                                                    break;
+
+                                                case UDPMASKTYPE_REALM:
+                                                    udpStruct->listInStreamSettingsFinalMaskUdpRealmObjStruct = (struct jsonListInboundStreamSettingsFinalMaskUdpRealmObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsFinalMaskUdpRealmObjectStruct));
+                                                    if (!udpStruct->listInStreamSettingsFinalMaskUdpRealmObjStruct) {
+                                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsFinalMaskUdpRealmObjStruct is a null pointer, failed to allocate space");
+
+                                                        jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                        streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                        inboundObj->listInSniffingObjStruct = NULL;
+                                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                        listInStruct->listInObjStruct = NULL;
+                                                        jsonListInboundStructDelete(listInStruct);
+
+                                                        cJSON_Delete(jsonParser);
+
+                                                        return NULL;
+
+                                                    }
+
+                                                    struct jsonListInboundStreamSettingsFinalMaskUdpRealmObjectStruct* realmStruct = udpStruct->listInStreamSettingsFinalMaskUdpRealmObjStruct;
+                                                    realmStruct->url = NULL;
+                                                    realmStruct->stunServers = NULL;
+                                                    realmStruct->stunServersCount = 0;
+                                                    realmStruct->listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct = NULL;
+
+                                                    // the url is always of the form realm://token@host:port/id
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "url") &&
+                                                        cJSON_IsString(cJSON_GetObjectItem(udpSettingsObj, "url"))
+                                                       ) {
+                                                        char* realmUrl = cJSON_GetObjectItem(udpSettingsObj, "url")->valuestring;
+                                                        size_t realmUrlLen = strlen(realmUrl);
+                                                        char* realmUrlCopy = (char*)malloc((realmUrlLen + 1) * sizeof(char));
+                                                        strncpy(realmUrlCopy, realmUrl, realmUrlLen);
+                                                        realmUrlCopy[realmUrlLen] = '\0';
+                                                        realmStruct->url = realmUrlCopy;
+
+                                                    }
+
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "stunServers") &&
+                                                        cJSON_IsArray(cJSON_GetObjectItem(udpSettingsObj, "stunServers"))
+                                                       ) {
+                                                        cJSON* stunServersObj = cJSON_GetObjectItem(udpSettingsObj, "stunServers");
+                                                        size_t stunServersCount = cJSON_GetArraySize(stunServersObj);
+                                                        const char** stunServersCopy = (const char**)malloc((stunServersCount ? stunServersCount : 1) * sizeof(char*));
+                                                        if (!stunServersCopy) {
+                                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "stunServersCopy is a null pointer, failed to allocate space");
+
+                                                            jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                            streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                            inboundObj->listInSniffingObjStruct = NULL;
+                                                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                            listInStruct->listInObjStruct = NULL;
+                                                            jsonListInboundStructDelete(listInStruct);
+
+                                                            cJSON_Delete(jsonParser);
+
+                                                            return NULL;
+
+                                                        }
+
+                                                        for (size_t s = 0; s < stunServersCount; s++) {
+                                                            stunServersCopy[s] = NULL;
+
+                                                        }
+
+                                                        for (size_t s = 0; s < stunServersCount; s++) {
+                                                            cJSON* stunServerItem = cJSON_GetArrayItem(stunServersObj, s);
+                                                            if (cJSON_IsString(stunServerItem)) {
+                                                                char* stunServer = stunServerItem->valuestring;
+                                                                size_t stunServerLen = strlen(stunServer);
+                                                                char* stunServerCopy = (char*)malloc((stunServerLen + 1) * sizeof(char));
+                                                                strncpy(stunServerCopy, stunServer, stunServerLen);
+                                                                stunServerCopy[stunServerLen] = '\0';
+                                                                stunServersCopy[s] = stunServerCopy;
+
+                                                            }
+
+                                                        }
+
+                                                        realmStruct->stunServers = stunServersCopy;
+                                                        realmStruct->stunServersCount = stunServersCount;
+
+                                                    }
+
+                                                    // the realm tls field is optional
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "tlsConfig") &&
+                                                        cJSON_IsObject(cJSON_GetObjectItem(udpSettingsObj, "tlsConfig"))
+                                                       ) {
+                                                        cJSON* tlsConfigObj = cJSON_GetObjectItem(udpSettingsObj, "tlsConfig");
+                                                        if (!tlsConfigObj) {
+                                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "tlsConfigObj is a null pointer");
+
+                                                            jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                            streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                            inboundObj->listInSniffingObjStruct = NULL;
+                                                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                            listInStruct->listInObjStruct = NULL;
+                                                            jsonListInboundStructDelete(listInStruct);
+
+                                                            cJSON_Delete(jsonParser);
+
+                                                            return NULL;
+
+                                                        }
+
+                                                        realmStruct->listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct = (struct jsonListInboundStreamSettingsFinalMaskUdpRealmTlsConfigObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsFinalMaskUdpRealmTlsConfigObjectStruct));
+                                                        if (!realmStruct->listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct) {
+                                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct is a null pointer, failed to allocate space");
+
+                                                            jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                            streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                            inboundObj->listInSniffingObjStruct = NULL;
+                                                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                            listInStruct->listInObjStruct = NULL;
+                                                            jsonListInboundStructDelete(listInStruct);
+
+                                                            cJSON_Delete(jsonParser);
+
+                                                            return NULL;
+
+                                                        }
+
+                                                        struct jsonListInboundStreamSettingsFinalMaskUdpRealmTlsConfigObjectStruct* realmTlsConfigStruct = realmStruct->listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct;
+                                                        realmTlsConfigStruct->serverName = NULL;
+                                                        realmTlsConfigStruct->alpn = NULL;
+                                                        realmTlsConfigStruct->alpnCount = 0;
+                                                        realmTlsConfigStruct->fingerprint = NULL;
+                                                        realmTlsConfigStruct->allowInsecure = 0;
+
+                                                        if (
+                                                            cJSON_HasObjectItem(tlsConfigObj, "serverName") &&
+                                                            cJSON_IsString(cJSON_GetObjectItem(tlsConfigObj, "serverName"))
+                                                           ) {
+                                                            char* serverName = cJSON_GetObjectItem(tlsConfigObj, "serverName")->valuestring;
+                                                            size_t serverNameLen = strlen(serverName);
+                                                            char* serverNameCopy = (char*)malloc((serverNameLen + 1) * sizeof(char));
+                                                            strncpy(serverNameCopy, serverName, serverNameLen);
+                                                            serverNameCopy[serverNameLen] = '\0';
+                                                            realmTlsConfigStruct->serverName = serverNameCopy;
+
+                                                        }
+
+                                                        // the alpn field has 3 options: h3, h2, http/1.1
+                                                        if (
+                                                            cJSON_HasObjectItem(tlsConfigObj, "alpn") &&
+                                                            cJSON_IsArray(cJSON_GetObjectItem(tlsConfigObj, "alpn"))
+                                                           ) {
+                                                            cJSON* alpnObj = cJSON_GetObjectItem(tlsConfigObj, "alpn");
+                                                            size_t alpnCount = cJSON_GetArraySize(alpnObj);
+                                                            const char** alpnCopy = (const char**)malloc((alpnCount ? alpnCount : 1) * sizeof(char*));
+                                                            if (!alpnCopy) {
+                                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "alpnCopy is a null pointer, failed to allocate space");
+
+                                                                jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                                streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                                jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                                inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                                inboundObj->listInSniffingObjStruct = NULL;
+                                                                jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                                jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                                listInStruct->listInObjStruct = NULL;
+                                                                jsonListInboundStructDelete(listInStruct);
+
+                                                                cJSON_Delete(jsonParser);
+
+                                                                return NULL;
+
+                                                            }
+
+                                                            for (size_t a = 0; a < alpnCount; a++) {
+                                                                alpnCopy[a] = NULL;
+
+                                                            }
+
+                                                            for (size_t a = 0; a < alpnCount; a++) {
+                                                                cJSON* alpnItem = cJSON_GetArrayItem(alpnObj, a);
+                                                                if (cJSON_IsString(alpnItem)) {
+                                                                    char* alpnValue = alpnItem->valuestring;
+                                                                    size_t alpnValueLen = strlen(alpnValue);
+                                                                    char* alpnValueCopy = (char*)malloc((alpnValueLen + 1) * sizeof(char));
+                                                                    strncpy(alpnValueCopy, alpnValue, alpnValueLen);
+                                                                    alpnValueCopy[alpnValueLen] = '\0';
+                                                                    alpnCopy[a] = alpnValueCopy;
+
+                                                                }
+
+                                                            }
+
+                                                            realmTlsConfigStruct->alpn = alpnCopy;
+                                                            realmTlsConfigStruct->alpnCount = alpnCount;
+
+                                                        }
+
+                                                        // the fingerprint options are: chrome, firefox, safari, ios,
+                                                        // android, edge, 360, qq, random, randomizednoalpn, unsafe
+                                                        if (
+                                                            cJSON_HasObjectItem(tlsConfigObj, "fingerprint") &&
+                                                            cJSON_IsString(cJSON_GetObjectItem(tlsConfigObj, "fingerprint"))
+                                                           ) {
+                                                            char* fingerprint = cJSON_GetObjectItem(tlsConfigObj, "fingerprint")->valuestring;
+                                                            size_t fingerprintLen = strlen(fingerprint);
+                                                            char* fingerprintCopy = (char*)malloc((fingerprintLen + 1) * sizeof(char));
+                                                            strncpy(fingerprintCopy, fingerprint, fingerprintLen);
+                                                            fingerprintCopy[fingerprintLen] = '\0';
+                                                            realmTlsConfigStruct->fingerprint = fingerprintCopy;
+
+                                                        }
+
+                                                        if (
+                                                            cJSON_HasObjectItem(tlsConfigObj, "allowInsecure") &&
+                                                            cJSON_IsBool(cJSON_GetObjectItem(tlsConfigObj, "allowInsecure"))
+                                                           ) {
+                                                            realmTlsConfigStruct->allowInsecure = (unsigned char)cJSON_IsTrue(cJSON_GetObjectItem(tlsConfigObj, "allowInsecure"));
+
+                                                        }
+
+                                                    }
+
+                                                    break;
+
+                                                case UDPMASKTYPE_HEADERCUSTOM:
+                                                    udpStruct->listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct = (struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomObjectStruct));
+                                                    if (!udpStruct->listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct) {
+                                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct is a null pointer, failed to allocate space");
+
+                                                        jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                        streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                        inboundObj->listInSniffingObjStruct = NULL;
+                                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                        listInStruct->listInObjStruct = NULL;
+                                                        jsonListInboundStructDelete(listInStruct);
+
+                                                        cJSON_Delete(jsonParser);
+
+                                                        return NULL;
+
+                                                    }
+
+                                                    struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomObjectStruct* headerCustomStruct = udpStruct->listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct;
+                                                    headerCustomStruct->listInStreamSettingsFinalMaskUdpHeaderCustomClientPacketStruct = NULL;
+                                                    headerCustomStruct->jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomClientPacketStructSize = 0;
+                                                    headerCustomStruct->listInStreamSettingsFinalMaskUdpHeaderCustomServerPacketStruct = NULL;
+                                                    headerCustomStruct->jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomServerPacketStructSize = 0;
+
+                                                    // the client and server fields have the same fields, the packet
+                                                    // objects differ by their type field ( array / str / hex / base64 )
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "client") &&
+                                                        cJSON_IsArray(cJSON_GetObjectItem(udpSettingsObj, "client"))
+                                                       ) {
+                                                        cJSON* clientArr = cJSON_GetObjectItem(udpSettingsObj, "client");
+                                                        size_t clientCount = cJSON_GetArraySize(clientArr);
+                                                        struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct* headerCustomClientCopy = (struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct*)malloc((clientCount ? clientCount : 1) * sizeof(struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct));
+                                                        if (!headerCustomClientCopy) {
+                                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "headerCustomClientCopy is a null pointer, failed to allocate space");
+
+                                                            jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                            streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                            inboundObj->listInSniffingObjStruct = NULL;
+                                                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                            listInStruct->listInObjStruct = NULL;
+                                                            jsonListInboundStructDelete(listInStruct);
+
+                                                            cJSON_Delete(jsonParser);
+
+                                                            return NULL;
+
+                                                        }
+
+                                                        for (size_t c = 0; c < clientCount; c++) {
+                                                            headerCustomClientCopy[c].type = NULL;
+                                                            headerCustomClientCopy[c].rand = 0;
+                                                            headerCustomClientCopy[c].randRange = NULL;
+                                                            headerCustomClientCopy[c].packet = NULL;
+
+                                                        }
+
+                                                        for (size_t c = 0; c < clientCount; c++) {
+                                                            cJSON* clientPacketItem = cJSON_GetArrayItem(clientArr, c);
+                                                            struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct* clientPacket = &headerCustomClientCopy[c];
+
+                                                            if (
+                                                                cJSON_HasObjectItem(clientPacketItem, "type") &&
+                                                                cJSON_IsString(cJSON_GetObjectItem(clientPacketItem, "type"))
+                                                               ) {
+                                                                char* clientPacketType = cJSON_GetObjectItem(clientPacketItem, "type")->valuestring;
+                                                                size_t clientPacketTypeLen = strlen(clientPacketType);
+                                                                char* clientPacketTypeCopy = (char*)malloc((clientPacketTypeLen + 1) * sizeof(char));
+                                                                strncpy(clientPacketTypeCopy, clientPacketType, clientPacketTypeLen);
+                                                                clientPacketTypeCopy[clientPacketTypeLen] = '\0';
+                                                                clientPacket->type = clientPacketTypeCopy;
+
+                                                            }
+
+                                                            // rand / randRange are only present when type is "array"
+                                                            if (
+                                                                cJSON_HasObjectItem(clientPacketItem, "rand") &&
+                                                                cJSON_IsNumber(cJSON_GetObjectItem(clientPacketItem, "rand"))
+                                                               ) {
+                                                                clientPacket->rand = (int64_t)cJSON_GetObjectItem(clientPacketItem, "rand")->valuedouble;
+
+                                                            }
+
+                                                            if (
+                                                                cJSON_HasObjectItem(clientPacketItem, "randRange") &&
+                                                                cJSON_IsString(cJSON_GetObjectItem(clientPacketItem, "randRange"))
+                                                               ) {
+                                                                char* clientRandRange = cJSON_GetObjectItem(clientPacketItem, "randRange")->valuestring;
+                                                                size_t clientRandRangeLen = strlen(clientRandRange);
+                                                                char* clientRandRangeCopy = (char*)malloc((clientRandRangeLen + 1) * sizeof(char));
+                                                                strncpy(clientRandRangeCopy, clientRandRange, clientRandRangeLen);
+                                                                clientRandRangeCopy[clientRandRangeLen] = '\0';
+                                                                clientPacket->randRange = clientRandRangeCopy;
+
+                                                            }
+
+                                                            // packet is only present when type is "str" / "hex" / "base64"
+                                                            if (
+                                                                cJSON_HasObjectItem(clientPacketItem, "packet") &&
+                                                                cJSON_IsString(cJSON_GetObjectItem(clientPacketItem, "packet"))
+                                                               ) {
+                                                                char* clientPacketVal = cJSON_GetObjectItem(clientPacketItem, "packet")->valuestring;
+                                                                size_t clientPacketLen = strlen(clientPacketVal);
+                                                                char* clientPacketCopy = (char*)malloc((clientPacketLen + 1) * sizeof(char));
+                                                                strncpy(clientPacketCopy, clientPacketVal, clientPacketLen);
+                                                                clientPacketCopy[clientPacketLen] = '\0';
+                                                                clientPacket->packet = clientPacketCopy;
+
+                                                            }
+
+                                                        }
+
+                                                        headerCustomStruct->listInStreamSettingsFinalMaskUdpHeaderCustomClientPacketStruct = headerCustomClientCopy;
+                                                        headerCustomStruct->jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomClientPacketStructSize = clientCount;
+
+                                                    }
+
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "server") &&
+                                                        cJSON_IsArray(cJSON_GetObjectItem(udpSettingsObj, "server"))
+                                                       ) {
+                                                        cJSON* serverArr = cJSON_GetObjectItem(udpSettingsObj, "server");
+                                                        size_t serverCount = cJSON_GetArraySize(serverArr);
+                                                        struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct* headerCustomServerCopy = (struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct*)malloc((serverCount ? serverCount : 1) * sizeof(struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct));
+                                                        if (!headerCustomServerCopy) {
+                                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "headerCustomServerCopy is a null pointer, failed to allocate space");
+
+                                                            jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                            streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                            inboundObj->listInSniffingObjStruct = NULL;
+                                                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                            listInStruct->listInObjStruct = NULL;
+                                                            jsonListInboundStructDelete(listInStruct);
+
+                                                            cJSON_Delete(jsonParser);
+
+                                                            return NULL;
+
+                                                        }
+
+                                                        for (size_t s2 = 0; s2 < serverCount; s2++) {
+                                                            headerCustomServerCopy[s2].type = NULL;
+                                                            headerCustomServerCopy[s2].rand = 0;
+                                                            headerCustomServerCopy[s2].randRange = NULL;
+                                                            headerCustomServerCopy[s2].packet = NULL;
+
+                                                        }
+
+                                                        for (size_t s2 = 0; s2 < serverCount; s2++) {
+                                                            cJSON* serverPacketItem = cJSON_GetArrayItem(serverArr, s2);
+                                                            struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct* serverPacket = &headerCustomServerCopy[s2];
+
+                                                            if (
+                                                                cJSON_HasObjectItem(serverPacketItem, "type") &&
+                                                                cJSON_IsString(cJSON_GetObjectItem(serverPacketItem, "type"))
+                                                               ) {
+                                                                char* serverPacketType = cJSON_GetObjectItem(serverPacketItem, "type")->valuestring;
+                                                                size_t serverPacketTypeLen = strlen(serverPacketType);
+                                                                char* serverPacketTypeCopy = (char*)malloc((serverPacketTypeLen + 1) * sizeof(char));
+                                                                strncpy(serverPacketTypeCopy, serverPacketType, serverPacketTypeLen);
+                                                                serverPacketTypeCopy[serverPacketTypeLen] = '\0';
+                                                                serverPacket->type = serverPacketTypeCopy;
+
+                                                            }
+
+                                                            if (
+                                                                cJSON_HasObjectItem(serverPacketItem, "rand") &&
+                                                                cJSON_IsNumber(cJSON_GetObjectItem(serverPacketItem, "rand"))
+                                                               ) {
+                                                                serverPacket->rand = (int64_t)cJSON_GetObjectItem(serverPacketItem, "rand")->valuedouble;
+
+                                                            }
+
+                                                            if (
+                                                                cJSON_HasObjectItem(serverPacketItem, "randRange") &&
+                                                                cJSON_IsString(cJSON_GetObjectItem(serverPacketItem, "randRange"))
+                                                               ) {
+                                                                char* serverRandRange = cJSON_GetObjectItem(serverPacketItem, "randRange")->valuestring;
+                                                                size_t serverRandRangeLen = strlen(serverRandRange);
+                                                                char* serverRandRangeCopy = (char*)malloc((serverRandRangeLen + 1) * sizeof(char));
+                                                                strncpy(serverRandRangeCopy, serverRandRange, serverRandRangeLen);
+                                                                serverRandRangeCopy[serverRandRangeLen] = '\0';
+                                                                serverPacket->randRange = serverRandRangeCopy;
+
+                                                            }
+
+                                                            if (
+                                                                cJSON_HasObjectItem(serverPacketItem, "packet") &&
+                                                                cJSON_IsString(cJSON_GetObjectItem(serverPacketItem, "packet"))
+                                                               ) {
+                                                                char* serverPacketVal = cJSON_GetObjectItem(serverPacketItem, "packet")->valuestring;
+                                                                size_t serverPacketLen = strlen(serverPacketVal);
+                                                                char* serverPacketCopy = (char*)malloc((serverPacketLen + 1) * sizeof(char));
+                                                                strncpy(serverPacketCopy, serverPacketVal, serverPacketLen);
+                                                                serverPacketCopy[serverPacketLen] = '\0';
+                                                                serverPacket->packet = serverPacketCopy;
+
+                                                            }
+
+                                                        }
+
+                                                        headerCustomStruct->listInStreamSettingsFinalMaskUdpHeaderCustomServerPacketStruct = headerCustomServerCopy;
+                                                        headerCustomStruct->jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomServerPacketStructSize = serverCount;
+
+                                                    }
+
+                                                    break;
+
+                                                case UDPMASKTYPE_NOISE:
+                                                    udpStruct->listInStreamSettingsFinalMaskUdpNoiseObjStruct = (struct jsonListInboundStreamSettingsFinalMaskUdpNoiseObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsFinalMaskUdpNoiseObjectStruct));
+                                                    if (!udpStruct->listInStreamSettingsFinalMaskUdpNoiseObjStruct) {
+                                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsFinalMaskUdpNoiseObjStruct is a null pointer, failed to allocate space");
+
+                                                        jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                        streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                        inboundObj->listInSniffingObjStruct = NULL;
+                                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                        listInStruct->listInObjStruct = NULL;
+                                                        jsonListInboundStructDelete(listInStruct);
+
+                                                        cJSON_Delete(jsonParser);
+
+                                                        return NULL;
+
+                                                    }
+
+                                                    struct jsonListInboundStreamSettingsFinalMaskUdpNoiseObjectStruct* noiseStruct = udpStruct->listInStreamSettingsFinalMaskUdpNoiseObjStruct;
+                                                    noiseStruct->reset = 0;
+                                                    noiseStruct->listInStreamSettingsFinalMaskUdpNoisePacketStruct = NULL;
+                                                    noiseStruct->jsonListInboundStreamSettingsFinalMaskUdpNoisePacketStructSize = 0;
+
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "reset") &&
+                                                        cJSON_IsNumber(cJSON_GetObjectItem(udpSettingsObj, "reset"))
+                                                       ) {
+                                                        noiseStruct->reset = (int64_t)cJSON_GetObjectItem(udpSettingsObj, "reset")->valuedouble;
+
+                                                    }
+
+                                                    // the noise packet types ( array, str, hex, base64 ) and all of
+                                                    // their fields ( delay, rand, randRange, packet ) are optional
+                                                    if (
+                                                        cJSON_HasObjectItem(udpSettingsObj, "noise") &&
+                                                        cJSON_IsArray(cJSON_GetObjectItem(udpSettingsObj, "noise"))
+                                                       ) {
+                                                        cJSON* noiseArr = cJSON_GetObjectItem(udpSettingsObj, "noise");
+                                                        size_t noiseCount = cJSON_GetArraySize(noiseArr);
+                                                        struct jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStruct* noiseCopy = (struct jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStruct*)malloc((noiseCount ? noiseCount : 1) * sizeof(struct jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStruct));
+                                                        if (!noiseCopy) {
+                                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "noiseCopy is a null pointer, failed to allocate space");
+
+                                                            jsonListInboundStreamSettingsFinalMaskObjectStructDelete(finalMaskStruct);
+
+                                                            streamSettingsStruct->listInStreamSettingsFinalMaskObjStruct = NULL;
+                                                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                                                            inboundObj->listInSniffingObjStruct = NULL;
+                                                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                                            listInStruct->listInObjStruct = NULL;
+                                                            jsonListInboundStructDelete(listInStruct);
+
+                                                            cJSON_Delete(jsonParser);
+
+                                                            return NULL;
+
+                                                        }
+
+                                                        for (size_t n = 0; n < noiseCount; n++) {
+                                                            noiseCopy[n].type = NULL;
+                                                            noiseCopy[n].delay = NULL;
+                                                            noiseCopy[n].rand = NULL;
+                                                            noiseCopy[n].randRange = NULL;
+                                                            noiseCopy[n].packet = NULL;
+
+                                                        }
+
+                                                        for (size_t n = 0; n < noiseCount; n++) {
+                                                            cJSON* noisePacketItem = cJSON_GetArrayItem(noiseArr, n);
+                                                            struct jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStruct* noisePacket = &noiseCopy[n];
+
+                                                            if (
+                                                                cJSON_HasObjectItem(noisePacketItem, "type") &&
+                                                                cJSON_IsString(cJSON_GetObjectItem(noisePacketItem, "type"))
+                                                               ) {
+                                                                char* noisePacketType = cJSON_GetObjectItem(noisePacketItem, "type")->valuestring;
+                                                                size_t noisePacketTypeLen = strlen(noisePacketType);
+                                                                char* noisePacketTypeCopy = (char*)malloc((noisePacketTypeLen + 1) * sizeof(char));
+                                                                strncpy(noisePacketTypeCopy, noisePacketType, noisePacketTypeLen);
+                                                                noisePacketTypeCopy[noisePacketTypeLen] = '\0';
+                                                                noisePacket->type = noisePacketTypeCopy;
+
+                                                            }
+
+                                                            if (
+                                                                cJSON_HasObjectItem(noisePacketItem, "delay") &&
+                                                                cJSON_IsString(cJSON_GetObjectItem(noisePacketItem, "delay"))
+                                                               ) {
+                                                                char* noiseDelay = cJSON_GetObjectItem(noisePacketItem, "delay")->valuestring;
+                                                                size_t noiseDelayLen = strlen(noiseDelay);
+                                                                char* noiseDelayCopy = (char*)malloc((noiseDelayLen + 1) * sizeof(char));
+                                                                strncpy(noiseDelayCopy, noiseDelay, noiseDelayLen);
+                                                                noiseDelayCopy[noiseDelayLen] = '\0';
+                                                                noisePacket->delay = noiseDelayCopy;
+
+                                                            }
+
+                                                            // rand / randRange are only present when type is "array"
+                                                            if (
+                                                                cJSON_HasObjectItem(noisePacketItem, "rand") &&
+                                                                cJSON_IsString(cJSON_GetObjectItem(noisePacketItem, "rand"))
+                                                               ) {
+                                                                char* noiseRand = cJSON_GetObjectItem(noisePacketItem, "rand")->valuestring;
+                                                                size_t noiseRandLen = strlen(noiseRand);
+                                                                char* noiseRandCopy = (char*)malloc((noiseRandLen + 1) * sizeof(char));
+                                                                strncpy(noiseRandCopy, noiseRand, noiseRandLen);
+                                                                noiseRandCopy[noiseRandLen] = '\0';
+                                                                noisePacket->rand = noiseRandCopy;
+
+                                                            }
+
+                                                            if (
+                                                                cJSON_HasObjectItem(noisePacketItem, "randRange") &&
+                                                                cJSON_IsString(cJSON_GetObjectItem(noisePacketItem, "randRange"))
+                                                               ) {
+                                                                char* noiseRandRange = cJSON_GetObjectItem(noisePacketItem, "randRange")->valuestring;
+                                                                size_t noiseRandRangeLen = strlen(noiseRandRange);
+                                                                char* noiseRandRangeCopy = (char*)malloc((noiseRandRangeLen + 1) * sizeof(char));
+                                                                strncpy(noiseRandRangeCopy, noiseRandRange, noiseRandRangeLen);
+                                                                noiseRandRangeCopy[noiseRandRangeLen] = '\0';
+                                                                noisePacket->randRange = noiseRandRangeCopy;
+
+                                                            }
+
+                                                            // packet is only present when type is "str" / "hex" / "base64"
+                                                            if (
+                                                                cJSON_HasObjectItem(noisePacketItem, "packet") &&
+                                                                cJSON_IsString(cJSON_GetObjectItem(noisePacketItem, "packet"))
+                                                               ) {
+                                                                char* noisePacketVal = cJSON_GetObjectItem(noisePacketItem, "packet")->valuestring;
+                                                                size_t noisePacketLen = strlen(noisePacketVal);
+                                                                char* noisePacketCopy = (char*)malloc((noisePacketLen + 1) * sizeof(char));
+                                                                strncpy(noisePacketCopy, noisePacketVal, noisePacketLen);
+                                                                noisePacketCopy[noisePacketLen] = '\0';
+                                                                noisePacket->packet = noisePacketCopy;
+
+                                                            }
+
+                                                        }
+
+                                                        noiseStruct->listInStreamSettingsFinalMaskUdpNoisePacketStruct = noiseCopy;
+                                                        noiseStruct->jsonListInboundStreamSettingsFinalMaskUdpNoisePacketStructSize = noiseCount;
+
+                                                    }
+
+                                                    break;
+
+                                                default:
+                                                    break;
+
+                                            }
+
+                                        } else {
+                                            applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "The settings field is not present in the udp mask element, skipping the element...");
+
+                                        }
+
+                                    } else {
+                                        applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "The type field is not present in the udp mask element, skipping the element...");
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                        break;
+
+                    case NETWORKTYPE_WS:
+
+                    case NETWORKTYPE_GRPC:
+
+                    case NETWORKTYPE_HTTPUPGRADE:
+
+                    case NETWORKTYPE_XHTTP:
+
+                    default:
+
+                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+
+                }
+
+                if (jsonListInboundStreamSettingsSockoptParse(streamSettingsObj, streamSettingsStruct, inboundObj, i, listInStruct, jsonParser) == 0) {
+                    return NULL;
+
+                }
+
+                inboundObj->listInSniffingObjStruct = (struct jsonListInboundSniffingObjectStruct*)malloc(sizeof(struct jsonListInboundSniffingObjectStruct));
+                if (!inboundObj->listInSniffingObjStruct) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInSniffingObjStruct is a null pointer, failed to allocate space");
+
+                    inboundObj->listInSniffingObjStruct = NULL;
+                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                    jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                    listInStruct->listInObjStruct = NULL;
+                    jsonListInboundStructDelete(listInStruct);
+
+                    cJSON_Delete(jsonParser);
+
+                    return NULL;
+
+                }
+
+                struct jsonListInboundSniffingObjectStruct* sniffingStruct = inboundObj->listInSniffingObjStruct;
+                cJSON* sniffingObj = cJSON_GetObjectItem(arrItem, "sniffing");
+                cJSON* sniffingEnabledObj = sniffingObj ? cJSON_GetObjectItem(sniffingObj, "enabled") : NULL;
+                if (sniffingEnabledObj && cJSON_IsBool(sniffingEnabledObj)) {
+                    const char* enabledValue = cJSON_IsTrue(sniffingEnabledObj) ? "true" : "false";
+                    size_t enabledLen = strlen(enabledValue);
+                    char* enabledCopy = (char*)malloc((enabledLen + 1) * sizeof(char));
+                    strncpy(enabledCopy, enabledValue, enabledLen);
+                    enabledCopy[enabledLen] = '\0';
+                    sniffingStruct->enabled = enabledCopy;
+
+                } else if (sniffingEnabledObj && cJSON_IsString(sniffingEnabledObj) && cJSON_GetObjectItem(sniffingObj, "enabled")->valuestring) {
+                    char* enabledValue = cJSON_GetObjectItem(sniffingObj, "enabled")->valuestring;
+                    size_t enabledLen = strlen(enabledValue);
+                    char* enabledCopy = (char*)malloc((enabledLen + 1) * sizeof(char));
+                    strncpy(enabledCopy, enabledValue, enabledLen);
+                    enabledCopy[enabledLen] = '\0';
+                    sniffingStruct->enabled = enabledCopy;
+
+                } else {
+                    sniffingStruct->enabled = NULL;
+
+                }
+
             } else {
                 applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "Some item is not present in the array elelement, skipping the element...");
 
-                listInStruct->listInObjStruct[i].remark = NULL;
-                listInStruct->listInObjStruct[i].trafficReset = NULL;
-                listInStruct->listInObjStruct[i].listInCliStatsStruct = NULL;
-                listInStruct->listInObjStruct[i].listen = NULL;
-                listInStruct->listInObjStruct[i].protocol = NULL;
-                listInStruct->listInObjStruct[i].tag = NULL;
-                listInStruct->listInObjStruct[i].shareAddrStrategy = NULL;
-                listInStruct->listInObjStruct[i].shareAddr = NULL;
-                listInStruct->listInObjStruct[i].originNodeGuid = NULL;
-                listInStruct->listInObjStruct[i].listInSettingsObjStruct = NULL;
-                listInStruct->listInObjStruct[i].listInStreamSettingsObjStruct = NULL;
-                listInStruct->listInObjStruct[i].listInSniffingObjStruct = NULL;
+                inboundObj->remark = NULL;
+                inboundObj->trafficReset = NULL;
+                inboundObj->listInCliStatsStruct = NULL;
+                inboundObj->listen = NULL;
+                inboundObj->protocol = NULL;
+                inboundObj->tag = NULL;
+                inboundObj->shareAddrStrategy = NULL;
+                inboundObj->shareAddr = NULL;
+                inboundObj->originNodeGuid = NULL;
+                inboundObj->listInSettingsObjStruct = NULL;
+                inboundObj->listInStreamSettingsObjStruct = NULL;
+                inboundObj->listInSniffingObjStruct = NULL;
 
             }
 
