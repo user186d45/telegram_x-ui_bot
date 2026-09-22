@@ -632,7 +632,7 @@ enum networkTypesEnum {
 
 };
 
-static int jsonListInboundStreamSettingsSockoptParse(cJSON* sockOptObj, struct jsonListInboundStreamSettingsObjectStruct* streamSettingsObj, enum networkTypesEnum nType) {
+static int jsonListInboundStreamSettingsSockoptParse(cJSON* sockOptObj, struct jsonListInboundStreamSettingsObjectStruct* streamSettingsStruct, enum networkTypesEnum nType) {
     // sockopt holds the socket options, when real client ip is off/direct the
     // trusted X-Forwarded-For field is always empty, the real client ip field
     // itself is not present in this variant
@@ -642,48 +642,69 @@ static int jsonListInboundStreamSettingsSockoptParse(cJSON* sockOptObj, struct j
     // option only works with websocket, httpupgrade and xhttp, and the "l4 relay / spectrum ( PROXY )"
     // option only works with tcp, websocket, httpupgrade, grpc and xhttp
 
+    // this json has too many dynamic fields therefore object / array availability is checked after allocating the struct, and on parsing them
     switch (nType) {
         case NETWORKTYPE_TCP:
         {
-            if (
-                cJSON_HasObjectItem(sockOptObj, "acceptProxyProtocol") &&
-                cJSON_HasObjectItem(sockOptObj, "tcpFastOpen") &&
-                // also has the "tproxy" field
-                cJSON_HasObjectItem(sockOptObj, "penetrate") &&
-                cJSON_HasObjectItem(sockOptObj, "tcpcongestion") &&
-                // there is also an optional "V6Only" option, check for that also
-                cJSON_HasObjectItem(sockOptObj, "customSockopt") &&
-                cJSON_IsArray(cJSON_GetObjectItem(sockOptObj, "customSockopt"))
-               ) {
-                streamSettingsObj->listInStreamSettingsTcpSockoptObjStruct = (struct jsonListInboundStreamSettingsTcpSockoptObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsTcpSockoptObjectStruct));
-                if (!streamSettingsObj->listInStreamSettingsTcpSettingsObjStruct) {
-                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTcpSettingsObjStruct is a null pointer, failed to allocate memory");
+            streamSettingsStruct->listInStreamSettingsTcpSockoptObjStruct = (struct jsonListInboundStreamSettingsTcpSockoptObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsTcpSockoptObjectStruct));
+            if (!streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTcpSettingsObjStruct is a null pointer, failed to allocate memory");
 
-                    streamSettingsObj->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
 
-                    return 1;
+                return 1;
 
-                }
+            }
 
-                struct jsonListInboundStreamSettingsTcpSockoptObjectStruct* tcpSocketStruct = streamSettingsObj->listInStreamSettingsTcpSockoptObjStruct;
+            struct jsonListInboundStreamSettingsTcpSockoptObjectStruct* tcpSocketStruct = streamSettingsStruct->listInStreamSettingsTcpSockoptObjStruct;
+
+            if (cJSON_HasObjectItem(sockOptObj, "acceptProxyProtocol")) {
+                tcpSocketStruct->acceptProxyProtocolEnabled = 1;
 
                 tcpSocketStruct->acceptProxyProtocol = cJSON_IsTrue(cJSON_GetObjectItem(sockOptObj, "acceptProxyProtocol"));
+
+            } else {
+                tcpSocketStruct->acceptProxyProtocolEnabled = 0;
+
+            }
+
+            if (cJSON_HasObjectItem(sockOptObj, "tcpFastOpen")) {
+                tcpSocketStruct->tcpFastOpenEnabled = 1;
+
                 tcpSocketStruct->tcpFastOpen = cJSON_IsTrue(cJSON_GetObjectItem(sockOptObj, "tcpFastOpen"));
 
-                if (cJSON_HasObjectItem(sockOptObj, "tproxy")) {
-                    char* tproxy = cJSON_GetObjectItem(sockOptObj, "tproxy")->valuestring;
-                    size_t tproxyLen = strlen(tproxy);
-                    char* tproxyCopy = (char*)malloc((tproxyLen + 1) * sizeof(char));
-                    strncpy(tproxyCopy, tproxy, tproxyLen);
-                    tproxyCopy[tproxyLen] = '\0';
-                    tcpSocketStruct->tproxy = tproxyCopy;
+            } else {
+                tcpSocketStruct->tcpFastOpenEnabled = 0;
 
-                } else {
-                    tcpSocketStruct->tproxy = NULL;
+            }
 
-                }
+            if (cJSON_HasObjectItem(sockOptObj, "tproxy")) {
+                tcpSocketStruct->tproxyEnabled = 1;
+
+                char* tproxy = cJSON_GetObjectItem(sockOptObj, "tproxy")->valuestring;
+                size_t tproxyLen = strlen(tproxy);
+                char* tproxyCopy = (char*)malloc((tproxyLen + 1) * sizeof(char));
+                strncpy(tproxyCopy, tproxy, tproxyLen);
+                tproxyCopy[tproxyLen] = '\0';
+                tcpSocketStruct->tproxy = tproxyCopy;
+
+            } else {
+                tcpSocketStruct->tproxyEnabled = 0;
+
+            }
+
+            if (cJSON_HasObjectItem(sockOptObj, "penetrate")) {
+                tcpSocketStruct->penetrateEnabled = 1;
 
                 tcpSocketStruct->penetrate = cJSON_IsTrue(cJSON_GetObjectItem(sockOptObj, "penetrate"));
+
+            } else {
+                tcpSocketStruct->penetrateEnabled = 0;
+
+            }
+
+            if (cJSON_HasObjectItem(sockOptObj, "tcpcongestion")) {
+                tcpSocketStruct->tcpcongestionEnabled = 1;
 
                 char* tcpcongestion = cJSON_GetObjectItem(sockOptObj, "tcpcongestion")->valuestring;
                 size_t tcpcongestionLen = strlen(tcpcongestion);
@@ -692,16 +713,25 @@ static int jsonListInboundStreamSettingsSockoptParse(cJSON* sockOptObj, struct j
                 tcpcongestionCopy[tcpcongestionLen] = '\0';
                 tcpSocketStruct->tcpcongestion = tcpcongestionCopy;
 
-                if (cJSON_HasObjectItem(sockOptObj, "V6Only")) {
-                    tcpSocketStruct->V6OnlyEnabled = 1;
-                    
-                    tcpSocketStruct->V6Only = cJSON_IsTrue(cJSON_GetObjectItem(sockOptObj, "V6Only"));
+            } else {
+                tcpSocketStruct->tcpcongestionEnabled = 0;
 
-                } else {
-                    tcpSocketStruct->V6OnlyEnabled = 0;
+            }
 
-                }
+            if (cJSON_HasObjectItem(sockOptObj, "V6Only")) {
+                tcpSocketStruct->V6OnlyEnabled = 1;
+                
+                tcpSocketStruct->V6Only = cJSON_IsTrue(cJSON_GetObjectItem(sockOptObj, "V6Only"));
 
+            } else {
+                tcpSocketStruct->V6OnlyEnabled = 0;
+
+            }
+
+            if (
+                cJSON_HasObjectItem(sockOptObj, "customSockopt") &&
+                cJSON_IsArray(cJSON_GetObjectItem(sockOptObj, "customSockopt"))
+               ) {
                 cJSON* customSockoptArr = cJSON_GetObjectItem(sockOptObj, "customSockopt");
                 size_t customSockoptArrLen = cJSON_GetArraySize(customSockoptArr);
                 if (customSockoptArrLen) {
@@ -778,27 +808,16 @@ static int jsonListInboundStreamSettingsSockoptParse(cJSON* sockOptObj, struct j
                 // TODO
             }
 
+            // tcp masks remaining
+
             break;
 
         }
         case NETWORKTYPE_KCP:
         {
-            if (
-                cJSON_HasObjectItem(sockOptObj, "tcpFastOpen") &&
-                cJSON_HasObjectItem(sockOptObj, "penetrate") &&
-                cJSON_HasObjectItem(sockOptObj, "tcpcongestion") &&
-                cJSON_HasObjectItem(sockOptObj, "customSockopt")
-               ) {
-                streamSettingsObj->listInStreamSettingsMKcpSockoptObjStruct = (struct jsonListInboundStreamSettingsMKcpSockoptObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsMKcpSockoptObjectStruct));
-                if (!streamSettingsObj->listInStreamSettingsMKcpSockoptObjStruct) {
-                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsMKcpSockoptObjStruct is a null pointer, failed to allocate memory");
-
-                    streamSettingsObj->listInStreamSettingsMKcpSockoptObjStruct = NULL;
-
-                    return 1;
-
-                }
-
+            streamSettingsStruct->listInStreamSettingsMKcpSockoptObjStruct = (struct jsonListInboundStreamSettingsMKcpSockoptObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsMKcpSockoptObjectStruct));
+            if (!streamSettingsStruct->listInStreamSettingsMKcpSockoptObjStruct) {
+                // TODO
 
             }
 

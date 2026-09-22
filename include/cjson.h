@@ -213,14 +213,25 @@ struct jsonListInboundStreamSettingsTcpSockoptObjectCustomSockOptArrayStruct {
 };
 
 struct jsonListInboundStreamSettingsTcpSockoptObjectStruct {
+    unsigned char acceptProxyProtocolEnabled;
     unsigned char acceptProxyProtocol;
+    unsigned char tcpFastOpenEnabled;
     unsigned char tcpFastOpen;
+    unsigned char tproxyEnabled;
     const char* tproxy;
+    unsigned char penetrateEnabled;
     unsigned char penetrate;
+    unsigned char tcpcongestionEnabled;
     const char* tcpcongestion;
     unsigned char V6OnlyEnabled;
     unsigned char V6Only;
+    unsigned char listInStreamSettingsTcpSockoptObjCustomScokArrStructEnabled;
     struct jsonListInboundStreamSettingsTcpSockoptObjectCustomSockOptArrayStruct* listInStreamSettingsTcpSockoptObjCustomScokArrStruct; // array
+
+};
+
+struct jsonListInboundStreamSettingsMKcpSockoptObjectStruct {
+    
 
 };
 
