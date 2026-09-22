@@ -632,236 +632,185 @@ enum networkTypesEnum {
 
 };
 
-static int jsonListInboundStreamSettingsSockoptParse(cJSON* streamSettingsObj, struct jsonListInboundStreamSettingsObjectStruct* streamSettingsStruct, struct jsonListInboundObjectStruct* listInObjStruct, size_t i, struct jsonListInboundStruct* listInStruct, cJSON* jsonParser) {
+static int jsonListInboundStreamSettingsSockoptParse(cJSON* sockOptObj, struct jsonListInboundStreamSettingsObjectStruct* streamSettingsObj, enum networkTypesEnum nType) {
     // sockopt holds the socket options, when real client ip is off/direct the
     // trusted X-Forwarded-For field is always empty, the real client ip field
     // itself is not present in this variant
     // TODO: parse the real client ip field and the trusted X-Forwarded-For
     // field when the json for the other real client ip options gets provided,
     // the allowed options depend on the transmission: the cloudflare cdn
-    // option only works with websocket, and the "l4 relay / spectrum ( PROXY )"
+    // option only works with websocket, httpupgrade and xhttp, and the "l4 relay / spectrum ( PROXY )"
     // option only works with tcp, websocket, httpupgrade, grpc and xhttp
-    if (
-        cJSON_HasObjectItem(streamSettingsObj, "sockopt") &&
-        cJSON_IsObject(cJSON_GetObjectItem(streamSettingsObj, "sockopt"))
-       ) {
-        cJSON* sockoptObj = cJSON_GetObjectItem(streamSettingsObj, "sockopt");
-        if (!sockoptObj) {
-            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "sockoptObj is a null pointer");
 
-            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+    switch (nType) {
+        case NETWORKTYPE_TCP:
+        {
+            if (
+                cJSON_HasObjectItem(sockOptObj, "acceptProxyProtocol") &&
+                cJSON_HasObjectItem(sockOptObj, "tcpFastOpen") &&
+                // also has the "tproxy" field
+                cJSON_HasObjectItem(sockOptObj, "penetrate") &&
+                cJSON_HasObjectItem(sockOptObj, "tcpcongestion") &&
+                // there is also an optional "V6Only" option, check for that also
+                cJSON_HasObjectItem(sockOptObj, "customSockopt") &&
+                cJSON_IsArray(cJSON_GetObjectItem(sockOptObj, "customSockopt"))
+               ) {
+                streamSettingsObj->listInStreamSettingsTcpSockoptObjStruct = (struct jsonListInboundStreamSettingsTcpSockoptObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsTcpSockoptObjectStruct));
+                if (!streamSettingsObj->listInStreamSettingsTcpSettingsObjStruct) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTcpSettingsObjStruct is a null pointer, failed to allocate memory");
 
-            listInObjStruct->listInStreamSettingsObjStruct = NULL;
-            listInObjStruct->listInSniffingObjStruct = NULL;
-            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+                    streamSettingsObj->listInStreamSettingsTcpSettingsObjStruct = NULL;
 
-            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+                    return 1;
 
-            listInStruct->listInObjStruct = NULL;
-            jsonListInboundStructDelete(listInStruct);
+                }
 
-            cJSON_Delete(jsonParser);
+                struct jsonListInboundStreamSettingsTcpSockoptObjectStruct* tcpSocketStruct = streamSettingsObj->listInStreamSettingsTcpSockoptObjStruct;
 
-            return 0;
+                tcpSocketStruct->acceptProxyProtocol = cJSON_IsTrue(cJSON_GetObjectItem(sockOptObj, "acceptProxyProtocol"));
+                tcpSocketStruct->tcpFastOpen = cJSON_IsTrue(cJSON_GetObjectItem(sockOptObj, "tcpFastOpen"));
+
+                if (cJSON_HasObjectItem(sockOptObj, "tproxy")) {
+                    char* tproxy = cJSON_GetObjectItem(sockOptObj, "tproxy")->valuestring;
+                    size_t tproxyLen = strlen(tproxy);
+                    char* tproxyCopy = (char*)malloc((tproxyLen + 1) * sizeof(char));
+                    strncpy(tproxyCopy, tproxy, tproxyLen);
+                    tproxyCopy[tproxyLen] = '\0';
+                    tcpSocketStruct->tproxy = tproxyCopy;
+
+                } else {
+                    tcpSocketStruct->tproxy = NULL;
+
+                }
+
+                tcpSocketStruct->penetrate = cJSON_IsTrue(cJSON_GetObjectItem(sockOptObj, "penetrate"));
+
+                char* tcpcongestion = cJSON_GetObjectItem(sockOptObj, "tcpcongestion")->valuestring;
+                size_t tcpcongestionLen = strlen(tcpcongestion);
+                char* tcpcongestionCopy = (char*)malloc((tcpcongestionLen + 1) * sizeof(char));
+                strncpy(tcpcongestionCopy, tcpcongestion, tcpcongestionLen);
+                tcpcongestionCopy[tcpcongestionLen] = '\0';
+                tcpSocketStruct->tcpcongestion = tcpcongestionCopy;
+
+                if (cJSON_HasObjectItem(sockOptObj, "V6Only")) {
+                    tcpSocketStruct->V6OnlyEnabled = 1;
+                    
+                    tcpSocketStruct->V6Only = cJSON_IsTrue(cJSON_GetObjectItem(sockOptObj, "V6Only"));
+
+                } else {
+                    tcpSocketStruct->V6OnlyEnabled = 0;
+
+                }
+
+                cJSON* customSockoptArr = cJSON_GetObjectItem(sockOptObj, "customSockopt");
+                size_t customSockoptArrLen = cJSON_GetArraySize(customSockoptArr);
+                if (customSockoptArrLen) {
+                    tcpSocketStruct->listInStreamSettingsTcpSockoptObjCustomScokArrStruct = (struct jsonListInboundStreamSettingsTcpSockoptObjectCustomSockOptArrayStruct*)malloc(customSockoptArrLen * sizeof(struct jsonListInboundStreamSettingsTcpSockoptObjectCustomSockOptArrayStruct));
+                    if (!tcpSocketStruct->listInStreamSettingsTcpSockoptObjCustomScokArrStruct) {
+                        // TODO: define and declare the missing cleaner functions and call them here
+
+                    }
+
+                    for (size_t i = 0; i < customSockoptArrLen; i++) {
+                        struct jsonListInboundStreamSettingsTcpSockoptObjectCustomSockOptArrayStruct* customSockOptArrStruct = tcpSocketStruct->listInStreamSettingsTcpSockoptObjCustomScokArrStruct;
+
+                        cJSON* customSockoptArrItem = cJSON_GetArrayItem(customSockoptArr, i);
+                        if (
+                            // also has the "system" field if set
+                            cJSON_HasObjectItem(customSockoptArrItem, "type") &&
+                            cJSON_HasObjectItem(customSockoptArrItem, "level") &&
+                            cJSON_HasObjectItem(customSockoptArrItem, "opt") &&
+                            cJSON_HasObjectItem(customSockoptArrItem, "value")
+                           ) {
+
+                            if (cJSON_HasObjectItem(customSockoptArrItem, "system")) {
+                                char* system = cJSON_GetObjectItem(customSockoptArrItem, "system")->valuestring;
+                                size_t systemLen = strlen(system);
+                                char* systemCopy = (char*)malloc((systemLen + 1) * sizeof(char));
+                                strncpy(systemCopy, system, systemLen);
+                                systemCopy[systemLen] = '\0';
+                                customSockOptArrStruct[i].system = systemCopy;
+
+                            } else {
+                                customSockOptArrStruct[i].system = NULL;
+
+                            }
+
+                            char* type = cJSON_GetObjectItem(customSockoptArrItem, "type")->valuestring;
+                            size_t typeLen = strlen(type);
+                            char* typeCopy = (char*)malloc((typeLen + 1) * sizeof(char));
+                            strncpy(typeCopy, type, typeLen);
+                            typeCopy[typeLen] = '\0';
+                            customSockOptArrStruct[i].type = typeCopy;
+
+                            char* level = cJSON_GetObjectItem(customSockoptArrItem, "level")->valuestring;
+                            size_t levelLen = strlen(level);
+                            char* levelCopy = (char*)malloc((levelLen + 1) * sizeof(char));
+                            strncpy(levelCopy, level, levelLen);
+                            levelCopy[levelLen] = '\0';
+                            customSockOptArrStruct[i].level = levelCopy;
+
+                            char* opt = cJSON_GetObjectItem(customSockoptArrItem, "opt")->valuestring;
+                            size_t optLen = strlen(opt);
+                            char* optCopy = (char*)malloc((optLen + 1) * sizeof(char));
+                            strncpy(optCopy, opt, optLen);
+                            optCopy[optLen] = '\0';
+                            customSockOptArrStruct[i].opt = optCopy;
+
+                            char* value = cJSON_GetObjectItem(customSockoptArrItem, "value")->valuestring;
+                            size_t valueLen = strlen(value);
+                            char* valueCopy = (char*)malloc((valueLen + 1) * sizeof(char));
+                            strncpy(valueCopy, value, valueLen);
+                            valueCopy[valueLen] = '\0';
+                            customSockOptArrStruct[i].value = valueCopy;
+
+                        } else {
+                            // TODO
+                        }
+
+                    }
+
+                } else {
+                    // TODO
+                }
+
+            } else {
+                // TODO
+            }
+
+            break;
 
         }
+        case NETWORKTYPE_KCP:
+        {
+            if (
+                cJSON_HasObjectItem(sockOptObj, "tcpFastOpen") &&
+                cJSON_HasObjectItem(sockOptObj, "penetrate") &&
+                cJSON_HasObjectItem(sockOptObj, "tcpcongestion") &&
+                cJSON_HasObjectItem(sockOptObj, "customSockopt")
+               ) {
+                streamSettingsObj->listInStreamSettingsMKcpSockoptObjStruct = (struct jsonListInboundStreamSettingsMKcpSockoptObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsMKcpSockoptObjectStruct));
+                if (!streamSettingsObj->listInStreamSettingsMKcpSockoptObjStruct) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsMKcpSockoptObjStruct is a null pointer, failed to allocate memory");
 
-        streamSettingsStruct->listInStreamSettingsSockoptObjStruct = (struct jsonListInboundStreamSettingsSockoptObjectStruct*)malloc(sizeof(struct jsonListInboundStreamSettingsSockoptObjectStruct));
-        if (!streamSettingsStruct->listInStreamSettingsSockoptObjStruct) {
-            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsSockoptObjStruct is a null pointer, failed to allocate space");
+                    streamSettingsObj->listInStreamSettingsMKcpSockoptObjStruct = NULL;
 
-            streamSettingsStruct->listInStreamSettingsSockoptObjStruct = NULL;
-            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+                    return 1;
 
-            listInObjStruct->listInStreamSettingsObjStruct = NULL;
-            listInObjStruct->listInSniffingObjStruct = NULL;
-            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+                }
 
-            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
-
-            listInStruct->listInObjStruct = NULL;
-            jsonListInboundStructDelete(listInStruct);
-
-            cJSON_Delete(jsonParser);
-
-            return 0;
-
-        }
-
-        struct jsonListInboundStreamSettingsSockoptObjectStruct* sockoptStruct = streamSettingsStruct->listInStreamSettingsSockoptObjStruct;
-        sockoptStruct->tproxy = NULL;
-        sockoptStruct->tcpcongestion = NULL;
-        sockoptStruct->listInStreamSettingsSockoptCustomSockoptStruct = NULL;
-        sockoptStruct->jsonListInboundStreamSettingsSockoptCustomSockoptStructSize = 0;
-
-        if (
-            cJSON_HasObjectItem(sockoptObj, "tcpFastOpen") &&
-            cJSON_IsBool(cJSON_GetObjectItem(sockoptObj, "tcpFastOpen"))
-           ) {
-            sockoptStruct->tcpFastOpen = (unsigned char)cJSON_IsTrue(cJSON_GetObjectItem(sockoptObj, "tcpFastOpen"));
-
-        } else {
-            sockoptStruct->tcpFastOpen = 0;
-
-        }
-
-        // the tproxy field has 3 options: off, redirect, tproxy
-        if (
-            cJSON_HasObjectItem(sockoptObj, "tproxy") &&
-            cJSON_IsString(cJSON_GetObjectItem(sockoptObj, "tproxy"))
-           ) {
-            char* tproxy = cJSON_GetObjectItem(sockoptObj, "tproxy")->valuestring;
-            size_t tproxyLen = strlen(tproxy);
-            char* tproxyCopy = (char*)malloc((tproxyLen + 1) * sizeof(char));
-            strncpy(tproxyCopy, tproxy, tproxyLen);
-            tproxyCopy[tproxyLen] = '\0';
-            sockoptStruct->tproxy = tproxyCopy;
-
-        }
-
-        if (
-            cJSON_HasObjectItem(sockoptObj, "penetrate") &&
-            cJSON_IsBool(cJSON_GetObjectItem(sockoptObj, "penetrate"))
-           ) {
-            sockoptStruct->penetrate = (unsigned char)cJSON_IsTrue(cJSON_GetObjectItem(sockoptObj, "penetrate"));
-
-        } else {
-            sockoptStruct->penetrate = 0;
-
-        }
-
-        if (
-            cJSON_HasObjectItem(sockoptObj, "tcpcongestion") &&
-            cJSON_IsString(cJSON_GetObjectItem(sockoptObj, "tcpcongestion"))
-           ) {
-            char* tcpcongestion = cJSON_GetObjectItem(sockoptObj, "tcpcongestion")->valuestring;
-            size_t tcpcongestionLen = strlen(tcpcongestion);
-            char* tcpcongestionCopy = (char*)malloc((tcpcongestionLen + 1) * sizeof(char));
-            strncpy(tcpcongestionCopy, tcpcongestion, tcpcongestionLen);
-            tcpcongestionCopy[tcpcongestionLen] = '\0';
-            sockoptStruct->tcpcongestion = tcpcongestionCopy;
-
-        }
-
-        if (
-            cJSON_HasObjectItem(sockoptObj, "customSockopt") &&
-            cJSON_IsArray(cJSON_GetObjectItem(sockoptObj, "customSockopt"))
-           ) {
-            cJSON* customSockoptArr = cJSON_GetObjectItem(sockoptObj, "customSockopt");
-            size_t customSockoptCount = cJSON_GetArraySize(customSockoptArr);
-            struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct* customSockoptCopy = (struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct*)malloc((customSockoptCount ? customSockoptCount : 1) * sizeof(struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct));
-            if (!customSockoptCopy) {
-                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "customSockoptCopy is a null pointer, failed to allocate space");
-
-                jsonListInboundStreamSettingsSockoptObjectStructDelete(sockoptStruct);
-
-                streamSettingsStruct->listInStreamSettingsSockoptObjStruct = NULL;
-                jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
-
-                listInObjStruct->listInStreamSettingsObjStruct = NULL;
-                listInObjStruct->listInSniffingObjStruct = NULL;
-                jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
-
-                jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
-
-                listInStruct->listInObjStruct = NULL;
-                jsonListInboundStructDelete(listInStruct);
-
-                cJSON_Delete(jsonParser);
-
-                return 0;
 
             }
 
-            for (size_t cs = 0; cs < customSockoptCount; cs++) {
-                customSockoptCopy[cs].system = NULL;
-                customSockoptCopy[cs].type = NULL;
-                customSockoptCopy[cs].level = NULL;
-                customSockoptCopy[cs].opt = NULL;
-                customSockoptCopy[cs].value = NULL;
-
-            }
-
-            for (size_t cs = 0; cs < customSockoptCount; cs++) {
-                cJSON* customSockoptItem = cJSON_GetArrayItem(customSockoptArr, cs);
-                struct jsonListInboundStreamSettingsSockoptCustomSockoptObjectStruct* customSockoptStruct = &customSockoptCopy[cs];
-
-                // the system field is optional, e.g. "linux" / "windows"
-                if (
-                    cJSON_HasObjectItem(customSockoptItem, "system") &&
-                    cJSON_IsString(cJSON_GetObjectItem(customSockoptItem, "system"))
-                   ) {
-                    char* system = cJSON_GetObjectItem(customSockoptItem, "system")->valuestring;
-                    size_t systemLen = strlen(system);
-                    char* systemCopy = (char*)malloc((systemLen + 1) * sizeof(char));
-                    strncpy(systemCopy, system, systemLen);
-                    systemCopy[systemLen] = '\0';
-                    customSockoptStruct->system = systemCopy;
-
-                }
-
-                // the type field has two values, int and string, the value
-                // field is interpreted respectively
-                if (
-                    cJSON_HasObjectItem(customSockoptItem, "type") &&
-                    cJSON_IsString(cJSON_GetObjectItem(customSockoptItem, "type"))
-                   ) {
-                    char* customSockoptType = cJSON_GetObjectItem(customSockoptItem, "type")->valuestring;
-                    size_t customSockoptTypeLen = strlen(customSockoptType);
-                    char* customSockoptTypeCopy = (char*)malloc((customSockoptTypeLen + 1) * sizeof(char));
-                    strncpy(customSockoptTypeCopy, customSockoptType, customSockoptTypeLen);
-                    customSockoptTypeCopy[customSockoptTypeLen] = '\0';
-                    customSockoptStruct->type = customSockoptTypeCopy;
-
-                }
-
-                if (
-                    cJSON_HasObjectItem(customSockoptItem, "level") &&
-                    cJSON_IsString(cJSON_GetObjectItem(customSockoptItem, "level"))
-                   ) {
-                    char* level = cJSON_GetObjectItem(customSockoptItem, "level")->valuestring;
-                    size_t levelLen = strlen(level);
-                    char* levelCopy = (char*)malloc((levelLen + 1) * sizeof(char));
-                    strncpy(levelCopy, level, levelLen);
-                    levelCopy[levelLen] = '\0';
-                    customSockoptStruct->level = levelCopy;
-
-                }
-
-                if (
-                    cJSON_HasObjectItem(customSockoptItem, "opt") &&
-                    cJSON_IsString(cJSON_GetObjectItem(customSockoptItem, "opt"))
-                   ) {
-                    char* opt = cJSON_GetObjectItem(customSockoptItem, "opt")->valuestring;
-                    size_t optLen = strlen(opt);
-                    char* optCopy = (char*)malloc((optLen + 1) * sizeof(char));
-                    strncpy(optCopy, opt, optLen);
-                    optCopy[optLen] = '\0';
-                    customSockoptStruct->opt = optCopy;
-
-                }
-
-                if (
-                    cJSON_HasObjectItem(customSockoptItem, "value") &&
-                    cJSON_IsString(cJSON_GetObjectItem(customSockoptItem, "value"))
-                   ) {
-                    char* value = cJSON_GetObjectItem(customSockoptItem, "value")->valuestring;
-                    size_t valueLen = strlen(value);
-                    char* valueCopy = (char*)malloc((valueLen + 1) * sizeof(char));
-                    strncpy(valueCopy, value, valueLen);
-                    valueCopy[valueLen] = '\0';
-                    customSockoptStruct->value = valueCopy;
-
-                }
-
-            }
-
-            sockoptStruct->listInStreamSettingsSockoptCustomSockoptStruct = customSockoptCopy;
-            sockoptStruct->jsonListInboundStreamSettingsSockoptCustomSockoptStructSize = customSockoptCount;
-
         }
+        case NETWORKTYPE_WS:
+        case NETWORKTYPE_GRPC:
+        case NETWORKTYPE_HTTPUPGRADE:
+        case NETWORKTYPE_XHTTP:
+        default:
 
     }
+
 
     return 1;
 
@@ -1029,7 +978,7 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                 } else {
                     inboundObj->listInCliStatsStruct = (struct jsonListInboundClientStatsArrayStruct*)malloc(inboundObj->jsonListInboundClientStatsArrayStructSize * sizeof(struct jsonListInboundClientStatsArrayStruct));
                     if (!inboundObj->listInCliStatsStruct) {
-                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInCliStatsStruct is a null pointer, failed to allocate space"); // TODO: make this messag econsistent across this file
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInCliStatsStruct is a null pointer, failed to allocate space"); // TODO: make this message consistent across this file
 
                         inboundObj->listInCliStatsStruct = NULL;
                         inboundObj->listen = NULL;
@@ -1189,6 +1138,32 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                 cJSON* settingsObj = cJSON_GetObjectItem(arrItem, "settings");
                 if (!settingsObj) {
                     applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "settingsObj is a null pointer");
+
+                    jsonListInboundSettingsObjectStructDelete(inboundObj->listInSettingsObjStruct);
+                    inboundObj->listInSettingsObjStruct = NULL;
+                    inboundObj->listInStreamSettingsObjStruct = NULL;
+                    inboundObj->listInSniffingObjStruct = NULL;
+                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                    jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+                    listInStruct->listInObjStruct = NULL;
+                    jsonListInboundStructDelete(listInStruct);
+
+                    cJSON_Delete(jsonParser);
+
+                    return NULL;
+
+                }
+
+                if (
+                    cJSON_HasObjectItem(settingsObj, "clients") &&
+                    cJSON_IsArray(cJSON_GetObjectItem(settingsObj, "clients")) &&
+                    cJSON_HasObjectItem(settingsObj, "decryption") &&
+                    cJSON_HasObjectItem(settingsObj, "encryption")
+                   ) {
+
+                } else {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Some item is not present in the settings object, returning...");
 
                     jsonListInboundSettingsObjectStructDelete(inboundObj->listInSettingsObjStruct);
                     inboundObj->listInSettingsObjStruct = NULL;
@@ -1451,29 +1426,184 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                 for (int n = 0; n < NETWORKTYPE_COUNT; n++) {
                     if (strncmp(networkTypes[n], streamSettingsStruct->network, strlen(networkTypes[n])) == 0) {
                         nType = (enum networkTypesEnum)n;
+
                         break;
 
+                    } else if (n == NETWORKTYPE_COUNT - 1) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Unable to detect network type");
+
+                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                        inboundObj->listInSniffingObjStruct = NULL;
+                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                        listInStruct->listInObjStruct = NULL;
+                        jsonListInboundStructDelete(listInStruct);
+
+                        cJSON_Delete(jsonParser);
+
+                        return NULL;
+                        
                     }
 
                 }
-                if (nType == NETWORKTYPE_COUNT) {
-                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Unable to detect network type");
 
-                    streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
-                    jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+                switch (nType) {
+                    case NETWORKTYPE_TCP:
+                        streamSettingsStruct->listInStreamSettingsMKcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSettingsObjStruct = NULL;
 
-                    inboundObj->listInStreamSettingsObjStruct = NULL;
-                    inboundObj->listInSniffingObjStruct = NULL;
-                    jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+                        streamSettingsStruct->listInStreamSettingsMKcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPFinalMaskObjStruct = NULL;
 
-                    jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+                        streamSettingsStruct->listInStreamSettingsMKcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSockoptObjStruct = NULL;
 
-                    listInStruct->listInObjStruct = NULL;
-                    jsonListInboundStructDelete(listInStruct);
+                        break;
 
-                    cJSON_Delete(jsonParser);
+                    case NETWORKTYPE_KCP:
+                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSettingsObjStruct = NULL;
 
-                    return NULL;
+                        streamSettingsStruct->listInStreamSettingsTcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPFinalMaskObjStruct = NULL;
+
+                        streamSettingsStruct->listInStreamSettingsTcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSockoptObjStruct = NULL;
+
+                        break;
+
+                    case NETWORKTYPE_WS:
+                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSettingsObjStruct = NULL;
+
+                        streamSettingsStruct->listInStreamSettingsTcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPFinalMaskObjStruct = NULL;
+
+                        streamSettingsStruct->listInStreamSettingsTcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSockoptObjStruct = NULL;
+
+                        break;
+
+                    case NETWORKTYPE_GRPC:
+                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSettingsObjStruct = NULL;
+
+                        streamSettingsStruct->listInStreamSettingsTcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPFinalMaskObjStruct = NULL;
+
+                        streamSettingsStruct->listInStreamSettingsTcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSockoptObjStruct = NULL;
+
+                        break;
+
+                    case NETWORKTYPE_HTTPUPGRADE:
+                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSettingsObjStruct = NULL;
+
+                        streamSettingsStruct->listInStreamSettingsTcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPFinalMaskObjStruct = NULL;
+
+                        streamSettingsStruct->listInStreamSettingsTcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSockoptObjStruct = NULL;
+
+                        break;
+
+                    case NETWORKTYPE_XHTTP:
+                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSettingsObjStruct = NULL;
+
+                        streamSettingsStruct->listInStreamSettingsTcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeFinalMaskObjStruct = NULL;
+
+                        streamSettingsStruct->listInStreamSettingsTcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct = NULL;
+
+                        break;
+
+                    case NETWORKTYPE_COUNT:
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Invalid network type");
+
+                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSettingsObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSettingsObjStruct = NULL;
+
+                        streamSettingsStruct->listInStreamSettingsTcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeFinalMaskObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPFinalMaskObjStruct = NULL;
+
+                        streamSettingsStruct->listInStreamSettingsTcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsMKcpSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsWSSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsGRPCSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct = NULL;
+                        streamSettingsStruct->listInStreamSettingsXHTTPSockoptObjStruct = NULL;
+
+                        break;
 
                 }
 

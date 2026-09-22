@@ -203,13 +203,49 @@ struct jsonListInboundStreamSettingsSockoptObjectStruct {
 
 };
 
+struct jsonListInboundStreamSettingsTcpSockoptObjectCustomSockOptArrayStruct {
+    const char* system;
+    const char* type;
+    const char* level;
+    const char* opt;
+    const char* value;
+
+};
+
+struct jsonListInboundStreamSettingsTcpSockoptObjectStruct {
+    unsigned char acceptProxyProtocol;
+    unsigned char tcpFastOpen;
+    const char* tproxy;
+    unsigned char penetrate;
+    const char* tcpcongestion;
+    unsigned char V6OnlyEnabled;
+    unsigned char V6Only;
+    struct jsonListInboundStreamSettingsTcpSockoptObjectCustomSockOptArrayStruct* listInStreamSettingsTcpSockoptObjCustomScokArrStruct; // array
+
+};
+
 struct jsonListInboundStreamSettingsObjectStruct {
     const char*                 network;
     struct jsonListInboundStreamSettingsTcpSettingsObjectStruct* listInStreamSettingsTcpSettingsObjStruct;
-    struct jsonListInboundStreamSettingsKcpSettingsObjectStruct* listInStreamSettingsKcpSettingsObjStruct;
+    struct jsonListInboundStreamSettingsMKcpSettingsObjectStruct* listInStreamSettingsMKcpSettingsObjStruct;
+    struct jsonListInboundStreamSettingsWSSettingsObjectStruct* listInStreamSettingsWSSettingsObjStruct;
+    struct jsonListInboundStreamSettingsGRPCSettingsObjectStruct* listInStreamSettingsGRPCSettingsObjStruct;
+    struct jsonListInboundStreamSettingsHTTPUpgradeSettingsObjectStruct* listInStreamSettingsHTTPUpgradeSettingsObjStruct;
+    struct jsonListInboundStreamSettingsXHTTPSettingsObjectStruct* listInStreamSettingsXHTTPSettingsObjStruct;
     const char*                 security; // for kcp: currently "none", TODO: different security values may carry extra settings, handle them at the settings field
-    struct jsonListInboundStreamSettingsFinalMaskObjectStruct* listInStreamSettingsFinalMaskObjStruct; // optional, NULL when the finalmask field is not present
-    struct jsonListInboundStreamSettingsSockoptObjectStruct* listInStreamSettingsSockoptObjStruct;
+    struct jsonListInboundStreamSettingsTcpFinalMaskObjectStruct* listInStreamSettingsTcpFinalMaskObjStruct; // optional, NULL when the finalmask field is not present
+    struct jsonListInboundStreamSettingsMKcpFinalMaskObjectStruct* listInStreamSettingsMKcpFinalMaskObjStruct;
+    struct jsonListInboundStreamSettingsWSFinalMaskObjectStruct* listInStreamSettingsWSFinalMaskObjStruct;
+    struct jsonListInboundStreamSettingsGRPCFinalMaskObjectStruct* listInStreamSettingsGRPCFinalMaskObjStruct;
+    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskObjectStruct* listInStreamSettingsHTTPUpgradeFinalMaskObjStruct;
+    struct jsonListInboundStreamSettingsXHTTPFinalMaskObjectStruct* listInStreamSettingsXHTTPFinalMaskObjStruct;
+
+    struct jsonListInboundStreamSettingsTcpSockoptObjectStruct* listInStreamSettingsTcpSockoptObjStruct;
+    struct jsonListInboundStreamSettingsMKcpSockoptObjectStruct* listInStreamSettingsMKcpSockoptObjStruct;
+    struct jsonListInboundStreamSettingsWSSockoptObjectStruct* listInStreamSettingsWSSockoptObjStruct;
+    struct jsonListInboundStreamSettingsGRPCSockoptObjectStruct* listInStreamSettingsGRPCSockoptObjStruct;
+    struct jsonListInboundStreamSettingsHTTPUpgradeSockoptObjectStruct* listInStreamSettingsHTTPUpgradeSockoptObjStruct;
+    struct jsonListInboundStreamSettingsXHTTPSockoptObjectStruct* listInStreamSettingsXHTTPSockoptObjStruct;
 
 };
 
@@ -3830,8 +3866,6 @@ struct jsonDeleteSubBalancerResponseStruct {
 // them. Post structs serialize to JSON; everything else
 // parses from JSON
 // =====================================================
-static unsigned char isJsonValid(const char* json);
-
 void        jsonListInboundClientStatsArrayStructDelete(struct jsonListInboundClientStatsArrayStruct* listInCliStatsStruct, size_t arraySize);
 void        jsonListInboundSettingsClientsArrayStructDelete(struct jsonListInboundSettingsClientsArrayStruct* listInSettingsCliArrStruct, size_t arraySize);
 void        jsonListInboundSettingsObjectStructDelete(struct jsonListInboundSettingsObjectStruct* listInSettingsObjStruct);
