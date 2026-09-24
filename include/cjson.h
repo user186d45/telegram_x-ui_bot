@@ -89,6 +89,45 @@ struct jsonListInboundStreamSettingsTcpSettingsObjectStruct {
 
 };
 
+struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectHeadersStruct {
+    const char*                 name; // header key, e.g. "sdfasdaf"
+    const char**                value; // array of header values
+    int64_t                     valueCount;
+
+};
+
+struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectRequestObjectStruct {
+    const char*                 version;
+    const char*                 method;
+    const char**                path; // array of path entries
+    int64_t                     pathCount;
+    size_t                      jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectHeadersStructSize;
+    struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectHeadersStruct* listInStreamSettingsWSSettingsObjHeaderObjReqHeadersStruct; // array
+
+};
+
+struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectResponseObjectStruct {
+    const char*                 version;
+    const char*                 status;
+    const char*                 reason;
+    size_t                      jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectHeadersStructSize;
+    struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectHeadersStruct* listInStreamSettingsWSSettingsObjHeaderObjResHeadersStruct; // array
+
+};
+
+struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectStruct {
+    const char*                 type;
+    struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectRequestObjectStruct* listInStreamSettingsWSSettingsObjHeaderObjReqObjStruct;
+    struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectResponseObjectStruct* listInStreamSettingsWSSettingsObjHeaderObjResObjStruct;
+
+};
+
+struct jsonListInboundStreamSettingsWSSettingsObjectStruct {
+    unsigned char               acceptProxyProtocol;
+    struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectStruct* listInStreamSettingsWSSettingsObjHeaderObjStruct;
+
+};
+
 struct jsonListInboundStreamSettingsMKcpSettingsObjectStruct {
     int64_t                     mtu;
     int64_t                     tti;
@@ -259,6 +298,81 @@ struct jsonListInboundStreamSettingsTcpFinalMaskObjectStruct {
 
 };
 
+struct jsonListInboundStreamSettingsWSFinalMaskFragmentObjectStruct {
+    const char*                 packets; // e.g. "1-3"
+    const char**                lengths; // array of length ranges, e.g. ["100-200"]
+    int64_t                     lengthsCount;
+    const char*                 maxSplit; // e.g. "10"
+    const char**                delays; // array of delay ranges, e.g. ["10-20"]
+    int64_t                     delaysCount;
+
+};
+
+struct jsonListInboundStreamSettingsWSFinalMaskHeaderCustomPacketObjectStruct {
+    const char*                 type; // array / str / hex / base64
+    const char*                 delay; // e.g. "10-20"
+    const char*                 rand; // only present when type is "array", e.g. "1-8192"
+    const char*                 randRange; // only present when type is "array", e.g. "0-255"
+    const char*                 packet; // only present when type is "str" / "hex" / "base64"
+
+};
+
+struct jsonListInboundStreamSettingsWSFinalMaskHeaderCustomGroupObjectStruct {
+    size_t                      jsonListInboundStreamSettingsWSFinalMaskHeaderCustomPacketStructSize;
+    struct jsonListInboundStreamSettingsWSFinalMaskHeaderCustomPacketObjectStruct* listInStreamSettingsWSFinalMaskHeaderCustomPacketStruct; // array
+
+};
+
+struct jsonListInboundStreamSettingsWSFinalMaskHeaderCustomObjectStruct {
+    size_t                      jsonListInboundStreamSettingsWSFinalMaskHeaderCustomClientGroupStructSize;
+    struct jsonListInboundStreamSettingsWSFinalMaskHeaderCustomGroupObjectStruct* listInStreamSettingsWSFinalMaskHeaderCustomClientGroupStruct; // array of packet groups
+    size_t                      jsonListInboundStreamSettingsWSFinalMaskHeaderCustomServerGroupStructSize;
+    struct jsonListInboundStreamSettingsWSFinalMaskHeaderCustomGroupObjectStruct* listInStreamSettingsWSFinalMaskHeaderCustomServerGroupStruct; // array of packet groups
+
+};
+
+struct jsonListInboundStreamSettingsWSFinalMaskSudokuObjectStruct {
+    const char*                 password;
+    const char**                customTables; // array of custom table names
+    int64_t                     customTablesCount;
+    const char*                 ascii;
+    const char*                 customTable;
+    int64_t                     paddingMin;
+    int64_t                     paddingMax;
+
+};
+
+struct jsonListInboundStreamSettingsWSFinalMaskXmcProfileObjectStruct {
+    const char*                 username;
+    const char*                 uuid;
+    const char*                 texturesValue;
+    const char*                 texturesSignature;
+
+};
+
+struct jsonListInboundStreamSettingsWSFinalMaskXmcObjectStruct {
+    const char*                 hostname;
+    int64_t                     jsonListInboundStreamSettingsWSFinalMaskXmcProfileStructSize;
+    struct jsonListInboundStreamSettingsWSFinalMaskXmcProfileObjectStruct* listInStreamSettingsWSFinalMaskXmcProfileStruct; // array
+    const char*                 password;
+
+};
+
+struct jsonListInboundStreamSettingsWSFinalMaskTcpObjectStruct {
+    const char*                 type; // fragment / header-custom / sudoku / xmc
+    struct jsonListInboundStreamSettingsWSFinalMaskFragmentObjectStruct* listInStreamSettingsWSFinalMaskFragmentObjStruct;
+    struct jsonListInboundStreamSettingsWSFinalMaskHeaderCustomObjectStruct* listInStreamSettingsWSFinalMaskHeaderCustomObjStruct;
+    struct jsonListInboundStreamSettingsWSFinalMaskSudokuObjectStruct* listInStreamSettingsWSFinalMaskSudokuObjStruct;
+    struct jsonListInboundStreamSettingsWSFinalMaskXmcObjectStruct* listInStreamSettingsWSFinalMaskXmcObjStruct;
+
+};
+
+struct jsonListInboundStreamSettingsWSFinalMaskObjectStruct {
+    size_t                      jsonListInboundStreamSettingsWSFinalMaskTcpStructSize;
+    struct jsonListInboundStreamSettingsWSFinalMaskTcpObjectStruct* listInStreamSettingsWSFinalMaskTcpStruct; // array
+
+};
+
 struct jsonListInboundStreamSettingsTcpSockoptObjectCustomSockOptArrayStruct {
     const char* system;
     const char* type;
@@ -284,6 +398,38 @@ struct jsonListInboundStreamSettingsTcpSockoptObjectStruct {
     unsigned char listInStreamSettingsTcpSockoptObjCustomScokArrStructEnabled;
     size_t                      jsonListInboundStreamSettingsTcpSockoptCustomSockOptArrayStructSize; // array length, 0 when the array is not present
     struct jsonListInboundStreamSettingsTcpSockoptObjectCustomSockOptArrayStruct* listInStreamSettingsTcpSockoptObjCustomScokArrStruct; // array
+
+};
+
+
+struct jsonListInboundStreamSettingsWSSockoptObjectCustomSockOptArrayStruct {
+    const char* system;
+    const char* type;
+    const char* level;
+    const char* opt;
+    const char* value;
+
+};
+
+struct jsonListInboundStreamSettingsWSSockoptObjectStruct {
+    unsigned char acceptProxyProtocolEnabled;
+    unsigned char acceptProxyProtocol;
+    unsigned char tcpFastOpenEnabled;
+    unsigned char tcpFastOpen;
+    unsigned char tproxyEnabled;
+    const char* tproxy;
+    unsigned char penetrateEnabled;
+    unsigned char penetrate;
+    unsigned char tcpcongestionEnabled;
+    const char* tcpcongestion;
+    unsigned char V6OnlyEnabled;
+    unsigned char V6Only;
+    unsigned char listInStreamSettingsWSSockoptObjCustomScokArrStructEnabled;
+    size_t                      jsonListInboundStreamSettingsWSSockoptCustomSockOptArrayStructSize; // array length, 0 when the array is not present
+    struct jsonListInboundStreamSettingsWSSockoptObjectCustomSockOptArrayStruct* listInStreamSettingsWSSockoptObjCustomScokArrStruct; // array
+
+    const char**                trustedXForwardedFor;
+    int64_t                     trustedXForwardedForCount;
 
 };
 
@@ -3984,8 +4130,18 @@ void        jsonListInboundStreamSettingsTcpFinalMaskXmcProfileObjectStructDelet
 void        jsonListInboundStreamSettingsTcpFinalMaskXmcObjectStructDelete(struct jsonListInboundStreamSettingsTcpFinalMaskXmcObjectStruct* listInStreamSettingsTcpFinalMaskXmcObjStruct);
 void        jsonListInboundStreamSettingsTcpFinalMaskTcpObjectStructDelete(struct jsonListInboundStreamSettingsTcpFinalMaskTcpObjectStruct* listInStreamSettingsTcpFinalMaskTcpObjStruct);
 void        jsonListInboundStreamSettingsTcpFinalMaskObjectStructDelete(struct jsonListInboundStreamSettingsTcpFinalMaskObjectStruct* listInStreamSettingsTcpFinalMaskObjStruct);
+void        jsonListInboundStreamSettingsWSFinalMaskFragmentObjectStructDelete(struct jsonListInboundStreamSettingsWSFinalMaskFragmentObjectStruct* listInStreamSettingsWSFinalMaskFragmentObjStruct);
+void        jsonListInboundStreamSettingsWSFinalMaskHeaderCustomPacketObjectStructDelete(struct jsonListInboundStreamSettingsWSFinalMaskHeaderCustomPacketObjectStruct* listInStreamSettingsWSFinalMaskHeaderCustomPacketObjStruct, size_t arraySize);
+void        jsonListInboundStreamSettingsWSFinalMaskHeaderCustomGroupObjectStructDelete(struct jsonListInboundStreamSettingsWSFinalMaskHeaderCustomGroupObjectStruct* listInStreamSettingsWSFinalMaskHeaderCustomGroupObjStruct, size_t arraySize);
+void        jsonListInboundStreamSettingsWSFinalMaskHeaderCustomObjectStructDelete(struct jsonListInboundStreamSettingsWSFinalMaskHeaderCustomObjectStruct* listInStreamSettingsWSFinalMaskHeaderCustomObjStruct);
+void        jsonListInboundStreamSettingsWSFinalMaskSudokuObjectStructDelete(struct jsonListInboundStreamSettingsWSFinalMaskSudokuObjectStruct* listInStreamSettingsWSFinalMaskSudokuObjStruct);
+void        jsonListInboundStreamSettingsWSFinalMaskXmcProfileObjectStructDelete(struct jsonListInboundStreamSettingsWSFinalMaskXmcProfileObjectStruct* listInStreamSettingsWSFinalMaskXmcProfileObjStruct, size_t arraySize);
+void        jsonListInboundStreamSettingsWSFinalMaskXmcObjectStructDelete(struct jsonListInboundStreamSettingsWSFinalMaskXmcObjectStruct* listInStreamSettingsWSFinalMaskXmcObjStruct);
+void        jsonListInboundStreamSettingsWSFinalMaskTcpObjectStructDelete(struct jsonListInboundStreamSettingsWSFinalMaskTcpObjectStruct* listInStreamSettingsWSFinalMaskTcpObjStruct);
+void        jsonListInboundStreamSettingsWSFinalMaskObjectStructDelete(struct jsonListInboundStreamSettingsWSFinalMaskObjectStruct* listInStreamSettingsWSFinalMaskObjStruct);
 void        jsonListInboundStreamSettingsTcpSockoptObjectStructDelete(struct jsonListInboundStreamSettingsTcpSockoptObjectStruct* listInStreamSettingsTcpSockoptObjStruct);
 void        jsonListInboundStreamSettingsMKcpSockoptObjectStructDelete(struct jsonListInboundStreamSettingsMKcpSockoptObjectStruct* listInStreamSettingsMKcpSockoptObjStruct);
+void        jsonListInboundStreamSettingsWSSockoptObjectStructDelete(struct jsonListInboundStreamSettingsWSSockoptObjectStruct* listInStreamSettingsWSSockoptObjStruct);
 void        jsonListInboundStreamSettingsObjectStructDelete(struct jsonListInboundStreamSettingsObjectStruct* listInStreamSettingsObjStruct);
 void        jsonListInboundSniffingObjectStructDelete(struct jsonListInboundSniffingObjectStruct* listInSniffingObjStruct);
 void        jsonListInboundObjectStructDeleteElement(struct jsonListInboundObjectStruct* listInObj);
@@ -4500,4 +4656,3 @@ struct jsonUpdateSubBalancerResponseStruct*        jsonUpdateSubBalancerResponse
 struct jsonDeleteSubBalancerResponseStruct*        jsonDeleteSubBalancerResponse(const char* json);
 
 #endif
-
