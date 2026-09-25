@@ -128,6 +128,28 @@ struct jsonListInboundStreamSettingsWSSettingsObjectStruct {
 
 };
 
+struct jsonListInboundStreamSettingsGRPCSettingsObjectStruct {
+    const char*                 serviceName;
+    const char*                 authority;
+    unsigned char               multiMode;
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeSettingsObjectHeadersStruct {
+    const char*                 name; // object key, e.g. "name01"
+    const char*                 value;
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeSettingsObjectStruct {
+    unsigned char               acceptProxyProtocol;
+    const char*                 path;
+    const char*                 host;
+    size_t                      jsonListInboundStreamSettingsHTTPUpgradeSettingsObjectHeadersStructSize;
+    struct jsonListInboundStreamSettingsHTTPUpgradeSettingsObjectHeadersStruct* listInStreamSettingsHTTPUpgradeSettingsObjHeadersStruct; // array
+
+};
+
 struct jsonListInboundStreamSettingsMKcpSettingsObjectStruct {
     int64_t                     mtu;
     int64_t                     tti;
@@ -298,6 +320,156 @@ struct jsonListInboundStreamSettingsTcpFinalMaskObjectStruct {
 
 };
 
+struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskFragmentObjectStruct {
+    const char*                 packets; // e.g. "1-3"
+    const char**                lengths; // array of length ranges, e.g. ["100-200"]
+    int64_t                     lengthsCount;
+    const char*                 maxSplit; // e.g. "10"
+    const char**                delays; // array of delay ranges, e.g. ["10-20"]
+    int64_t                     delaysCount;
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskHeaderCustomPacketObjectStruct {
+    const char*                 type; // array / str / hex / base64
+    const char*                 delay; // e.g. "10-20"
+    const char*                 rand; // only present when type is "array", e.g. "1-8192"
+    const char*                 randRange; // only present when type is "array", e.g. "0-255"
+    const char*                 packet; // only present when type is "str" / "hex" / "base64"
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskHeaderCustomGroupObjectStruct {
+    size_t                      jsonListInboundStreamSettingsHTTPUpgradeFinalMaskHeaderCustomPacketStructSize;
+    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskHeaderCustomPacketObjectStruct* listInStreamSettingsHTTPUpgradeFinalMaskHeaderCustomPacketStruct; // array
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskHeaderCustomObjectStruct {
+    size_t                      jsonListInboundStreamSettingsHTTPUpgradeFinalMaskHeaderCustomClientGroupStructSize;
+    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskHeaderCustomGroupObjectStruct* listInStreamSettingsHTTPUpgradeFinalMaskHeaderCustomClientGroupStruct; // array of packet groups
+    size_t                      jsonListInboundStreamSettingsHTTPUpgradeFinalMaskHeaderCustomServerGroupStructSize;
+    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskHeaderCustomGroupObjectStruct* listInStreamSettingsHTTPUpgradeFinalMaskHeaderCustomServerGroupStruct; // array of packet groups
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskSudokuObjectStruct {
+    const char*                 password;
+    const char**                customTables; // array of custom table names
+    int64_t                     customTablesCount;
+    const char*                 ascii;
+    const char*                 customTable;
+    int64_t                     paddingMin;
+    int64_t                     paddingMax;
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskXmcProfileObjectStruct {
+    const char*                 username;
+    const char*                 uuid;
+    const char*                 texturesValue;
+    const char*                 texturesSignature;
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskXmcObjectStruct {
+    const char*                 hostname;
+    int64_t                     jsonListInboundStreamSettingsHTTPUpgradeFinalMaskXmcProfileStructSize;
+    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskXmcProfileObjectStruct* listInStreamSettingsHTTPUpgradeFinalMaskXmcProfileStruct; // array
+    const char*                 password;
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskTcpObjectStruct {
+    const char*                 type; // fragment / header-custom / sudoku / xmc
+    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskFragmentObjectStruct* listInStreamSettingsHTTPUpgradeFinalMaskFragmentObjStruct;
+    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskHeaderCustomObjectStruct* listInStreamSettingsHTTPUpgradeFinalMaskHeaderCustomObjStruct;
+    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskSudokuObjectStruct* listInStreamSettingsHTTPUpgradeFinalMaskSudokuObjStruct;
+    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskXmcObjectStruct* listInStreamSettingsHTTPUpgradeFinalMaskXmcObjStruct;
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskObjectStruct {
+    size_t                      jsonListInboundStreamSettingsHTTPUpgradeFinalMaskTcpStructSize;
+    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskTcpObjectStruct* listInStreamSettingsHTTPUpgradeFinalMaskTcpStruct; // array
+
+};
+
+struct jsonListInboundStreamSettingsGRPCFinalMaskFragmentObjectStruct {
+    const char*                 packets; // e.g. "1-3"
+    const char**                lengths; // array of length ranges, e.g. ["100-200"]
+    int64_t                     lengthsCount;
+    const char*                 maxSplit; // e.g. "10"
+    const char**                delays; // array of delay ranges, e.g. ["10-20"]
+    int64_t                     delaysCount;
+
+};
+
+struct jsonListInboundStreamSettingsGRPCFinalMaskHeaderCustomPacketObjectStruct {
+    const char*                 type; // array / str / hex / base64
+    const char*                 delay; // e.g. "10-20"
+    const char*                 rand; // only present when type is "array", e.g. "1-8192"
+    const char*                 randRange; // only present when type is "array", e.g. "0-255"
+    const char*                 packet; // only present when type is "str" / "hex" / "base64"
+
+};
+
+struct jsonListInboundStreamSettingsGRPCFinalMaskHeaderCustomGroupObjectStruct {
+    size_t                      jsonListInboundStreamSettingsGRPCFinalMaskHeaderCustomPacketStructSize;
+    struct jsonListInboundStreamSettingsGRPCFinalMaskHeaderCustomPacketObjectStruct* listInStreamSettingsGRPCFinalMaskHeaderCustomPacketStruct; // array
+
+};
+
+struct jsonListInboundStreamSettingsGRPCFinalMaskHeaderCustomObjectStruct {
+    size_t                      jsonListInboundStreamSettingsGRPCFinalMaskHeaderCustomClientGroupStructSize;
+    struct jsonListInboundStreamSettingsGRPCFinalMaskHeaderCustomGroupObjectStruct* listInStreamSettingsGRPCFinalMaskHeaderCustomClientGroupStruct; // array of packet groups
+    size_t                      jsonListInboundStreamSettingsGRPCFinalMaskHeaderCustomServerGroupStructSize;
+    struct jsonListInboundStreamSettingsGRPCFinalMaskHeaderCustomGroupObjectStruct* listInStreamSettingsGRPCFinalMaskHeaderCustomServerGroupStruct; // array of packet groups
+
+};
+
+struct jsonListInboundStreamSettingsGRPCFinalMaskSudokuObjectStruct {
+    const char*                 password;
+    const char**                customTables; // array of custom table names
+    int64_t                     customTablesCount;
+    const char*                 ascii;
+    const char*                 customTable;
+    int64_t                     paddingMin;
+    int64_t                     paddingMax;
+
+};
+
+struct jsonListInboundStreamSettingsGRPCFinalMaskXmcProfileObjectStruct {
+    const char*                 username;
+    const char*                 uuid;
+    const char*                 texturesValue;
+    const char*                 texturesSignature;
+
+};
+
+struct jsonListInboundStreamSettingsGRPCFinalMaskXmcObjectStruct {
+    const char*                 hostname;
+    int64_t                     jsonListInboundStreamSettingsGRPCFinalMaskXmcProfileStructSize;
+    struct jsonListInboundStreamSettingsGRPCFinalMaskXmcProfileObjectStruct* listInStreamSettingsGRPCFinalMaskXmcProfileStruct; // array
+    const char*                 password;
+
+};
+
+struct jsonListInboundStreamSettingsGRPCFinalMaskTcpObjectStruct {
+    const char*                 type; // fragment / header-custom / sudoku / xmc
+    struct jsonListInboundStreamSettingsGRPCFinalMaskFragmentObjectStruct* listInStreamSettingsGRPCFinalMaskFragmentObjStruct;
+    struct jsonListInboundStreamSettingsGRPCFinalMaskHeaderCustomObjectStruct* listInStreamSettingsGRPCFinalMaskHeaderCustomObjStruct;
+    struct jsonListInboundStreamSettingsGRPCFinalMaskSudokuObjectStruct* listInStreamSettingsGRPCFinalMaskSudokuObjStruct;
+    struct jsonListInboundStreamSettingsGRPCFinalMaskXmcObjectStruct* listInStreamSettingsGRPCFinalMaskXmcObjStruct;
+
+};
+
+struct jsonListInboundStreamSettingsGRPCFinalMaskObjectStruct {
+    size_t                      jsonListInboundStreamSettingsGRPCFinalMaskTcpStructSize;
+    struct jsonListInboundStreamSettingsGRPCFinalMaskTcpObjectStruct* listInStreamSettingsGRPCFinalMaskTcpStruct; // array
+
+};
+
 struct jsonListInboundStreamSettingsWSFinalMaskFragmentObjectStruct {
     const char*                 packets; // e.g. "1-3"
     const char**                lengths; // array of length ranges, e.g. ["100-200"]
@@ -427,6 +599,92 @@ struct jsonListInboundStreamSettingsWSSockoptObjectStruct {
     unsigned char listInStreamSettingsWSSockoptObjCustomScokArrStructEnabled;
     size_t                      jsonListInboundStreamSettingsWSSockoptCustomSockOptArrayStructSize; // array length, 0 when the array is not present
     struct jsonListInboundStreamSettingsWSSockoptObjectCustomSockOptArrayStruct* listInStreamSettingsWSSockoptObjCustomScokArrStruct; // array
+
+    const char**                trustedXForwardedFor;
+    int64_t                     trustedXForwardedForCount;
+
+};
+
+struct jsonListInboundStreamSettingsGRPCSockoptObjectCustomSockOptArrayStruct {
+    const char* system;
+    const char* type;
+    const char* level;
+    const char* opt;
+    const char* value;
+
+};
+
+struct jsonListInboundStreamSettingsGRPCSockoptObjectStruct {
+    unsigned char acceptProxyProtocolEnabled;
+    unsigned char acceptProxyProtocol;
+    unsigned char tcpFastOpenEnabled;
+    unsigned char tcpFastOpen;
+    unsigned char markEnabled;
+    int64_t      mark;
+    unsigned char tproxyEnabled;
+    const char* tproxy;
+    unsigned char penetrateEnabled;
+    unsigned char penetrate;
+    unsigned char tcpMaxSegEnabled;
+    int64_t      tcpMaxSeg;
+    unsigned char tcpKeepAliveIntervalEnabled;
+    int64_t      tcpKeepAliveInterval;
+    unsigned char tcpKeepAliveIdleEnabled;
+    int64_t      tcpKeepAliveIdle;
+    unsigned char tcpUserTimeoutEnabled;
+    int64_t      tcpUserTimeout;
+    unsigned char tcpcongestionEnabled;
+    const char* tcpcongestion;
+    unsigned char V6OnlyEnabled;
+    unsigned char V6Only;
+    unsigned char tcpWindowClampEnabled;
+    int64_t      tcpWindowClamp;
+    unsigned char listInStreamSettingsGRPCSockoptObjCustomScokArrStructEnabled;
+    size_t                      jsonListInboundStreamSettingsGRPCSockoptCustomSockOptArrayStructSize; // array length, 0 when the array is not present
+    struct jsonListInboundStreamSettingsGRPCSockoptObjectCustomSockOptArrayStruct* listInStreamSettingsGRPCSockoptObjCustomScokArrStruct; // array
+
+    const char**                trustedXForwardedFor;
+    int64_t                     trustedXForwardedForCount;
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeSockoptObjectCustomSockOptArrayStruct {
+    const char* system;
+    const char* type;
+    const char* level;
+    const char* opt;
+    const char* value;
+
+};
+
+struct jsonListInboundStreamSettingsHTTPUpgradeSockoptObjectStruct {
+    unsigned char acceptProxyProtocolEnabled;
+    unsigned char acceptProxyProtocol;
+    unsigned char tcpFastOpenEnabled;
+    unsigned char tcpFastOpen;
+    unsigned char markEnabled;
+    int64_t      mark;
+    unsigned char tproxyEnabled;
+    const char* tproxy;
+    unsigned char penetrateEnabled;
+    unsigned char penetrate;
+    unsigned char tcpMaxSegEnabled;
+    int64_t      tcpMaxSeg;
+    unsigned char tcpKeepAliveIntervalEnabled;
+    int64_t      tcpKeepAliveInterval;
+    unsigned char tcpKeepAliveIdleEnabled;
+    int64_t      tcpKeepAliveIdle;
+    unsigned char tcpUserTimeoutEnabled;
+    int64_t      tcpUserTimeout;
+    unsigned char tcpcongestionEnabled;
+    const char* tcpcongestion;
+    unsigned char V6OnlyEnabled;
+    unsigned char V6Only;
+    unsigned char tcpWindowClampEnabled;
+    int64_t      tcpWindowClamp;
+    unsigned char listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStructEnabled;
+    size_t                      jsonListInboundStreamSettingsHTTPUpgradeSockoptCustomSockOptArrayStructSize; // array length, 0 when the array is not present
+    struct jsonListInboundStreamSettingsHTTPUpgradeSockoptObjectCustomSockOptArrayStruct* listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct; // array
 
     const char**                trustedXForwardedFor;
     int64_t                     trustedXForwardedForCount;
