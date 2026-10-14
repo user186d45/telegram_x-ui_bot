@@ -10,23 +10,23 @@ void applicationLog(uint8_t logLevel, const char* prettyFunc, const char* msg) {
     struct tm tmv = *localtime(&now);
 
     char* timeBuffer = (char*)malloc(256 * sizeof(char));
-    strftime(timeBuffer, 256, "%Y/%m/%d %H::%%M::%%S", &tmv);
+    strftime(timeBuffer, 256, "%Y/%m/%d %H:%M:%S", &tmv);
 
     char* lLevel = NULL;
     switch (logLevel) {
-        case (uint8_t)INFO:
+        case (uint8_t)LOG_INFO:
             lLevel = (char*)malloc(5 * sizeof(char));
             strncpy(lLevel, "INFO", 5);
 
             break;
 
-        case (uint8_t)WARNING:
+        case (uint8_t)LOG_WARNING:
             lLevel = (char*)malloc(8 * sizeof(char));
             strncpy(lLevel, "WARNING", 8);
 
             break;
 
-        case (uint8_t)ERROR:
+        case (uint8_t)LOG_ERROR:
             lLevel = (char*)malloc(6 * sizeof(char));
             strncpy(lLevel, "ERROR", 6);
 
@@ -41,7 +41,9 @@ void applicationLog(uint8_t logLevel, const char* prettyFunc, const char* msg) {
     }
 
     char* buffer = (char*)malloc(1024 * sizeof(char));
-    snprintf("[ %s ] [ %s ]: %s\n", 1024, timeBuffer, lLevel, msg);
+    snprintf(buffer, 1024, "[ %s ] [ %s ] [ %s ]: %s\n", timeBuffer, lLevel, prettyFunc, msg);
+
+    printf("%s", buffer);
 
     free(buffer);
     free(lLevel);

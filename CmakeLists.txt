@@ -57,11 +57,14 @@ set(SOURCES
     src/main.cpp
     src/bot.cpp
     src/structs.cpp
-    src/cjson.cpp
     src/curl.cpp
     src/sqlite.cpp
     src/log.cpp
 )
+
+# cjson API sources, split one per documentation section under src/cjson
+file(GLOB CJSON_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/cjson/*.c")
+list(APPEND SOURCES ${CJSON_SOURCES})
 
 # Create executable
 add_executable(${PROJECT_NAME} ${SOURCES})

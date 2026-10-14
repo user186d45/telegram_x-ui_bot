@@ -12,7 +12,7 @@ static sqlite3* userDb = NULL;
 
 unsigned char createCheckDb() {
     DBG(LOG_INFO, "Function called");
-    const char* tableCreate = "CREATE TABLE IF NOT EXISTS ( "
+    const char* tableCreate = "CREATE TABLE IF NOT EXISTS users( "
                               "userId INTEGER PRIMARY KEY, "
                               "balance INTEGER NOT NULL DEFAULT 0, "
                               "phoneNumber TEXT, "
