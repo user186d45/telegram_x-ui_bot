@@ -24661,6 +24661,302 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
             break;
 
         case NETWORKTYPE_WS:
+            if (streamSettingsStruct->listInStreamSettingsWSSettingsObjStruct) {
+                cJSON* wsSettingsObj = cJSON_CreateObject();
+                if (!wsSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "wsSettings", wsSettingsObj);
+
+                struct jsonListInboundStreamSettingsWSSettingsObjectStruct* wsSettingsStruct = streamSettingsStruct->listInStreamSettingsWSSettingsObjStruct;
+
+                cJSON_AddBoolToObject(wsSettingsObj, "acceptProxyProtocol", wsSettingsStruct->acceptProxyProtocol);
+
+                if (wsSettingsStruct->listInStreamSettingsWSSettingsObjHeaderObjStruct) {
+                    cJSON* wsHeaderObj = cJSON_CreateObject();
+                    if (!wsHeaderObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings header object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(wsSettingsObj, "header", wsHeaderObj);
+
+                    struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectStruct* wsHeaderStruct = wsSettingsStruct->listInStreamSettingsWSSettingsObjHeaderObjStruct;
+
+                    if (wsHeaderStruct->type) {
+                        cJSON_AddStringToObject(wsHeaderObj, "type", wsHeaderStruct->type);
+
+                    }
+
+                    if (wsHeaderStruct->listInStreamSettingsWSSettingsObjHeaderObjReqObjStruct) {
+                        cJSON* wsRequestObj = cJSON_CreateObject();
+                        if (!wsRequestObj) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings header request object");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(wsHeaderObj, "request", wsRequestObj);
+
+                        struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectRequestObjectStruct* wsRequestStruct = wsHeaderStruct->listInStreamSettingsWSSettingsObjHeaderObjReqObjStruct;
+
+                        if (wsRequestStruct->version) {
+                            cJSON_AddStringToObject(wsRequestObj, "version", wsRequestStruct->version);
+
+                        }
+
+                        if (wsRequestStruct->method) {
+                            cJSON_AddStringToObject(wsRequestObj, "method", wsRequestStruct->method);
+
+                        }
+
+                        if (wsRequestStruct->pathCount) {
+                            cJSON* wsRequestPathArray = cJSON_CreateArray();
+                            if (!wsRequestPathArray) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings header request path array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(wsRequestObj, "path", wsRequestPathArray);
+
+                            for (int64_t pathIdx = 0; pathIdx < wsRequestStruct->pathCount; pathIdx++) {
+                                cJSON* wsRequestPathItem = cJSON_CreateString(wsRequestStruct->path[pathIdx]);
+                                if (!wsRequestPathItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings header request path item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(wsRequestPathArray, wsRequestPathItem);
+
+                            }
+                        }
+
+                        if (wsRequestStruct->jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectHeadersStructSize) {
+                            cJSON* wsRequestHeadersObj = cJSON_CreateObject();
+                            if (!wsRequestHeadersObj) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings header request headers object");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(wsRequestObj, "headers", wsRequestHeadersObj);
+
+                            for (size_t requestHeaderIdx = 0; requestHeaderIdx < wsRequestStruct->jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectHeadersStructSize; requestHeaderIdx++) {
+                                struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectHeadersStruct* wsRequestHeaderStruct = &wsRequestStruct->listInStreamSettingsWSSettingsObjHeaderObjReqHeadersStruct[requestHeaderIdx];
+
+                                if (wsRequestHeaderStruct->name) {
+                                    cJSON* wsRequestHeaderValuesArray = cJSON_CreateArray();
+                                    if (!wsRequestHeaderValuesArray) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings header request header values array");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(wsRequestHeadersObj, wsRequestHeaderStruct->name, wsRequestHeaderValuesArray);
+
+                                    for (int64_t valueIdx = 0; valueIdx < wsRequestHeaderStruct->valueCount; valueIdx++) {
+                                        cJSON* wsRequestHeaderValueItem = cJSON_CreateString(wsRequestHeaderStruct->value[valueIdx]);
+                                        if (!wsRequestHeaderValueItem) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings header request header value item");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToArray(wsRequestHeaderValuesArray, wsRequestHeaderValueItem);
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (wsHeaderStruct->listInStreamSettingsWSSettingsObjHeaderObjResObjStruct) {
+                        cJSON* wsResponseObj = cJSON_CreateObject();
+                        if (!wsResponseObj) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings header response object");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(wsHeaderObj, "response", wsResponseObj);
+
+                        struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectResponseObjectStruct* wsResponseStruct = wsHeaderStruct->listInStreamSettingsWSSettingsObjHeaderObjResObjStruct;
+
+                        if (wsResponseStruct->version) {
+                            cJSON_AddStringToObject(wsResponseObj, "version", wsResponseStruct->version);
+
+                        }
+
+                        if (wsResponseStruct->status) {
+                            cJSON_AddStringToObject(wsResponseObj, "status", wsResponseStruct->status);
+
+                        }
+
+                        if (wsResponseStruct->reason) {
+                            cJSON_AddStringToObject(wsResponseObj, "reason", wsResponseStruct->reason);
+
+                        }
+
+                        if (wsResponseStruct->jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectHeadersStructSize) {
+                            cJSON* wsResponseHeadersObj = cJSON_CreateObject();
+                            if (!wsResponseHeadersObj) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings header response headers object");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(wsResponseObj, "headers", wsResponseHeadersObj);
+
+                            for (size_t responseHeaderIdx = 0; responseHeaderIdx < wsResponseStruct->jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectHeadersStructSize; responseHeaderIdx++) {
+                                struct jsonListInboundStreamSettingsWSSettingsObjectHeaderObjectHeadersStruct* wsResponseHeaderStruct = &wsResponseStruct->listInStreamSettingsWSSettingsObjHeaderObjResHeadersStruct[responseHeaderIdx];
+
+                                if (wsResponseHeaderStruct->name) {
+                                    cJSON* wsResponseHeaderValuesArray = cJSON_CreateArray();
+                                    if (!wsResponseHeaderValuesArray) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings header response header values array");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(wsResponseHeadersObj, wsResponseHeaderStruct->name, wsResponseHeaderValuesArray);
+
+                                    for (int64_t valueIdx = 0; valueIdx < wsResponseHeaderStruct->valueCount; valueIdx++) {
+                                        cJSON* wsResponseHeaderValueItem = cJSON_CreateString(wsResponseHeaderStruct->value[valueIdx]);
+                                        if (!wsResponseHeaderValueItem) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create wsSettings header response header value item");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToArray(wsResponseHeaderValuesArray, wsResponseHeaderValueItem);
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (streamSettingsStruct->security) {
+                cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
+
+            }
+
+            if (streamSettingsStruct->listInStreamSettingsWSFinalMaskObjStruct) {
+                cJSON* finalmaskObj = cJSON_CreateObject();
+                if (!finalmaskObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "finalmask", finalmaskObj);
+
+                struct jsonListInboundStreamSettingsWSFinalMaskObjectStruct* finalmaskStruct = streamSettingsStruct->listInStreamSettingsWSFinalMaskObjStruct;
+
+                if (finalmaskStruct->jsonListInboundStreamSettingsWSFinalMaskTcpStructSize) {
+                    cJSON* finalmaskWsArray = cJSON_CreateArray();
+                    if (!finalmaskWsArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask ws array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(finalmaskObj, "ws", finalmaskWsArray);
+
+                    const char* wsMaskTypes[] = {
+                        "fragment",
+                        "header-custom",
+                        "sudoku",
+                        "xmc"
+
+                    };
+
+                    enum wsMaskTypesEnum {
+                        WSMASKTYPE_FRAGMENT,
+                        WSMASKTYPE_HEADERCUSTOM,
+                        WSMASKTYPE_SUDOKU,
+                        WSMASKTYPE_XMC,
+                        WSMASKTYPE_COUNT
+
+                    };
+
+                    for (size_t wsIdx = 0; wsIdx < finalmaskStruct->jsonListInboundStreamSettingsWSFinalMaskTcpStructSize; wsIdx++) {
+                        struct jsonListInboundStreamSettingsWSFinalMaskTcpObjectStruct* finalmaskWsStruct = &finalmaskStruct->listInStreamSettingsWSFinalMaskTcpStruct[wsIdx];
+
+                        cJSON* finalmaskWsItem = cJSON_CreateObject();
+                        if (!finalmaskWsItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask ws item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(finalmaskWsArray, finalmaskWsItem);
+
+                        cJSON_AddStringToObject(finalmaskWsItem, "type", finalmaskWsStruct->type);
+
+                        enum wsMaskTypesEnum wType = WSMASKTYPE_COUNT;
+                        for (int w2 = 0; w2 < WSMASKTYPE_COUNT; w2++) {
+                            if (strncmp(wsMaskTypes[w2], finalmaskWsStruct->type, strlen(wsMaskTypes[w2])) == 0) {
+                                wType = (enum wsMaskTypesEnum)w2;
+                                break;
+
+                            }
+
+                        }
+
+                        switch (wType) {
+                            case WSMASKTYPE_FRAGMENT:
+                            case WSMASKTYPE_HEADERCUSTOM:
+                            case WSMASKTYPE_SUDOKU:
+                            case WSMASKTYPE_XMC:
+                            case WSMASKTYPE_COUNT:
+                                break;
+
+                        }
+                    }
+                }
+            }
+
+            break;
+
         case NETWORKTYPE_GRPC:
         case NETWORKTYPE_HTTPUPGRADE:
         case NETWORKTYPE_XHTTP:
