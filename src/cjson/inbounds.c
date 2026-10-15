@@ -24167,6 +24167,122 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
 
             }
 
+            if (streamSettingsStruct->listInStreamSettingsMKcpFinalMaskObjStruct) {
+                cJSON* finalmaskObj = cJSON_CreateObject();
+                if (!finalmaskObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "finalmask", finalmaskObj);
+
+                struct jsonListInboundStreamSettingsMKcpFinalMaskObjectStruct* finalmaskStruct = streamSettingsStruct->listInStreamSettingsMKcpFinalMaskObjStruct;
+
+                if (finalmaskStruct->jsonListInboundStreamSettingsFinalMaskUdpStructSize) {
+                    cJSON* finalmaskUdpArray = cJSON_CreateArray();
+                    if (!finalmaskUdpArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask udp array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(finalmaskObj, "udp", finalmaskUdpArray);
+
+                    const char* udpMaskTypes[] = {
+                        "mkcp-legacy",
+                        "xdns",
+                        "xicmp",
+                        "realm",
+                        "header-custom",
+                        "noise"
+
+                    };
+
+                    enum udpMaskTypesEnum {
+                        UDPMASKTYPE_MKCPLEGACY,
+                        UDPMASKTYPE_XDNS,
+                        UDPMASKTYPE_XICMP,
+                        UDPMASKTYPE_REALM,
+                        UDPMASKTYPE_HEADERCUSTOM,
+                        UDPMASKTYPE_NOISE,
+                        UDPMASKTYPE_COUNT
+
+                    };
+
+                    for (size_t udpIdx = 0; udpIdx < finalmaskStruct->jsonListInboundStreamSettingsFinalMaskUdpStructSize; udpIdx++) {
+                        struct jsonListInboundStreamSettingsFinalMaskUdpObjectStruct* finalmaskUdpStruct = &finalmaskStruct->listInStreamSettingsFinalMaskUdpStruct[udpIdx];
+
+                        cJSON* finalmaskUdpItem = cJSON_CreateObject();
+                        if (!finalmaskUdpItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask udp item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(finalmaskUdpArray, finalmaskUdpItem);
+
+                        cJSON_AddStringToObject(finalmaskUdpItem, "type", finalmaskUdpStruct->type);
+
+                        enum udpMaskTypesEnum uType = UDPMASKTYPE_COUNT;
+                        for (int u2 = 0; u2 < UDPMASKTYPE_COUNT; u2++) {
+                            if (strncmp(udpMaskTypes[u2], finalmaskUdpStruct->type, strlen(udpMaskTypes[u2])) == 0) {
+                                uType = (enum udpMaskTypesEnum)u2;
+                                break;
+
+                            }
+
+                        }
+
+                        switch (uType) {
+                            case UDPMASKTYPE_MKCPLEGACY:
+                                if (finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct) {
+                                    cJSON* mkcpLegacySettingsObj = cJSON_CreateObject();
+                                    if (!mkcpLegacySettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask mkcp-legacy settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskUdpItem, "settings", mkcpLegacySettingsObj);
+
+                                    struct jsonListInboundStreamSettingsFinalMaskUdpMkcpLegacyObjectStruct* mkcpLegacyStruct = finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpMkcpLegacyObjStruct;
+
+                                    if (mkcpLegacyStruct->header) {
+                                        cJSON_AddStringToObject(mkcpLegacySettingsObj, "header", mkcpLegacyStruct->header);
+
+                                    }
+
+                                    if (mkcpLegacyStruct->value) {
+                                        cJSON_AddStringToObject(mkcpLegacySettingsObj, "value", mkcpLegacyStruct->value);
+
+                                    }
+                                }
+
+                                break;
+
+                            case UDPMASKTYPE_XDNS:
+                            case UDPMASKTYPE_XICMP:
+                            case UDPMASKTYPE_REALM:
+                            case UDPMASKTYPE_HEADERCUSTOM:
+                            case UDPMASKTYPE_NOISE:
+                            case UDPMASKTYPE_COUNT:
+                                break;
+
+                        }
+
+                    }
+                }
+            }
+
             break;
 
         case NETWORKTYPE_WS:
