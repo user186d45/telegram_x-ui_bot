@@ -26249,6 +26249,82 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case HTTPUPGRADEMASKTYPE_XMC:
+                                if (finalmaskHttpUpgradeStruct->listInStreamSettingsHTTPUpgradeFinalMaskXmcObjStruct) {
+                                    cJSON* xmcSettingsObj = cJSON_CreateObject();
+                                    if (!xmcSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask httpupgrade xmc settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskHttpUpgradeItem, "settings", xmcSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskXmcObjectStruct* xmcStruct = finalmaskHttpUpgradeStruct->listInStreamSettingsHTTPUpgradeFinalMaskXmcObjStruct;
+
+                                    if (xmcStruct->hostname) {
+                                        cJSON_AddStringToObject(xmcSettingsObj, "hostname", xmcStruct->hostname);
+
+                                    }
+
+                                    if (xmcStruct->jsonListInboundStreamSettingsHTTPUpgradeFinalMaskXmcProfileStructSize) {
+                                        cJSON* xmcProfilesArray = cJSON_CreateArray();
+                                        if (!xmcProfilesArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask httpupgrade xmc profiles array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(xmcSettingsObj, "profiles", xmcProfilesArray);
+
+                                        for (int64_t xmcProfileIdx = 0; xmcProfileIdx < xmcStruct->jsonListInboundStreamSettingsHTTPUpgradeFinalMaskXmcProfileStructSize; xmcProfileIdx++) {
+                                            struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskXmcProfileObjectStruct* xmcProfileStruct = &xmcStruct->listInStreamSettingsHTTPUpgradeFinalMaskXmcProfileStruct[xmcProfileIdx];
+
+                                            cJSON* xmcProfileObj = cJSON_CreateObject();
+                                            if (!xmcProfileObj) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask httpupgrade xmc profile object");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(xmcProfilesArray, xmcProfileObj);
+
+                                            if (xmcProfileStruct->username) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "username", xmcProfileStruct->username);
+
+                                            }
+
+                                            if (xmcProfileStruct->uuid) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "uuid", xmcProfileStruct->uuid);
+
+                                            }
+
+                                            if (xmcProfileStruct->texturesValue) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "texturesValue", xmcProfileStruct->texturesValue);
+
+                                            }
+
+                                            if (xmcProfileStruct->texturesSignature) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "texturesSignature", xmcProfileStruct->texturesSignature);
+
+                                            }
+
+                                        }
+                                    }
+
+                                    if (xmcStruct->password) {
+                                        cJSON_AddStringToObject(xmcSettingsObj, "password", xmcStruct->password);
+
+                                    }
+                                }
+
+                                break;
+
                             case HTTPUPGRADEMASKTYPE_COUNT:
                                 break;
 
