@@ -25948,6 +25948,87 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
 
                         switch (hType) {
                             case HTTPUPGRADEMASKTYPE_FRAGMENT:
+                                if (finalmaskHttpUpgradeStruct->listInStreamSettingsHTTPUpgradeFinalMaskFragmentObjStruct) {
+                                    cJSON* fragmentSettingsObj = cJSON_CreateObject();
+                                    if (!fragmentSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask httpupgrade fragment settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskHttpUpgradeItem, "settings", fragmentSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskFragmentObjectStruct* fragmentStruct = finalmaskHttpUpgradeStruct->listInStreamSettingsHTTPUpgradeFinalMaskFragmentObjStruct;
+
+                                    if (fragmentStruct->packets) {
+                                        cJSON_AddStringToObject(fragmentSettingsObj, "packets", fragmentStruct->packets);
+
+                                    }
+
+                                    if (fragmentStruct->lengthsCount) {
+                                        cJSON* fragmentLengthsArray = cJSON_CreateArray();
+                                        if (!fragmentLengthsArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask httpupgrade fragment lengths array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(fragmentSettingsObj, "lengths", fragmentLengthsArray);
+
+                                        for (int64_t lengthsIdx = 0; lengthsIdx < fragmentStruct->lengthsCount; lengthsIdx++) {
+                                            cJSON* fragmentLengthsItem = cJSON_CreateString(fragmentStruct->lengths[lengthsIdx]);
+                                            if (!fragmentLengthsItem) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask httpupgrade fragment lengths item");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(fragmentLengthsArray, fragmentLengthsItem);
+
+                                        }
+                                    }
+
+                                    if (fragmentStruct->maxSplit) {
+                                        cJSON_AddStringToObject(fragmentSettingsObj, "maxSplit", fragmentStruct->maxSplit);
+
+                                    }
+
+                                    if (fragmentStruct->delaysCount) {
+                                        cJSON* fragmentDelaysArray = cJSON_CreateArray();
+                                        if (!fragmentDelaysArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask httpupgrade fragment delays array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(fragmentSettingsObj, "delays", fragmentDelaysArray);
+
+                                        for (int64_t delaysIdx = 0; delaysIdx < fragmentStruct->delaysCount; delaysIdx++) {
+                                            cJSON* fragmentDelaysItem = cJSON_CreateString(fragmentStruct->delays[delaysIdx]);
+                                            if (!fragmentDelaysItem) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask httpupgrade fragment delays item");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(fragmentDelaysArray, fragmentDelaysItem);
+
+                                        }
+                                    }
+                                }
+
+                                break;
+
                             case HTTPUPGRADEMASKTYPE_HEADERCUSTOM:
                             case HTTPUPGRADEMASKTYPE_SUDOKU:
                             case HTTPUPGRADEMASKTYPE_XMC:
