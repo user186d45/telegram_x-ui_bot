@@ -1561,7 +1561,7 @@ struct jsonImportInboundsResponseStruct {
 struct jsonListInboundAllLinksStruct {
     unsigned char               success;
     const char*                 msg;
-    size_t                      jsonListInboundAllLinksArrayStructSize;
+    size_t                      listInAllLinksCount;
     const char**                listInAllLinksArrStruct; // array; every pointer presented is an element of the array
 
 };

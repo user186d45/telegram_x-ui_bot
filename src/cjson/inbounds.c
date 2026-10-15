@@ -1,4 +1,4 @@
-#include "../../include/cjson.h"
+#include "../../include/cjson/inbounds.h"
 #include "../../include/log.h"
 
 #include <cjson/cJSON.h>
@@ -2092,7 +2092,7 @@ void jsonListInboundAllLinksStructDelete(struct jsonListInboundAllLinksStruct* l
     free((char*)listInAllLinksStruct->msg);
 
     if (listInAllLinksStruct->listInAllLinksArrStruct) {
-        for (size_t i = 0; i < listInAllLinksStruct->jsonListInboundAllLinksArrayStructSize; i++) {
+        for (size_t i = 0; i < listInAllLinksStruct->listInAllLinksCount; i++) {
             free((char*)listInAllLinksStruct->listInAllLinksArrStruct[i]);
 
         }
@@ -3838,9 +3838,11 @@ static int jsonListInboundStreamSettingsSockoptParse(cJSON* sockOptObj, struct j
 
         }
         default:
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Couldn't identify network type");
+
+            return 0;
 
     }
-
 
     return 1;
 
@@ -13472,6 +13474,13 @@ struct jsonAddInboundResponseStruct* jsonAddInboundResponse(const char* json) {
 
 }
 
+const char* jsonDeleteSingleInboundPost(struct jsonDeleteSingleInboundPostStruct* deleteSingleInboundPostStruct) {
+    // not needed since the inbound id is to appended to the end of url
+
+    return NULL;
+
+}
+
 struct jsonDeleteSingleInboundResponseStruct* jsonDeleteSingleInboundResponse(const char* json) {
     DBG(LOG_INFO, "Function called");
 
@@ -13528,6 +13537,84 @@ struct jsonDeleteSingleInboundResponseStruct* jsonDeleteSingleInboundResponse(co
         return NULL;
 
     }
+
+}
+
+const char* jsonDeleteMultipleInboundsPost(struct jsonDeleteMultipleInboundsPostStruct* deleteMultipleInboundsPostStruct) {
+    if (!deleteMultipleInboundsPostStruct) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "deleteMultipleInboundsPostStruct is a null pointer");
+
+        return NULL;
+
+    }
+
+    if(deleteMultipleInboundsPostStruct->idsCount) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "ids array size is zero");
+
+        return NULL;
+
+    }
+
+    cJSON* json = cJSON_CreateObject();
+    if (!json) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create json object");
+
+        return NULL;
+
+    }
+
+    cJSON* idsArray = cJSON_CreateArray();
+    if (!idsArray) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create ids array");
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+    cJSON_AddItemToObject(json, "ids", idsArray);
+
+    for (int i = 0; i < deleteMultipleInboundsPostStruct->idsCount; i++) {
+        cJSON* id = cJSON_CreateNumber(deleteMultipleInboundsPostStruct->ids[i]);
+        if (!id) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "id is a null pointer, failed to create number");
+
+            cJSON_Delete(json);
+
+            return NULL;
+
+        }
+        cJSON_AddItemToArray(idsArray, id);
+
+    }
+
+    char* rawJson = cJSON_Print(json);
+    if (!rawJson) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Failed to print the raw json string");
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+
+    size_t rawJsonLen = strlen(rawJson);
+    char* rawJsonCopy = (char*)malloc((rawJsonLen + 1) * sizeof(char));
+    if (!rawJsonCopy) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "rawJsonCopy is a null pointer, failed to allocate memory");
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+
+    strncpy(rawJsonCopy, rawJson, rawJsonLen);
+    rawJsonCopy[rawJsonLen] = '\0';
+
+    cJSON_Delete(json);
+
+    return rawJsonCopy;
 
 }
 
