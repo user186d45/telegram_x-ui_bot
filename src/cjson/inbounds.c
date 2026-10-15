@@ -25332,6 +25332,122 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
             break;
 
         case NETWORKTYPE_GRPC:
+            if (streamSettingsStruct->listInStreamSettingsGRPCSettingsObjStruct) {
+                cJSON* grpcSettingsObj = cJSON_CreateObject();
+                if (!grpcSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create grpcSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "grpcSettings", grpcSettingsObj);
+
+                struct jsonListInboundStreamSettingsGRPCSettingsObjectStruct* grpcSettingsStruct = streamSettingsStruct->listInStreamSettingsGRPCSettingsObjStruct;
+
+                if (grpcSettingsStruct->serviceName) {
+                    cJSON_AddStringToObject(grpcSettingsObj, "serviceName", grpcSettingsStruct->serviceName);
+
+                }
+
+                if (grpcSettingsStruct->authority) {
+                    cJSON_AddStringToObject(grpcSettingsObj, "authority", grpcSettingsStruct->authority);
+
+                }
+
+                cJSON_AddBoolToObject(grpcSettingsObj, "multiMode", grpcSettingsStruct->multiMode);
+            }
+
+            if (streamSettingsStruct->security) {
+                cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
+
+            }
+
+            if (streamSettingsStruct->listInStreamSettingsGRPCFinalMaskObjStruct) {
+                cJSON* finalmaskObj = cJSON_CreateObject();
+                if (!finalmaskObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "finalmask", finalmaskObj);
+
+                struct jsonListInboundStreamSettingsGRPCFinalMaskObjectStruct* finalmaskStruct = streamSettingsStruct->listInStreamSettingsGRPCFinalMaskObjStruct;
+
+                if (finalmaskStruct->jsonListInboundStreamSettingsGRPCFinalMaskTcpStructSize) {
+                    cJSON* finalmaskGrpcArray = cJSON_CreateArray();
+                    if (!finalmaskGrpcArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask grpc array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(finalmaskObj, "grpc", finalmaskGrpcArray);
+
+                    const char* grpcMaskTypes[] = {
+                        "fragment",
+                        "header-custom",
+                        "sudoku",
+                        "xmc"
+
+                    };
+
+                    enum grpcMaskTypesEnum {
+                        GRPCMASKTYPE_FRAGMENT,
+                        GRPCMASKTYPE_HEADERCUSTOM,
+                        GRPCMASKTYPE_SUDOKU,
+                        GRPCMASKTYPE_XMC,
+                        GRPCMASKTYPE_COUNT
+
+                    };
+
+                    for (size_t grpcIdx = 0; grpcIdx < finalmaskStruct->jsonListInboundStreamSettingsGRPCFinalMaskTcpStructSize; grpcIdx++) {
+                        struct jsonListInboundStreamSettingsGRPCFinalMaskTcpObjectStruct* finalmaskGrpcStruct = &finalmaskStruct->listInStreamSettingsGRPCFinalMaskTcpStruct[grpcIdx];
+
+                        cJSON* finalmaskGrpcItem = cJSON_CreateObject();
+                        if (!finalmaskGrpcItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask grpc item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(finalmaskGrpcArray, finalmaskGrpcItem);
+
+                        cJSON_AddStringToObject(finalmaskGrpcItem, "type", finalmaskGrpcStruct->type);
+
+                        enum grpcMaskTypesEnum gType = GRPCMASKTYPE_COUNT;
+                        for (int g2 = 0; g2 < GRPCMASKTYPE_COUNT; g2++) {
+                            if (strncmp(grpcMaskTypes[g2], finalmaskGrpcStruct->type, strlen(grpcMaskTypes[g2])) == 0) {
+                                gType = (enum grpcMaskTypesEnum)g2;
+                                break;
+
+                            }
+
+                        }
+
+                        switch (gType) {
+                            case GRPCMASKTYPE_FRAGMENT:
+                            case GRPCMASKTYPE_HEADERCUSTOM:
+                            case GRPCMASKTYPE_SUDOKU:
+                            case GRPCMASKTYPE_XMC:
+                            case GRPCMASKTYPE_COUNT:
+                                break;
+
+                        }
+                    }
+                }
+            }
+
+            break;
+
         case NETWORKTYPE_HTTPUPGRADE:
         case NETWORKTYPE_XHTTP:
         case NETWORKTYPE_COUNT:
