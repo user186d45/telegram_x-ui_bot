@@ -24140,6 +24140,35 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
             break;
 
         case NETWORKTYPE_KCP:
+            if (streamSettingsStruct->listInStreamSettingsMKcpSettingsObjStruct) {
+                cJSON* kcpSettingsObj = cJSON_CreateObject();
+                if (!kcpSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create kcpSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "kcpSettings", kcpSettingsObj);
+
+                struct jsonListInboundStreamSettingsMKcpSettingsObjectStruct* kcpSettingsStruct = streamSettingsStruct->listInStreamSettingsMKcpSettingsObjStruct;
+
+                cJSON_AddNumberToObject(kcpSettingsObj, "mtu", kcpSettingsStruct->mtu);
+                cJSON_AddNumberToObject(kcpSettingsObj, "tti", kcpSettingsStruct->tti);
+                cJSON_AddNumberToObject(kcpSettingsObj, "uplinkCapacity", kcpSettingsStruct->uplinkCapacity);
+                cJSON_AddNumberToObject(kcpSettingsObj, "downlinkCapacity", kcpSettingsStruct->downlinkCapacity);
+                cJSON_AddNumberToObject(kcpSettingsObj, "cwndMultiplier", kcpSettingsStruct->cwndMultiplier);
+                cJSON_AddNumberToObject(kcpSettingsObj, "maxSendingWindow", kcpSettingsStruct->maxSendingWindow);
+            }
+
+            if (streamSettingsStruct->security) {
+                cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
+
+            }
+
+            break;
+
         case NETWORKTYPE_WS:
         case NETWORKTYPE_GRPC:
         case NETWORKTYPE_HTTPUPGRADE:
