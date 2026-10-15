@@ -24052,6 +24052,82 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case TCPMASKTYPE_XMC:
+                                if (finalmaskTcpStruct->listInStreamSettingsTcpFinalMaskXmcObjStruct) {
+                                    cJSON* xmcSettingsObj = cJSON_CreateObject();
+                                    if (!xmcSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xmc settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskTcpItem, "settings", xmcSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsTcpFinalMaskXmcObjectStruct* xmcStruct = finalmaskTcpStruct->listInStreamSettingsTcpFinalMaskXmcObjStruct;
+
+                                    if (xmcStruct->hostname) {
+                                        cJSON_AddStringToObject(xmcSettingsObj, "hostname", xmcStruct->hostname);
+
+                                    }
+
+                                    if (xmcStruct->jsonListInboundStreamSettingsTcpFinalMaskXmcProfileStructSize) {
+                                        cJSON* xmcProfilesArray = cJSON_CreateArray();
+                                        if (!xmcProfilesArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xmc profiles array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(xmcSettingsObj, "profiles", xmcProfilesArray);
+
+                                        for (int64_t xmcProfileIdx = 0; xmcProfileIdx < xmcStruct->jsonListInboundStreamSettingsTcpFinalMaskXmcProfileStructSize; xmcProfileIdx++) {
+                                            struct jsonListInboundStreamSettingsTcpFinalMaskXmcProfileObjectStruct* xmcProfileStruct = &xmcStruct->listInStreamSettingsTcpFinalMaskXmcProfileStruct[xmcProfileIdx];
+
+                                            cJSON* xmcProfileObj = cJSON_CreateObject();
+                                            if (!xmcProfileObj) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xmc profile object");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(xmcProfilesArray, xmcProfileObj);
+
+                                            if (xmcProfileStruct->username) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "username", xmcProfileStruct->username);
+
+                                            }
+
+                                            if (xmcProfileStruct->uuid) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "uuid", xmcProfileStruct->uuid);
+
+                                            }
+
+                                            if (xmcProfileStruct->texturesValue) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "texturesValue", xmcProfileStruct->texturesValue);
+
+                                            }
+
+                                            if (xmcProfileStruct->texturesSignature) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "texturesSignature", xmcProfileStruct->texturesSignature);
+
+                                            }
+
+                                        }
+                                    }
+
+                                    if (xmcStruct->password) {
+                                        cJSON_AddStringToObject(xmcSettingsObj, "password", xmcStruct->password);
+
+                                    }
+                                }
+
+                                break;
+
                             case TCPMASKTYPE_COUNT:
                                 break;
 
