@@ -24944,6 +24944,87 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
 
                         switch (wType) {
                             case WSMASKTYPE_FRAGMENT:
+                                if (finalmaskWsStruct->listInStreamSettingsWSFinalMaskFragmentObjStruct) {
+                                    cJSON* fragmentSettingsObj = cJSON_CreateObject();
+                                    if (!fragmentSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask ws fragment settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskWsItem, "settings", fragmentSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsWSFinalMaskFragmentObjectStruct* fragmentStruct = finalmaskWsStruct->listInStreamSettingsWSFinalMaskFragmentObjStruct;
+
+                                    if (fragmentStruct->packets) {
+                                        cJSON_AddStringToObject(fragmentSettingsObj, "packets", fragmentStruct->packets);
+
+                                    }
+
+                                    if (fragmentStruct->lengthsCount) {
+                                        cJSON* fragmentLengthsArray = cJSON_CreateArray();
+                                        if (!fragmentLengthsArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask ws fragment lengths array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(fragmentSettingsObj, "lengths", fragmentLengthsArray);
+
+                                        for (int64_t lengthsIdx = 0; lengthsIdx < fragmentStruct->lengthsCount; lengthsIdx++) {
+                                            cJSON* fragmentLengthsItem = cJSON_CreateString(fragmentStruct->lengths[lengthsIdx]);
+                                            if (!fragmentLengthsItem) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask ws fragment lengths item");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(fragmentLengthsArray, fragmentLengthsItem);
+
+                                        }
+                                    }
+
+                                    if (fragmentStruct->maxSplit) {
+                                        cJSON_AddStringToObject(fragmentSettingsObj, "maxSplit", fragmentStruct->maxSplit);
+
+                                    }
+
+                                    if (fragmentStruct->delaysCount) {
+                                        cJSON* fragmentDelaysArray = cJSON_CreateArray();
+                                        if (!fragmentDelaysArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask ws fragment delays array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(fragmentSettingsObj, "delays", fragmentDelaysArray);
+
+                                        for (int64_t delaysIdx = 0; delaysIdx < fragmentStruct->delaysCount; delaysIdx++) {
+                                            cJSON* fragmentDelaysItem = cJSON_CreateString(fragmentStruct->delays[delaysIdx]);
+                                            if (!fragmentDelaysItem) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask ws fragment delays item");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(fragmentDelaysArray, fragmentDelaysItem);
+
+                                        }
+                                    }
+                                }
+
+                                break;
+
                             case WSMASKTYPE_HEADERCUSTOM:
                             case WSMASKTYPE_SUDOKU:
                             case WSMASKTYPE_XMC:
