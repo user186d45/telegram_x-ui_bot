@@ -23680,6 +23680,170 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
 
             }
 
+            if (streamSettingsStruct->listInStreamSettingsTcpFinalMaskObjStruct) {
+                cJSON* finalmaskObj = cJSON_CreateObject();
+                if (!finalmaskObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "finalmask", finalmaskObj);
+
+                struct jsonListInboundStreamSettingsTcpFinalMaskObjectStruct* finalmaskStruct = streamSettingsStruct->listInStreamSettingsTcpFinalMaskObjStruct;
+
+                if (finalmaskStruct->jsonListInboundStreamSettingsTcpFinalMaskTcpStructSize) {
+                    cJSON* finalmaskTcpArray = cJSON_CreateArray();
+                    if (!finalmaskTcpArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask tcp array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(finalmaskObj, "tcp", finalmaskTcpArray);
+
+                    const char* tcpMaskTypes[] = {
+                        "fragment",
+                        "header-custom",
+                        "sudoku",
+                        "xmc"
+
+                    };
+
+                    enum tcpMaskTypesEnum {
+                        TCPMASKTYPE_FRAGMENT,
+                        TCPMASKTYPE_HEADERCUSTOM,
+                        TCPMASKTYPE_SUDOKU,
+                        TCPMASKTYPE_XMC,
+                        TCPMASKTYPE_COUNT
+
+                    };
+
+                    for (size_t tcpIdx = 0; tcpIdx < finalmaskStruct->jsonListInboundStreamSettingsTcpFinalMaskTcpStructSize; tcpIdx++) {
+                        struct jsonListInboundStreamSettingsTcpFinalMaskTcpObjectStruct* finalmaskTcpStruct = &finalmaskStruct->listInStreamSettingsTcpFinalMaskTcpStruct[tcpIdx];
+
+                        cJSON* finalmaskTcpItem = cJSON_CreateObject();
+                        if (!finalmaskTcpItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask tcp item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(finalmaskTcpArray, finalmaskTcpItem);
+
+                        cJSON_AddStringToObject(finalmaskTcpItem, "type", finalmaskTcpStruct->type);
+
+                        enum tcpMaskTypesEnum tType = TCPMASKTYPE_COUNT;
+                        for (int t2 = 0; t2 < TCPMASKTYPE_COUNT; t2++) {
+                            if (strncmp(tcpMaskTypes[t2], finalmaskTcpStruct->type, strlen(tcpMaskTypes[t2])) == 0) {
+                                tType = (enum tcpMaskTypesEnum)t2;
+                                break;
+
+                            }
+
+                        }
+
+                        switch (tType) {
+                            case TCPMASKTYPE_FRAGMENT:
+                                if (finalmaskTcpStruct->listInStreamSettingsTcpFinalMaskFragmentObjStruct) {
+                                    cJSON* fragmentSettingsObj = cJSON_CreateObject();
+                                    if (!fragmentSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask fragment settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskTcpItem, "settings", fragmentSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsTcpFinalMaskFragmentObjectStruct* fragmentStruct = finalmaskTcpStruct->listInStreamSettingsTcpFinalMaskFragmentObjStruct;
+
+                                    if (fragmentStruct->packets) {
+                                        cJSON_AddStringToObject(fragmentSettingsObj, "packets", fragmentStruct->packets);
+
+                                    }
+
+                                    if (fragmentStruct->lengthsCount) {
+                                        cJSON* fragmentLengthsArray = cJSON_CreateArray();
+                                        if (!fragmentLengthsArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask fragment lengths array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(fragmentSettingsObj, "lengths", fragmentLengthsArray);
+
+                                        for (int64_t lengthsIdx = 0; lengthsIdx < fragmentStruct->lengthsCount; lengthsIdx++) {
+                                            cJSON* fragmentLengthsItem = cJSON_CreateString(fragmentStruct->lengths[lengthsIdx]);
+                                            if (!fragmentLengthsItem) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask fragment lengths item");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(fragmentLengthsArray, fragmentLengthsItem);
+
+                                        }
+                                    }
+
+                                    if (fragmentStruct->maxSplit) {
+                                        cJSON_AddStringToObject(fragmentSettingsObj, "maxSplit", fragmentStruct->maxSplit);
+
+                                    }
+
+                                    if (fragmentStruct->delaysCount) {
+                                        cJSON* fragmentDelaysArray = cJSON_CreateArray();
+                                        if (!fragmentDelaysArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask fragment delays array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(fragmentSettingsObj, "delays", fragmentDelaysArray);
+
+                                        for (int64_t delaysIdx = 0; delaysIdx < fragmentStruct->delaysCount; delaysIdx++) {
+                                            cJSON* fragmentDelaysItem = cJSON_CreateString(fragmentStruct->delays[delaysIdx]);
+                                            if (!fragmentDelaysItem) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask fragment delays item");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(fragmentDelaysArray, fragmentDelaysItem);
+
+                                        }
+                                    }
+                                }
+
+                                break;
+
+                            case TCPMASKTYPE_HEADERCUSTOM:
+                            case TCPMASKTYPE_SUDOKU:
+                            case TCPMASKTYPE_XMC:
+                            case TCPMASKTYPE_COUNT:
+                                break;
+
+                        }
+
+                    }
+                }
+            }
+
             break;
 
         case NETWORKTYPE_KCP:
