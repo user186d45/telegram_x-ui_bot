@@ -24466,6 +24466,115 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case UDPMASKTYPE_HEADERCUSTOM:
+                                if (finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct) {
+                                    cJSON* headerCustomSettingsObj = cJSON_CreateObject();
+                                    if (!headerCustomSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskUdpItem, "settings", headerCustomSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomObjectStruct* headerCustomStruct = finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpHeaderCustomObjStruct;
+
+                                    if (headerCustomStruct->jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomClientPacketStructSize) {
+                                        cJSON* headerCustomClientArray = cJSON_CreateArray();
+                                        if (!headerCustomClientArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom client array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(headerCustomSettingsObj, "client", headerCustomClientArray);
+
+                                        for (size_t clientPacketIdx = 0; clientPacketIdx < headerCustomStruct->jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomClientPacketStructSize; clientPacketIdx++) {
+                                            struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct* clientPacketStruct = &headerCustomStruct->listInStreamSettingsFinalMaskUdpHeaderCustomClientPacketStruct[clientPacketIdx];
+
+                                            cJSON* clientPacketObj = cJSON_CreateObject();
+                                            if (!clientPacketObj) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom client packet object");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(headerCustomClientArray, clientPacketObj);
+
+                                            if (clientPacketStruct->type) {
+                                                cJSON_AddStringToObject(clientPacketObj, "type", clientPacketStruct->type);
+
+                                            }
+
+                                            cJSON_AddNumberToObject(clientPacketObj, "rand", clientPacketStruct->rand);
+
+                                            if (clientPacketStruct->randRange) {
+                                                cJSON_AddStringToObject(clientPacketObj, "randRange", clientPacketStruct->randRange);
+
+                                            }
+
+                                            if (clientPacketStruct->packet) {
+                                                cJSON_AddStringToObject(clientPacketObj, "packet", clientPacketStruct->packet);
+
+                                            }
+
+                                        }
+                                    }
+
+                                    if (headerCustomStruct->jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomServerPacketStructSize) {
+                                        cJSON* headerCustomServerArray = cJSON_CreateArray();
+                                        if (!headerCustomServerArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom server array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(headerCustomSettingsObj, "server", headerCustomServerArray);
+
+                                        for (size_t serverPacketIdx = 0; serverPacketIdx < headerCustomStruct->jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomServerPacketStructSize; serverPacketIdx++) {
+                                            struct jsonListInboundStreamSettingsFinalMaskUdpHeaderCustomPacketObjectStruct* serverPacketStruct = &headerCustomStruct->listInStreamSettingsFinalMaskUdpHeaderCustomServerPacketStruct[serverPacketIdx];
+
+                                            cJSON* serverPacketObj = cJSON_CreateObject();
+                                            if (!serverPacketObj) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom server packet object");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(headerCustomServerArray, serverPacketObj);
+
+                                            if (serverPacketStruct->type) {
+                                                cJSON_AddStringToObject(serverPacketObj, "type", serverPacketStruct->type);
+
+                                            }
+
+                                            cJSON_AddNumberToObject(serverPacketObj, "rand", serverPacketStruct->rand);
+
+                                            if (serverPacketStruct->randRange) {
+                                                cJSON_AddStringToObject(serverPacketObj, "randRange", serverPacketStruct->randRange);
+
+                                            }
+
+                                            if (serverPacketStruct->packet) {
+                                                cJSON_AddStringToObject(serverPacketObj, "packet", serverPacketStruct->packet);
+
+                                            }
+
+                                        }
+                                    }
+                                }
+
+                                break;
+
                             case UDPMASKTYPE_NOISE:
                             case UDPMASKTYPE_COUNT:
                                 break;
