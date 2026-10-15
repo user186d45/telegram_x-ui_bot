@@ -24315,6 +24315,52 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case UDPMASKTYPE_XICMP:
+                                if (finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpXicmpObjStruct) {
+                                    cJSON* xicmpSettingsObj = cJSON_CreateObject();
+                                    if (!xicmpSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xicmp settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskUdpItem, "settings", xicmpSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsFinalMaskUdpXicmpObjectStruct* xicmpStruct = finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpXicmpObjStruct;
+
+                                    cJSON_AddBoolToObject(xicmpSettingsObj, "dgram", xicmpStruct->dgram);
+
+                                    if (xicmpStruct->ipsCount) {
+                                        cJSON* xicmpIpsArray = cJSON_CreateArray();
+                                        if (!xicmpIpsArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xicmp ips array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(xicmpSettingsObj, "ips", xicmpIpsArray);
+
+                                        for (int64_t ipsIdx = 0; ipsIdx < xicmpStruct->ipsCount; ipsIdx++) {
+                                            cJSON* xicmpIpsItem = cJSON_CreateString(xicmpStruct->ips[ipsIdx]);
+                                            if (!xicmpIpsItem) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xicmp ips item");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(xicmpIpsArray, xicmpIpsItem);
+
+                                        }
+                                    }
+                                }
+
+                                break;
+
                             case UDPMASKTYPE_REALM:
                             case UDPMASKTYPE_HEADERCUSTOM:
                             case UDPMASKTYPE_NOISE:
