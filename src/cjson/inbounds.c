@@ -26766,6 +26766,148 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
             break;
 
         case NETWORKTYPE_HTTPUPGRADE:
+            if (streamSettingsStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct) {
+                cJSON* sockoptObj = cJSON_CreateObject();
+                if (!sockoptObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "sockopt", sockoptObj);
+
+                struct jsonListInboundStreamSettingsHTTPUpgradeSockoptObjectStruct* httpUpgradeSockoptStruct = streamSettingsStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct;
+
+                if (httpUpgradeSockoptStruct->acceptProxyProtocolEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "acceptProxyProtocol", httpUpgradeSockoptStruct->acceptProxyProtocol);
+
+                }
+
+                if (httpUpgradeSockoptStruct->tcpFastOpenEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "tcpFastOpen", httpUpgradeSockoptStruct->tcpFastOpen);
+
+                }
+
+                if (httpUpgradeSockoptStruct->markEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "mark", httpUpgradeSockoptStruct->mark);
+
+                }
+
+                if (httpUpgradeSockoptStruct->tproxyEnabled) {
+                    cJSON_AddStringToObject(sockoptObj, "tproxy", httpUpgradeSockoptStruct->tproxy);
+
+                }
+
+                if (httpUpgradeSockoptStruct->penetrateEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "penetrate", httpUpgradeSockoptStruct->penetrate);
+
+                }
+
+                if (httpUpgradeSockoptStruct->tcpMaxSegEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpMaxSeg", httpUpgradeSockoptStruct->tcpMaxSeg);
+
+                }
+
+                if (httpUpgradeSockoptStruct->tcpKeepAliveIntervalEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpKeepAliveInterval", httpUpgradeSockoptStruct->tcpKeepAliveInterval);
+
+                }
+
+                if (httpUpgradeSockoptStruct->tcpKeepAliveIdleEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpKeepAliveIdle", httpUpgradeSockoptStruct->tcpKeepAliveIdle);
+
+                }
+
+                if (httpUpgradeSockoptStruct->tcpUserTimeoutEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpUserTimeout", httpUpgradeSockoptStruct->tcpUserTimeout);
+
+                }
+
+                if (httpUpgradeSockoptStruct->tcpcongestionEnabled) {
+                    cJSON_AddStringToObject(sockoptObj, "tcpcongestion", httpUpgradeSockoptStruct->tcpcongestion);
+
+                }
+
+                if (httpUpgradeSockoptStruct->V6OnlyEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "V6Only", httpUpgradeSockoptStruct->V6Only);
+
+                }
+
+                if (httpUpgradeSockoptStruct->tcpWindowClampEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpWindowClamp", httpUpgradeSockoptStruct->tcpWindowClamp);
+
+                }
+
+                if (httpUpgradeSockoptStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStructEnabled) {
+                    cJSON* customSockoptArray = cJSON_CreateArray();
+                    if (!customSockoptArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt customSockopt array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(sockoptObj, "customSockopt", customSockoptArray);
+
+                    for (size_t customSockoptIdx = 0; customSockoptIdx < httpUpgradeSockoptStruct->jsonListInboundStreamSettingsHTTPUpgradeSockoptCustomSockOptArrayStructSize; customSockoptIdx++) {
+                        struct jsonListInboundStreamSettingsHTTPUpgradeSockoptObjectCustomSockOptArrayStruct* customSockoptEntry = &httpUpgradeSockoptStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[customSockoptIdx];
+
+                        cJSON* customSockoptItem = cJSON_CreateObject();
+                        if (!customSockoptItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt customSockopt item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(customSockoptArray, customSockoptItem);
+
+                        if (customSockoptEntry->system != NULL) {
+                            cJSON_AddStringToObject(customSockoptItem, "system", customSockoptEntry->system);
+
+                        }
+
+                        cJSON_AddStringToObject(customSockoptItem, "type", customSockoptEntry->type);
+                        cJSON_AddStringToObject(customSockoptItem, "level", customSockoptEntry->level);
+                        cJSON_AddStringToObject(customSockoptItem, "opt", customSockoptEntry->opt);
+                        cJSON_AddStringToObject(customSockoptItem, "value", customSockoptEntry->value);
+
+                    }
+                }
+
+                if (httpUpgradeSockoptStruct->trustedXForwardedForCount) {
+                    cJSON* trustedXForwardedForArray = cJSON_CreateArray();
+                    if (!trustedXForwardedForArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt trustedXForwardedFor array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(sockoptObj, "trustedXForwardedFor", trustedXForwardedForArray);
+
+                    for (int64_t trustedIdx = 0; trustedIdx < httpUpgradeSockoptStruct->trustedXForwardedForCount; trustedIdx++) {
+                        cJSON* trustedXForwardedForItem = cJSON_CreateString(httpUpgradeSockoptStruct->trustedXForwardedFor[trustedIdx]);
+                        if (!trustedXForwardedForItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt trustedXForwardedFor item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(trustedXForwardedForArray, trustedXForwardedForItem);
+
+                    }
+                }
+            }
+            break;
+
         case NETWORKTYPE_XHTTP:
         case NETWORKTYPE_COUNT:
             break;
