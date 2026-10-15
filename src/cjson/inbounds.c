@@ -23398,6 +23398,63 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
     cJSON_AddStringToObject(json, "shareAddr", importInboundsObjStruct->shareAddr);
     cJSON_AddStringToObject(json, "originNodeGuid", importInboundsObjStruct->originNodeGuid);
 
+    cJSON* settingsObj = cJSON_CreateObject();
+    if (!settingsObj) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+    cJSON_AddItemToObject(json, "settings", settingsObj);
+
+    cJSON* settingsClientsArray = cJSON_CreateArray();
+    if (!settingsClientsArray) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings clients array");
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+    cJSON_AddItemToObject(settingsObj, "clients", settingsClientsArray);
+
+    for (size_t i = 0; i < importInboundsObjStruct->listInSettingsObjStruct->jsonListInboundSettingsClientsArrayStructSize; i++) {
+        struct jsonListInboundSettingsClientsArrayStruct* client = &importInboundsObjStruct->listInSettingsObjStruct->listInSettingsCliArrStruct[i];
+
+        cJSON* clientItem = cJSON_CreateObject();
+        if (!clientItem) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "clientItem is a null pointer, failed to create json object");
+
+            cJSON_Delete(json);
+
+            return NULL;
+
+        }
+        cJSON_AddItemToArray(settingsClientsArray, clientItem);
+
+        cJSON_AddStringToObject(clientItem, "auth", client->auth);
+        cJSON_AddStringToObject(clientItem, "comment", client->comment);
+        cJSON_AddNumberToObject(clientItem, "created_at", (double)client->createdAt);
+        cJSON_AddStringToObject(clientItem, "email", client->email);
+        cJSON_AddBoolToObject(clientItem, "enable", client->enable);
+        cJSON_AddNumberToObject(clientItem, "expiryTime", (double)client->expiryTime);
+        cJSON_AddStringToObject(clientItem, "id", client->id);
+        cJSON_AddNumberToObject(clientItem, "limitIp", client->limitIp);
+        cJSON_AddStringToObject(clientItem, "password", client->password);
+        cJSON_AddNumberToObject(clientItem, "reset", client->reset);
+        cJSON_AddStringToObject(clientItem, "security", client->security);
+        cJSON_AddStringToObject(clientItem, "subId", client->subId);
+        cJSON_AddNumberToObject(clientItem, "tgId", (double)client->tgId);
+        cJSON_AddNumberToObject(clientItem, "totalGB", (double)client->totalGB);
+        cJSON_AddNumberToObject(clientItem, "updated_at", (double)client->updatedAt);
+
+    }
+
+    cJSON_AddStringToObject(settingsObj, "decryption", importInboundsObjStruct->listInSettingsObjStruct->decryption);
+    cJSON_AddStringToObject(settingsObj, "encryption", importInboundsObjStruct->listInSettingsObjStruct->encryption);
+
     char* rawJson = cJSON_Print(json);
     if (!rawJson) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Failed to print the raw json string");
