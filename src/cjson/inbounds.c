@@ -25182,6 +25182,68 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case WSMASKTYPE_SUDOKU:
+                                if (finalmaskWsStruct->listInStreamSettingsWSFinalMaskSudokuObjStruct) {
+                                    cJSON* sudokuSettingsObj = cJSON_CreateObject();
+                                    if (!sudokuSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask ws sudoku settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskWsItem, "settings", sudokuSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsWSFinalMaskSudokuObjectStruct* sudokuStruct = finalmaskWsStruct->listInStreamSettingsWSFinalMaskSudokuObjStruct;
+
+                                    if (sudokuStruct->password) {
+                                        cJSON_AddStringToObject(sudokuSettingsObj, "password", sudokuStruct->password);
+
+                                    }
+
+                                    if (sudokuStruct->customTablesCount) {
+                                        cJSON* sudokuCustomTablesArray = cJSON_CreateArray();
+                                        if (!sudokuCustomTablesArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask ws sudoku customTables array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(sudokuSettingsObj, "customTables", sudokuCustomTablesArray);
+
+                                        for (int64_t customTablesIdx = 0; customTablesIdx < sudokuStruct->customTablesCount; customTablesIdx++) {
+                                            cJSON* sudokuCustomTablesItem = cJSON_CreateString(sudokuStruct->customTables[customTablesIdx]);
+                                            if (!sudokuCustomTablesItem) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask ws sudoku customTables item");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(sudokuCustomTablesArray, sudokuCustomTablesItem);
+
+                                        }
+                                    }
+
+                                    if (sudokuStruct->ascii) {
+                                        cJSON_AddStringToObject(sudokuSettingsObj, "ascii", sudokuStruct->ascii);
+
+                                    }
+
+                                    if (sudokuStruct->customTable) {
+                                        cJSON_AddStringToObject(sudokuSettingsObj, "customTable", sudokuStruct->customTable);
+
+                                    }
+
+                                    cJSON_AddNumberToObject(sudokuSettingsObj, "paddingMin", sudokuStruct->paddingMin);
+                                    cJSON_AddNumberToObject(sudokuSettingsObj, "paddingMax", sudokuStruct->paddingMax);
+                                }
+
+                                break;
+
                             case WSMASKTYPE_XMC:
                             case WSMASKTYPE_COUNT:
                                 break;
