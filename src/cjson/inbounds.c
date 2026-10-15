@@ -26111,6 +26111,148 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
             break;
 
         case NETWORKTYPE_GRPC:
+            if (streamSettingsStruct->listInStreamSettingsGRPCSockoptObjStruct) {
+                cJSON* sockoptObj = cJSON_CreateObject();
+                if (!sockoptObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "sockopt", sockoptObj);
+
+                struct jsonListInboundStreamSettingsGRPCSockoptObjectStruct* grpcSockoptStruct = streamSettingsStruct->listInStreamSettingsGRPCSockoptObjStruct;
+
+                if (grpcSockoptStruct->acceptProxyProtocolEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "acceptProxyProtocol", grpcSockoptStruct->acceptProxyProtocol);
+
+                }
+
+                if (grpcSockoptStruct->tcpFastOpenEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "tcpFastOpen", grpcSockoptStruct->tcpFastOpen);
+
+                }
+
+                if (grpcSockoptStruct->markEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "mark", grpcSockoptStruct->mark);
+
+                }
+
+                if (grpcSockoptStruct->tproxyEnabled) {
+                    cJSON_AddStringToObject(sockoptObj, "tproxy", grpcSockoptStruct->tproxy);
+
+                }
+
+                if (grpcSockoptStruct->penetrateEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "penetrate", grpcSockoptStruct->penetrate);
+
+                }
+
+                if (grpcSockoptStruct->tcpMaxSegEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpMaxSeg", grpcSockoptStruct->tcpMaxSeg);
+
+                }
+
+                if (grpcSockoptStruct->tcpKeepAliveIntervalEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpKeepAliveInterval", grpcSockoptStruct->tcpKeepAliveInterval);
+
+                }
+
+                if (grpcSockoptStruct->tcpKeepAliveIdleEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpKeepAliveIdle", grpcSockoptStruct->tcpKeepAliveIdle);
+
+                }
+
+                if (grpcSockoptStruct->tcpUserTimeoutEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpUserTimeout", grpcSockoptStruct->tcpUserTimeout);
+
+                }
+
+                if (grpcSockoptStruct->tcpcongestionEnabled) {
+                    cJSON_AddStringToObject(sockoptObj, "tcpcongestion", grpcSockoptStruct->tcpcongestion);
+
+                }
+
+                if (grpcSockoptStruct->V6OnlyEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "V6Only", grpcSockoptStruct->V6Only);
+
+                }
+
+                if (grpcSockoptStruct->tcpWindowClampEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpWindowClamp", grpcSockoptStruct->tcpWindowClamp);
+
+                }
+
+                if (grpcSockoptStruct->listInStreamSettingsGRPCSockoptObjCustomScokArrStructEnabled) {
+                    cJSON* customSockoptArray = cJSON_CreateArray();
+                    if (!customSockoptArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt customSockopt array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(sockoptObj, "customSockopt", customSockoptArray);
+
+                    for (size_t customSockoptIdx = 0; customSockoptIdx < grpcSockoptStruct->jsonListInboundStreamSettingsGRPCSockoptCustomSockOptArrayStructSize; customSockoptIdx++) {
+                        struct jsonListInboundStreamSettingsGRPCSockoptObjectCustomSockOptArrayStruct* customSockoptEntry = &grpcSockoptStruct->listInStreamSettingsGRPCSockoptObjCustomScokArrStruct[customSockoptIdx];
+
+                        cJSON* customSockoptItem = cJSON_CreateObject();
+                        if (!customSockoptItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt customSockopt item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(customSockoptArray, customSockoptItem);
+
+                        if (customSockoptEntry->system != NULL) {
+                            cJSON_AddStringToObject(customSockoptItem, "system", customSockoptEntry->system);
+
+                        }
+
+                        cJSON_AddStringToObject(customSockoptItem, "type", customSockoptEntry->type);
+                        cJSON_AddStringToObject(customSockoptItem, "level", customSockoptEntry->level);
+                        cJSON_AddStringToObject(customSockoptItem, "opt", customSockoptEntry->opt);
+                        cJSON_AddStringToObject(customSockoptItem, "value", customSockoptEntry->value);
+
+                    }
+                }
+
+                if (grpcSockoptStruct->trustedXForwardedForCount) {
+                    cJSON* trustedXForwardedForArray = cJSON_CreateArray();
+                    if (!trustedXForwardedForArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt trustedXForwardedFor array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(sockoptObj, "trustedXForwardedFor", trustedXForwardedForArray);
+
+                    for (int64_t trustedIdx = 0; trustedIdx < grpcSockoptStruct->trustedXForwardedForCount; trustedIdx++) {
+                        cJSON* trustedXForwardedForItem = cJSON_CreateString(grpcSockoptStruct->trustedXForwardedFor[trustedIdx]);
+                        if (!trustedXForwardedForItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt trustedXForwardedFor item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(trustedXForwardedForArray, trustedXForwardedForItem);
+
+                    }
+                }
+            }
+            break;
+
         case NETWORKTYPE_HTTPUPGRADE:
         case NETWORKTYPE_XHTTP:
         case NETWORKTYPE_COUNT:
