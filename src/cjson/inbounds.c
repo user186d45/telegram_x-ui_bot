@@ -24362,6 +24362,109 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case UDPMASKTYPE_REALM:
+                                if (finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpRealmObjStruct) {
+                                    cJSON* realmSettingsObj = cJSON_CreateObject();
+                                    if (!realmSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask realm settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskUdpItem, "settings", realmSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsFinalMaskUdpRealmObjectStruct* realmStruct = finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpRealmObjStruct;
+
+                                    if (realmStruct->url) {
+                                        cJSON_AddStringToObject(realmSettingsObj, "url", realmStruct->url);
+
+                                    }
+
+                                    if (realmStruct->stunServersCount) {
+                                        cJSON* realmStunServersArray = cJSON_CreateArray();
+                                        if (!realmStunServersArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask realm stunServers array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(realmSettingsObj, "stunServers", realmStunServersArray);
+
+                                        for (int64_t stunServersIdx = 0; stunServersIdx < realmStruct->stunServersCount; stunServersIdx++) {
+                                            cJSON* realmStunServersItem = cJSON_CreateString(realmStruct->stunServers[stunServersIdx]);
+                                            if (!realmStunServersItem) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask realm stunServers item");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(realmStunServersArray, realmStunServersItem);
+
+                                        }
+                                    }
+
+                                    if (realmStruct->listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct) {
+                                        cJSON* realmTlsConfigObj = cJSON_CreateObject();
+                                        if (!realmTlsConfigObj) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask realm tlsConfig object");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(realmSettingsObj, "tlsConfig", realmTlsConfigObj);
+
+                                        struct jsonListInboundStreamSettingsFinalMaskUdpRealmTlsConfigObjectStruct* realmTlsConfigStruct = realmStruct->listInStreamSettingsFinalMaskUdpRealmTlsConfigObjStruct;
+
+                                        if (realmTlsConfigStruct->serverName) {
+                                            cJSON_AddStringToObject(realmTlsConfigObj, "serverName", realmTlsConfigStruct->serverName);
+
+                                        }
+
+                                        if (realmTlsConfigStruct->alpnCount) {
+                                            cJSON* realmTlsConfigAlpnArray = cJSON_CreateArray();
+                                            if (!realmTlsConfigAlpnArray) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask realm tlsConfig alpn array");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToObject(realmTlsConfigObj, "alpn", realmTlsConfigAlpnArray);
+
+                                            for (int64_t alpnIdx = 0; alpnIdx < realmTlsConfigStruct->alpnCount; alpnIdx++) {
+                                                cJSON* realmTlsConfigAlpnItem = cJSON_CreateString(realmTlsConfigStruct->alpn[alpnIdx]);
+                                                if (!realmTlsConfigAlpnItem) {
+                                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask realm tlsConfig alpn item");
+
+                                                    cJSON_Delete(json);
+
+                                                    return NULL;
+
+                                                }
+                                                cJSON_AddItemToArray(realmTlsConfigAlpnArray, realmTlsConfigAlpnItem);
+
+                                            }
+                                        }
+
+                                        if (realmTlsConfigStruct->fingerprint) {
+                                            cJSON_AddStringToObject(realmTlsConfigObj, "fingerprint", realmTlsConfigStruct->fingerprint);
+
+                                        }
+
+                                        cJSON_AddBoolToObject(realmTlsConfigObj, "allowInsecure", realmTlsConfigStruct->allowInsecure);
+                                    }
+                                }
+
+                                break;
+
                             case UDPMASKTYPE_HEADERCUSTOM:
                             case UDPMASKTYPE_NOISE:
                             case UDPMASKTYPE_COUNT:
