@@ -25823,6 +25823,144 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
             break;
 
         case NETWORKTYPE_HTTPUPGRADE:
+            if (streamSettingsStruct->listInStreamSettingsHTTPUpgradeSettingsObjStruct) {
+                cJSON* httpUpgradeSettingsObj = cJSON_CreateObject();
+                if (!httpUpgradeSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create httpupgradeSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "httpupgradeSettings", httpUpgradeSettingsObj);
+
+                struct jsonListInboundStreamSettingsHTTPUpgradeSettingsObjectStruct* httpUpgradeSettingsStruct = streamSettingsStruct->listInStreamSettingsHTTPUpgradeSettingsObjStruct;
+
+                cJSON_AddBoolToObject(httpUpgradeSettingsObj, "acceptProxyProtocol", httpUpgradeSettingsStruct->acceptProxyProtocol);
+
+                if (httpUpgradeSettingsStruct->path) {
+                    cJSON_AddStringToObject(httpUpgradeSettingsObj, "path", httpUpgradeSettingsStruct->path);
+
+                }
+
+                if (httpUpgradeSettingsStruct->host) {
+                    cJSON_AddStringToObject(httpUpgradeSettingsObj, "host", httpUpgradeSettingsStruct->host);
+
+                }
+
+                if (httpUpgradeSettingsStruct->jsonListInboundStreamSettingsHTTPUpgradeSettingsObjectHeadersStructSize) {
+                    cJSON* httpUpgradeHeadersObj = cJSON_CreateObject();
+                    if (!httpUpgradeHeadersObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create httpupgradeSettings headers object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(httpUpgradeSettingsObj, "headers", httpUpgradeHeadersObj);
+
+                    for (size_t httpUpgradeHeaderIdx = 0; httpUpgradeHeaderIdx < httpUpgradeSettingsStruct->jsonListInboundStreamSettingsHTTPUpgradeSettingsObjectHeadersStructSize; httpUpgradeHeaderIdx++) {
+                        struct jsonListInboundStreamSettingsHTTPUpgradeSettingsObjectHeadersStruct* httpUpgradeHeaderStruct = &httpUpgradeSettingsStruct->listInStreamSettingsHTTPUpgradeSettingsObjHeadersStruct[httpUpgradeHeaderIdx];
+
+                        if (httpUpgradeHeaderStruct->name && httpUpgradeHeaderStruct->value) {
+                            cJSON_AddStringToObject(httpUpgradeHeadersObj, httpUpgradeHeaderStruct->name, httpUpgradeHeaderStruct->value);
+
+                        }
+                    }
+                }
+            }
+
+            if (streamSettingsStruct->security) {
+                cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
+
+            }
+
+            if (streamSettingsStruct->listInStreamSettingsHTTPUpgradeFinalMaskObjStruct) {
+                cJSON* finalmaskObj = cJSON_CreateObject();
+                if (!finalmaskObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "finalmask", finalmaskObj);
+
+                struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskObjectStruct* finalmaskStruct = streamSettingsStruct->listInStreamSettingsHTTPUpgradeFinalMaskObjStruct;
+
+                if (finalmaskStruct->jsonListInboundStreamSettingsHTTPUpgradeFinalMaskTcpStructSize) {
+                    cJSON* finalmaskHttpUpgradeArray = cJSON_CreateArray();
+                    if (!finalmaskHttpUpgradeArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask httpupgrade array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(finalmaskObj, "httpupgrade", finalmaskHttpUpgradeArray);
+
+                    const char* httpUpgradeMaskTypes[] = {
+                        "fragment",
+                        "header-custom",
+                        "sudoku",
+                        "xmc"
+
+                    };
+
+                    enum httpUpgradeMaskTypesEnum {
+                        HTTPUPGRADEMASKTYPE_FRAGMENT,
+                        HTTPUPGRADEMASKTYPE_HEADERCUSTOM,
+                        HTTPUPGRADEMASKTYPE_SUDOKU,
+                        HTTPUPGRADEMASKTYPE_XMC,
+                        HTTPUPGRADEMASKTYPE_COUNT
+
+                    };
+
+                    for (size_t httpUpgradeIdx = 0; httpUpgradeIdx < finalmaskStruct->jsonListInboundStreamSettingsHTTPUpgradeFinalMaskTcpStructSize; httpUpgradeIdx++) {
+                        struct jsonListInboundStreamSettingsHTTPUpgradeFinalMaskTcpObjectStruct* finalmaskHttpUpgradeStruct = &finalmaskStruct->listInStreamSettingsHTTPUpgradeFinalMaskTcpStruct[httpUpgradeIdx];
+
+                        cJSON* finalmaskHttpUpgradeItem = cJSON_CreateObject();
+                        if (!finalmaskHttpUpgradeItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask httpupgrade item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(finalmaskHttpUpgradeArray, finalmaskHttpUpgradeItem);
+
+                        cJSON_AddStringToObject(finalmaskHttpUpgradeItem, "type", finalmaskHttpUpgradeStruct->type);
+
+                        enum httpUpgradeMaskTypesEnum hType = HTTPUPGRADEMASKTYPE_COUNT;
+                        for (int h2 = 0; h2 < HTTPUPGRADEMASKTYPE_COUNT; h2++) {
+                            if (strncmp(httpUpgradeMaskTypes[h2], finalmaskHttpUpgradeStruct->type, strlen(httpUpgradeMaskTypes[h2])) == 0) {
+                                hType = (enum httpUpgradeMaskTypesEnum)h2;
+                                break;
+
+                            }
+
+                        }
+
+                        switch (hType) {
+                            case HTTPUPGRADEMASKTYPE_FRAGMENT:
+                            case HTTPUPGRADEMASKTYPE_HEADERCUSTOM:
+                            case HTTPUPGRADEMASKTYPE_SUDOKU:
+                            case HTTPUPGRADEMASKTYPE_XMC:
+                            case HTTPUPGRADEMASKTYPE_COUNT:
+                                break;
+
+                        }
+                    }
+                }
+            }
+
+            break;
+
         case NETWORKTYPE_XHTTP:
         case NETWORKTYPE_COUNT:
             break;
