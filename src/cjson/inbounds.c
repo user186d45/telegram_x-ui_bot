@@ -23455,6 +23455,32 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
     cJSON_AddStringToObject(settingsObj, "decryption", importInboundsObjStruct->listInSettingsObjStruct->decryption);
     cJSON_AddStringToObject(settingsObj, "encryption", importInboundsObjStruct->listInSettingsObjStruct->encryption);
 
+    cJSON* sniffingObj = cJSON_CreateObject();
+    if (!sniffingObj) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sniffing object");
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+    cJSON_AddItemToObject(json, "sniffing", sniffingObj);
+
+    struct jsonListInboundSniffingObjectStruct* sniffingStruct = importInboundsObjStruct->listInSniffingObjStruct;
+    if (sniffingStruct->enabled != NULL) {
+        if (strcmp(sniffingStruct->enabled, "true") == 0) {
+            cJSON_AddBoolToObject(sniffingObj, "enabled", 1);
+
+        } else if (strcmp(sniffingStruct->enabled, "false") == 0) {
+            cJSON_AddBoolToObject(sniffingObj, "enabled", 0);
+
+        } else {
+            cJSON_AddStringToObject(sniffingObj, "enabled", sniffingStruct->enabled);
+
+        }
+
+    }
+
     char* rawJson = cJSON_Print(json);
     if (!rawJson) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Failed to print the raw json string");
