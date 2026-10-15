@@ -24270,6 +24270,50 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case UDPMASKTYPE_XDNS:
+                                if (finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpXdnsObjStruct) {
+                                    cJSON* xdnsSettingsObj = cJSON_CreateObject();
+                                    if (!xdnsSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xdns settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskUdpItem, "settings", xdnsSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsFinalMaskUdpXdnsObjectStruct* xdnsStruct = finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpXdnsObjStruct;
+
+                                    if (xdnsStruct->domainsCount) {
+                                        cJSON* xdnsDomainsArray = cJSON_CreateArray();
+                                        if (!xdnsDomainsArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xdns domains array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(xdnsSettingsObj, "domains", xdnsDomainsArray);
+
+                                        for (int64_t domainsIdx = 0; domainsIdx < xdnsStruct->domainsCount; domainsIdx++) {
+                                            cJSON* xdnsDomainsItem = cJSON_CreateString(xdnsStruct->domains[domainsIdx]);
+                                            if (!xdnsDomainsItem) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xdns domains item");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(xdnsDomainsArray, xdnsDomainsItem);
+
+                                        }
+                                    }
+                                }
+
+                                break;
+
                             case UDPMASKTYPE_XICMP:
                             case UDPMASKTYPE_REALM:
                             case UDPMASKTYPE_HEADERCUSTOM:
