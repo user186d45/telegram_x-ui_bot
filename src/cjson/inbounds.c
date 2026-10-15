@@ -23833,6 +23833,161 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case TCPMASKTYPE_HEADERCUSTOM:
+                                if (finalmaskTcpStruct->listInStreamSettingsTcpFinalMaskHeaderCustomObjStruct) {
+                                    cJSON* headerCustomSettingsObj = cJSON_CreateObject();
+                                    if (!headerCustomSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskTcpItem, "settings", headerCustomSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsTcpFinalMaskHeaderCustomObjectStruct* headerCustomStruct = finalmaskTcpStruct->listInStreamSettingsTcpFinalMaskHeaderCustomObjStruct;
+
+                                    if (headerCustomStruct->jsonListInboundStreamSettingsTcpFinalMaskHeaderCustomClientGroupStructSize) {
+                                        cJSON* headerCustomClientsArray = cJSON_CreateArray();
+                                        if (!headerCustomClientsArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom clients array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(headerCustomSettingsObj, "clients", headerCustomClientsArray);
+
+                                        for (size_t clientGroupIdx = 0; clientGroupIdx < headerCustomStruct->jsonListInboundStreamSettingsTcpFinalMaskHeaderCustomClientGroupStructSize; clientGroupIdx++) {
+                                            struct jsonListInboundStreamSettingsTcpFinalMaskHeaderCustomGroupObjectStruct* clientGroupStruct = &headerCustomStruct->listInStreamSettingsTcpFinalMaskHeaderCustomClientGroupStruct[clientGroupIdx];
+
+                                            cJSON* clientGroupArray = cJSON_CreateArray();
+                                            if (!clientGroupArray) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom client group array");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(headerCustomClientsArray, clientGroupArray);
+
+                                            for (size_t clientPacketIdx = 0; clientPacketIdx < clientGroupStruct->jsonListInboundStreamSettingsTcpFinalMaskHeaderCustomPacketStructSize; clientPacketIdx++) {
+                                                struct jsonListInboundStreamSettingsTcpFinalMaskHeaderCustomPacketObjectStruct* clientPacketStruct = &clientGroupStruct->listInStreamSettingsTcpFinalMaskHeaderCustomPacketStruct[clientPacketIdx];
+
+                                                cJSON* clientPacketObj = cJSON_CreateObject();
+                                                if (!clientPacketObj) {
+                                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom client packet object");
+
+                                                    cJSON_Delete(json);
+
+                                                    return NULL;
+
+                                                }
+                                                cJSON_AddItemToArray(clientGroupArray, clientPacketObj);
+
+                                                if (clientPacketStruct->type) {
+                                                    cJSON_AddStringToObject(clientPacketObj, "type", clientPacketStruct->type);
+
+                                                }
+
+                                                if (clientPacketStruct->delay) {
+                                                    cJSON_AddStringToObject(clientPacketObj, "delay", clientPacketStruct->delay);
+
+                                                }
+
+                                                if (clientPacketStruct->rand) {
+                                                    cJSON_AddStringToObject(clientPacketObj, "rand", clientPacketStruct->rand);
+
+                                                }
+
+                                                if (clientPacketStruct->randRange) {
+                                                    cJSON_AddStringToObject(clientPacketObj, "randRange", clientPacketStruct->randRange);
+
+                                                }
+
+                                                if (clientPacketStruct->packet) {
+                                                    cJSON_AddStringToObject(clientPacketObj, "packet", clientPacketStruct->packet);
+
+                                                }
+
+                                            }
+                                        }
+                                    }
+
+                                    if (headerCustomStruct->jsonListInboundStreamSettingsTcpFinalMaskHeaderCustomServerGroupStructSize) {
+                                        cJSON* headerCustomServersArray = cJSON_CreateArray();
+                                        if (!headerCustomServersArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom servers array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(headerCustomSettingsObj, "servers", headerCustomServersArray);
+
+                                        for (size_t serverGroupIdx = 0; serverGroupIdx < headerCustomStruct->jsonListInboundStreamSettingsTcpFinalMaskHeaderCustomServerGroupStructSize; serverGroupIdx++) {
+                                            struct jsonListInboundStreamSettingsTcpFinalMaskHeaderCustomGroupObjectStruct* serverGroupStruct = &headerCustomStruct->listInStreamSettingsTcpFinalMaskHeaderCustomServerGroupStruct[serverGroupIdx];
+
+                                            cJSON* serverGroupArray = cJSON_CreateArray();
+                                            if (!serverGroupArray) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom server group array");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(headerCustomServersArray, serverGroupArray);
+
+                                            for (size_t serverPacketIdx = 0; serverPacketIdx < serverGroupStruct->jsonListInboundStreamSettingsTcpFinalMaskHeaderCustomPacketStructSize; serverPacketIdx++) {
+                                                struct jsonListInboundStreamSettingsTcpFinalMaskHeaderCustomPacketObjectStruct* serverPacketStruct = &serverGroupStruct->listInStreamSettingsTcpFinalMaskHeaderCustomPacketStruct[serverPacketIdx];
+
+                                                cJSON* serverPacketObj = cJSON_CreateObject();
+                                                if (!serverPacketObj) {
+                                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask header-custom server packet object");
+
+                                                    cJSON_Delete(json);
+
+                                                    return NULL;
+
+                                                }
+                                                cJSON_AddItemToArray(serverGroupArray, serverPacketObj);
+
+                                                if (serverPacketStruct->type) {
+                                                    cJSON_AddStringToObject(serverPacketObj, "type", serverPacketStruct->type);
+
+                                                }
+
+                                                if (serverPacketStruct->delay) {
+                                                    cJSON_AddStringToObject(serverPacketObj, "delay", serverPacketStruct->delay);
+
+                                                }
+
+                                                if (serverPacketStruct->rand) {
+                                                    cJSON_AddStringToObject(serverPacketObj, "rand", serverPacketStruct->rand);
+
+                                                }
+
+                                                if (serverPacketStruct->randRange) {
+                                                    cJSON_AddStringToObject(serverPacketObj, "randRange", serverPacketStruct->randRange);
+
+                                                }
+
+                                                if (serverPacketStruct->packet) {
+                                                    cJSON_AddStringToObject(serverPacketObj, "packet", serverPacketStruct->packet);
+
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+
+                                break;
+
                             case TCPMASKTYPE_SUDOKU:
                             case TCPMASKTYPE_XMC:
                             case TCPMASKTYPE_COUNT:
