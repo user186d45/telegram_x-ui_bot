@@ -24576,6 +24576,79 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case UDPMASKTYPE_NOISE:
+                                if (finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpNoiseObjStruct) {
+                                    cJSON* noiseSettingsObj = cJSON_CreateObject();
+                                    if (!noiseSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask noise settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskUdpItem, "settings", noiseSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsFinalMaskUdpNoiseObjectStruct* noiseStruct = finalmaskUdpStruct->listInStreamSettingsFinalMaskUdpNoiseObjStruct;
+
+                                    cJSON_AddNumberToObject(noiseSettingsObj, "reset", noiseStruct->reset);
+
+                                    if (noiseStruct->jsonListInboundStreamSettingsFinalMaskUdpNoisePacketStructSize) {
+                                        cJSON* noiseArray = cJSON_CreateArray();
+                                        if (!noiseArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask noise array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(noiseSettingsObj, "noise", noiseArray);
+
+                                        for (size_t noisePacketIdx = 0; noisePacketIdx < noiseStruct->jsonListInboundStreamSettingsFinalMaskUdpNoisePacketStructSize; noisePacketIdx++) {
+                                            struct jsonListInboundStreamSettingsFinalMaskUdpNoisePacketObjectStruct* noisePacketStruct = &noiseStruct->listInStreamSettingsFinalMaskUdpNoisePacketStruct[noisePacketIdx];
+
+                                            cJSON* noisePacketObj = cJSON_CreateObject();
+                                            if (!noisePacketObj) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask noise packet object");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(noiseArray, noisePacketObj);
+
+                                            if (noisePacketStruct->type) {
+                                                cJSON_AddStringToObject(noisePacketObj, "type", noisePacketStruct->type);
+
+                                            }
+
+                                            if (noisePacketStruct->delay) {
+                                                cJSON_AddStringToObject(noisePacketObj, "delay", noisePacketStruct->delay);
+
+                                            }
+
+                                            if (noisePacketStruct->rand) {
+                                                cJSON_AddStringToObject(noisePacketObj, "rand", noisePacketStruct->rand);
+
+                                            }
+
+                                            if (noisePacketStruct->randRange) {
+                                                cJSON_AddStringToObject(noisePacketObj, "randRange", noisePacketStruct->randRange);
+
+                                            }
+
+                                            if (noisePacketStruct->packet) {
+                                                cJSON_AddStringToObject(noisePacketObj, "packet", noisePacketStruct->packet);
+
+                                            }
+
+                                        }
+                                    }
+                                }
+
+                                break;
+
                             case UDPMASKTYPE_COUNT:
                                 break;
 
