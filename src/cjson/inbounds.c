@@ -2068,13 +2068,6 @@ void jsonResetAllInboundsUploadNDownloadStructDelete(struct jsonResetAllInbounds
 
 }
 
-void jsonImportInboundsPostStructDelete(struct jsonImportInboundsPostStruct* importInboundsPostStruct) {
-    free((char*)importInboundsPostStruct->data);
-
-    free(importInboundsPostStruct);
-
-}
-
 void jsonImportInboundsResponseStructDelete(struct jsonImportInboundsResponseStruct* importInboundsRStruct) {
     free((char*)importInboundsRStruct->msg);
 
@@ -23326,6 +23319,75 @@ struct jsonListInboundSlimStruct* jsonListInboundSlim(const char* json) {
         return NULL;
 
     }
+
+}
+
+const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInboundsObjStruct) {
+    if (!importInboundsObjStruct) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "importInboundsObjStruct is a null pointer");
+
+        return NULL;
+
+    }
+
+    cJSON* json = cJSON_CreateObject();
+    if (!json) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create json object");
+
+        return NULL;
+
+    }
+
+    cJSON_AddNumberToObject(json, "id", (double)importInboundsObjStruct->id);
+    cJSON_AddNumberToObject(json, "up", (double)importInboundsObjStruct->up);
+    cJSON_AddNumberToObject(json, "down", (double)importInboundsObjStruct->down);
+    cJSON_AddNumberToObject(json, "total", (double)importInboundsObjStruct->total);
+    cJSON_AddStringToObject(json, "remark", importInboundsObjStruct->remark);
+    cJSON_AddNumberToObject(json, "subSortIndex", importInboundsObjStruct->subSortIndex);
+    cJSON_AddBoolToObject(json, "enable", importInboundsObjStruct->enable);
+    cJSON_AddNumberToObject(json, "expiryTime", (double)importInboundsObjStruct->expiryTime);
+    cJSON_AddStringToObject(json, "trafficReset", importInboundsObjStruct->trafficReset);
+    cJSON_AddNumberToObject(json, "trafficResetDay", importInboundsObjStruct->trafficResetDay);
+    cJSON_AddNumberToObject(json, "lastTrafficResetTime", (double)importInboundsObjStruct->lastTrafficResetTime);
+    cJSON_AddStringToObject(json, "listen", importInboundsObjStruct->listen);
+    cJSON_AddNumberToObject(json, "port", importInboundsObjStruct->port);
+    cJSON_AddStringToObject(json, "protocol", importInboundsObjStruct->protocol);
+    cJSON_AddStringToObject(json, "tag", importInboundsObjStruct->tag);
+    cJSON_AddStringToObject(json, "shareAddrStrategy", importInboundsObjStruct->shareAddrStrategy);
+    cJSON_AddStringToObject(json, "shareAddr", importInboundsObjStruct->shareAddr);
+    cJSON_AddStringToObject(json, "originNodeGuid", importInboundsObjStruct->originNodeGuid);
+
+    char* rawJson = cJSON_Print(json);
+    if (!rawJson) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Failed to print the raw json string");
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+
+    size_t rawJsonLen = strlen(rawJson);
+    char* rawJsonCopy = (char*)malloc((rawJsonLen + 1) * sizeof(char));
+    if (!rawJsonCopy) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "rawJsonCopy is a null pointer, failed to allocate memory");
+
+        free(rawJson);
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+
+    strncpy(rawJsonCopy, rawJson, rawJsonLen);
+    rawJsonCopy[rawJsonLen] = '\0';
+
+    free(rawJson);
+
+    cJSON_Delete(json);
+
+    return rawJsonCopy;
 
 }
 

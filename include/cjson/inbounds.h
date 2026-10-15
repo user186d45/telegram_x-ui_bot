@@ -1536,13 +1536,6 @@ struct jsonResetAllInboundsUploadNDownloadStruct {
 //}
 // =====================================================
 
-struct jsonImportInboundsPostStruct {
-    const char*                 data;
-
-};
-
-
-
 struct jsonImportInboundsResponseStruct {
     unsigned char               success;
     const char*                 msg;
@@ -1978,8 +1971,6 @@ void        jsonRemoveEveryClientFromInboundResponseStructDelete(struct jsonRemo
 
 void        jsonResetAllInboundsUploadNDownloadStructDelete(struct jsonResetAllInboundsUploadNDownloadStruct* resetAllInboundsUploadNDownloadStruct);
 
-void        jsonImportInboundsPostStructDelete(struct jsonImportInboundsPostStruct* importInboundsPostStruct);
-
 void        jsonImportInboundsResponseStructDelete(struct jsonImportInboundsResponseStruct* importInboundsRStruct);
 
 void        jsonListInboundAllLinksStructDelete(struct jsonListInboundAllLinksStruct* listInAllLinksStruct);
@@ -2046,7 +2037,7 @@ struct jsonRemoveEveryClientFromInboundResponseStruct* jsonRemoveEveryClientFrom
 
 struct jsonResetAllInboundsUploadNDownloadStruct*  jsonResetAllInboundsUploadNDownload(const char* json);
 
-const char*                                        jsonImportInboundsPost(struct jsonImportInboundsPostStruct* importInboundsPostStruct);
+const char*                                        jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInboundsObjStruct);
 
 struct jsonImportInboundsResponseStruct*           jsonImportInboundsResponse(const char* json);
 
