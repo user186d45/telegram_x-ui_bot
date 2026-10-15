@@ -23455,6 +23455,243 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
     cJSON_AddStringToObject(settingsObj, "decryption", importInboundsObjStruct->listInSettingsObjStruct->decryption);
     cJSON_AddStringToObject(settingsObj, "encryption", importInboundsObjStruct->listInSettingsObjStruct->encryption);
 
+    cJSON* streamSettingsObj = cJSON_CreateObject();
+    if (!streamSettingsObj) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create streamSettings object");
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+    cJSON_AddItemToObject(json, "streamSettings", streamSettingsObj);
+
+    struct jsonListInboundStreamSettingsObjectStruct* streamSettingsStruct = importInboundsObjStruct->listInStreamSettingsObjStruct;
+
+    cJSON_AddStringToObject(streamSettingsObj, "network", streamSettingsStruct->network);
+
+    const char* networkTypes[] = {
+        "tcp", // raw
+        "kcp", // mKCP
+        "ws", // websocket
+        "grpc",
+        "httpupgrade",
+        "xhttp"
+
+    };
+
+    enum networkTypesEnum nType = NETWORKTYPE_COUNT;
+    for (int n = 0; n < NETWORKTYPE_COUNT; n++) {
+        if (strncmp(networkTypes[n], streamSettingsStruct->network, strlen(networkTypes[n])) == 0) {
+            nType = (enum networkTypesEnum)n;
+
+            break;
+
+        }
+
+    }
+
+    switch (nType) {
+        case NETWORKTYPE_TCP:
+            if (streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct) {
+                cJSON* tcpSettingsObj = cJSON_CreateObject();
+                if (!tcpSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "tcpSettings", tcpSettingsObj);
+
+                struct jsonListInboundStreamSettingsTcpSettingsObjectStruct* tcpSettingsStruct = streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct;
+
+                cJSON_AddBoolToObject(tcpSettingsObj, "acceptProxyProtocol", tcpSettingsStruct->acceptProxyProtocol);
+
+                if (tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct) {
+                    cJSON* tcpHeaderObj = cJSON_CreateObject();
+                    if (!tcpHeaderObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings header object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tcpSettingsObj, "header", tcpHeaderObj);
+
+                    struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct* headerStruct = tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct;
+
+                    cJSON_AddStringToObject(tcpHeaderObj, "type", headerStruct->type);
+
+                    if (headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct) {
+                        cJSON* tcpHeaderRequestObj = cJSON_CreateObject();
+                        if (!tcpHeaderRequestObj) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings header request object");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(tcpHeaderObj, "request", tcpHeaderRequestObj);
+
+                        struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectRequestObjectStruct* headerReqStruct = headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct;
+
+                        cJSON_AddStringToObject(tcpHeaderRequestObj, "version", headerReqStruct->version);
+                        cJSON_AddStringToObject(tcpHeaderRequestObj, "method", headerReqStruct->method);
+
+                        cJSON* requestPathArray = cJSON_CreateArray();
+                        if (!requestPathArray) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings header request path array");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(tcpHeaderRequestObj, "path", requestPathArray);
+
+                        for (int64_t pathIdx = 0; pathIdx < headerReqStruct->pathCount; pathIdx++) {
+                            cJSON* requestPathItem = cJSON_CreateString(headerReqStruct->path[pathIdx]);
+                            if (!requestPathItem) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings header request path item");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToArray(requestPathArray, requestPathItem);
+
+                        }
+
+                        if (headerReqStruct->jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize) {
+                            cJSON* requestHeadersObj = cJSON_CreateObject();
+                            if (!requestHeadersObj) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings header request headers object");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(tcpHeaderRequestObj, "headers", requestHeadersObj);
+
+                            for (size_t headerIdx = 0; headerIdx < headerReqStruct->jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize; headerIdx++) {
+                                struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct* headerEntry = &headerReqStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqHeadersStruct[headerIdx];
+
+                                cJSON* headerValueArray = cJSON_CreateArray();
+                                if (!headerValueArray) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings header request header value array");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToObject(requestHeadersObj, headerEntry->name, headerValueArray);
+
+                                for (int64_t valueIdx = 0; valueIdx < headerEntry->valueCount; valueIdx++) {
+                                    cJSON* headerValueItem = cJSON_CreateString(headerEntry->value[valueIdx]);
+                                    if (!headerValueItem) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings header request header value item");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToArray(headerValueArray, headerValueItem);
+
+                                }
+
+                            }
+                        }
+                    }
+
+                    if (headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct) {
+                        cJSON* tcpHeaderResponseObj = cJSON_CreateObject();
+                        if (!tcpHeaderResponseObj) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings header response object");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(tcpHeaderObj, "response", tcpHeaderResponseObj);
+
+                        struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectResponseObjectStruct* headerResStruct = headerStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct;
+
+                        cJSON_AddStringToObject(tcpHeaderResponseObj, "version", headerResStruct->version);
+                        cJSON_AddStringToObject(tcpHeaderResponseObj, "status", headerResStruct->status);
+                        cJSON_AddStringToObject(tcpHeaderResponseObj, "reason", headerResStruct->reason);
+
+                        if (headerResStruct->jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize) {
+                            cJSON* responseHeadersObj = cJSON_CreateObject();
+                            if (!responseHeadersObj) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings header response headers object");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(tcpHeaderResponseObj, "headers", responseHeadersObj);
+
+                            for (size_t headerIdx = 0; headerIdx < headerResStruct->jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize; headerIdx++) {
+                                struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStruct* headerEntry = &headerResStruct->listInStreamSettingsTcpSettingsObjHeaderObjResHeadersStruct[headerIdx];
+
+                                cJSON* headerValueArray = cJSON_CreateArray();
+                                if (!headerValueArray) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings header response header value array");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToObject(responseHeadersObj, headerEntry->name, headerValueArray);
+
+                                for (int64_t valueIdx = 0; valueIdx < headerEntry->valueCount; valueIdx++) {
+                                    cJSON* headerValueItem = cJSON_CreateString(headerEntry->value[valueIdx]);
+                                    if (!headerValueItem) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tcpSettings header response header value item");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToArray(headerValueArray, headerValueItem);
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (streamSettingsStruct->security) {
+                cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
+
+            }
+
+            break;
+
+        case NETWORKTYPE_KCP:
+        case NETWORKTYPE_WS:
+        case NETWORKTYPE_GRPC:
+        case NETWORKTYPE_HTTPUPGRADE:
+        case NETWORKTYPE_XHTTP:
+        case NETWORKTYPE_COUNT:
+            break;
+
+    }
+
     cJSON* sniffingObj = cJSON_CreateObject();
     if (!sniffingObj) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sniffing object");
