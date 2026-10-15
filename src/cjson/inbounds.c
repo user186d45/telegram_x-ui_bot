@@ -23349,6 +23349,47 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
     cJSON_AddStringToObject(json, "trafficReset", importInboundsObjStruct->trafficReset);
     cJSON_AddNumberToObject(json, "trafficResetDay", importInboundsObjStruct->trafficResetDay);
     cJSON_AddNumberToObject(json, "lastTrafficResetTime", (double)importInboundsObjStruct->lastTrafficResetTime);
+
+    cJSON* clientStatsArray = cJSON_CreateArray();
+    if (!clientStatsArray) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create clientStats array");
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+    cJSON_AddItemToObject(json, "clientStats", clientStatsArray);
+
+    for (size_t i = 0; i < importInboundsObjStruct->jsonListInboundClientStatsArrayStructSize; i++) {
+        struct jsonListInboundClientStatsArrayStruct* cliStats = &importInboundsObjStruct->listInCliStatsStruct[i];
+
+        cJSON* clientStatsItem = cJSON_CreateObject();
+        if (!clientStatsItem) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "clientStatsItem is a null pointer, failed to create json object");
+
+            cJSON_Delete(json);
+
+            return NULL;
+
+        }
+        cJSON_AddItemToArray(clientStatsArray, clientStatsItem);
+
+        cJSON_AddNumberToObject(clientStatsItem, "id", (double)cliStats->id);
+        cJSON_AddNumberToObject(clientStatsItem, "inboundId", (double)cliStats->inboundId);
+        cJSON_AddBoolToObject(clientStatsItem, "enable", cliStats->enable);
+        cJSON_AddStringToObject(clientStatsItem, "email", cliStats->email);
+        cJSON_AddStringToObject(clientStatsItem, "uuid", cliStats->uuid);
+        cJSON_AddStringToObject(clientStatsItem, "subId", cliStats->subId);
+        cJSON_AddNumberToObject(clientStatsItem, "up", (double)cliStats->up);
+        cJSON_AddNumberToObject(clientStatsItem, "down", (double)cliStats->down);
+        cJSON_AddNumberToObject(clientStatsItem, "expiryTime", (double)cliStats->expiryTime);
+        cJSON_AddNumberToObject(clientStatsItem, "total", (double)cliStats->total);
+        cJSON_AddNumberToObject(clientStatsItem, "reset", cliStats->reset);
+        cJSON_AddNumberToObject(clientStatsItem, "lastOnline", (double)cliStats->lastOnline);
+
+    }
+
     cJSON_AddStringToObject(json, "listen", importInboundsObjStruct->listen);
     cJSON_AddNumberToObject(json, "port", importInboundsObjStruct->port);
     cJSON_AddStringToObject(json, "protocol", importInboundsObjStruct->protocol);
