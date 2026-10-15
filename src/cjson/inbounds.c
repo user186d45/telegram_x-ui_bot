@@ -24149,6 +24149,103 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
 
     }
 
+    switch (nType) {
+        case NETWORKTYPE_TCP:
+            if (streamSettingsStruct->listInStreamSettingsTcpSockoptObjStruct) {
+                cJSON* sockoptObj = cJSON_CreateObject();
+                if (!sockoptObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "sockopt", sockoptObj);
+
+                struct jsonListInboundStreamSettingsTcpSockoptObjectStruct* tcpSocketStruct = streamSettingsStruct->listInStreamSettingsTcpSockoptObjStruct;
+
+                if (tcpSocketStruct->acceptProxyProtocolEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "acceptProxyProtocol", tcpSocketStruct->acceptProxyProtocol);
+
+                }
+
+                if (tcpSocketStruct->tcpFastOpenEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "tcpFastOpen", tcpSocketStruct->tcpFastOpen);
+
+                }
+
+                if (tcpSocketStruct->tproxyEnabled) {
+                    cJSON_AddStringToObject(sockoptObj, "tproxy", tcpSocketStruct->tproxy);
+
+                }
+
+                if (tcpSocketStruct->penetrateEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "penetrate", tcpSocketStruct->penetrate);
+
+                }
+
+                if (tcpSocketStruct->tcpcongestionEnabled) {
+                    cJSON_AddStringToObject(sockoptObj, "tcpcongestion", tcpSocketStruct->tcpcongestion);
+
+                }
+
+                if (tcpSocketStruct->V6OnlyEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "V6Only", tcpSocketStruct->V6Only);
+
+                }
+
+                if (tcpSocketStruct->listInStreamSettingsTcpSockoptObjCustomScokArrStructEnabled) {
+                    cJSON* customSockoptArray = cJSON_CreateArray();
+                    if (!customSockoptArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt customSockopt array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(sockoptObj, "customSockopt", customSockoptArray);
+
+                    for (size_t customSockoptIdx = 0; customSockoptIdx < tcpSocketStruct->jsonListInboundStreamSettingsTcpSockoptCustomSockOptArrayStructSize; customSockoptIdx++) {
+                        struct jsonListInboundStreamSettingsTcpSockoptObjectCustomSockOptArrayStruct* customSockoptEntry = &tcpSocketStruct->listInStreamSettingsTcpSockoptObjCustomScokArrStruct[customSockoptIdx];
+
+                        cJSON* customSockoptItem = cJSON_CreateObject();
+                        if (!customSockoptItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt customSockopt item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(customSockoptArray, customSockoptItem);
+
+                        if (customSockoptEntry->system != NULL) {
+                            cJSON_AddStringToObject(customSockoptItem, "system", customSockoptEntry->system);
+
+                        }
+
+                        cJSON_AddStringToObject(customSockoptItem, "type", customSockoptEntry->type);
+                        cJSON_AddStringToObject(customSockoptItem, "level", customSockoptEntry->level);
+                        cJSON_AddStringToObject(customSockoptItem, "opt", customSockoptEntry->opt);
+                        cJSON_AddStringToObject(customSockoptItem, "value", customSockoptEntry->value);
+
+                    }
+                }
+            }
+            break;
+
+        case NETWORKTYPE_WS:
+        case NETWORKTYPE_KCP:
+        case NETWORKTYPE_GRPC:
+        case NETWORKTYPE_HTTPUPGRADE:
+        case NETWORKTYPE_XHTTP:
+        case NETWORKTYPE_COUNT:
+            break;
+
+    }
+
     cJSON* sniffingObj = cJSON_CreateObject();
     if (!sniffingObj) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sniffing object");
