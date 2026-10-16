@@ -26307,6 +26307,280 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
             break;
 
         case NETWORKTYPE_XHTTP:
+            if (streamSettingsStruct->listInStreamSettingsXHTTPSettingsObjStruct) {
+                cJSON* xhttpSettingsObj = cJSON_CreateObject();
+                if (!xhttpSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create xhttpSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "xhttpSettings", xhttpSettingsObj);
+
+                struct jsonListInboundStreamSettingsXHTTPSettingsObjectStruct* xhttpSettingsStruct = streamSettingsStruct->listInStreamSettingsXHTTPSettingsObjStruct;
+
+                if (xhttpSettingsStruct->path) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "path", xhttpSettingsStruct->path);
+
+                }
+
+                if (xhttpSettingsStruct->host) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "host", xhttpSettingsStruct->host);
+
+                }
+
+                if (xhttpSettingsStruct->mode) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "mode", xhttpSettingsStruct->mode);
+
+                }
+
+                if (xhttpSettingsStruct->xPaddingBytes) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "xPaddingBytes", xhttpSettingsStruct->xPaddingBytes);
+
+                }
+
+                cJSON_AddBoolToObject(xhttpSettingsObj, "xPaddingObfsMode", xhttpSettingsStruct->xPaddingObfsMode);
+
+                if (xhttpSettingsStruct->xPaddingKey) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "xPaddingKey", xhttpSettingsStruct->xPaddingKey);
+
+                }
+
+                if (xhttpSettingsStruct->xPaddingHeader) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "xPaddingHeader", xhttpSettingsStruct->xPaddingHeader);
+
+                }
+
+                if (xhttpSettingsStruct->xPaddingPlacement) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "xPaddingPlacement", xhttpSettingsStruct->xPaddingPlacement);
+
+                }
+
+                if (xhttpSettingsStruct->xPaddingMethod) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "xPaddingMethod", xhttpSettingsStruct->xPaddingMethod);
+
+                }
+
+                if (xhttpSettingsStruct->sessionIDPlacement) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "sessionIDPlacement", xhttpSettingsStruct->sessionIDPlacement);
+
+                }
+
+                if (xhttpSettingsStruct->sessionIDKey) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "sessionIDKey", xhttpSettingsStruct->sessionIDKey);
+
+                }
+
+                if (xhttpSettingsStruct->sessionIDTable) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "sessionIDTable", xhttpSettingsStruct->sessionIDTable);
+
+                }
+
+                if (xhttpSettingsStruct->sessionIDLength) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "sessionIDLength", xhttpSettingsStruct->sessionIDLength);
+
+                }
+
+                if (xhttpSettingsStruct->seqPlacement) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "seqPlacement", xhttpSettingsStruct->seqPlacement);
+
+                }
+
+                if (xhttpSettingsStruct->seqKey) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "seqKey", xhttpSettingsStruct->seqKey);
+
+                }
+
+                if (xhttpSettingsStruct->uplinkDataPlacement) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "uplinkDataPlacement", xhttpSettingsStruct->uplinkDataPlacement);
+
+                }
+
+                if (xhttpSettingsStruct->uplinkDataKey) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "uplinkDataKey", xhttpSettingsStruct->uplinkDataKey);
+
+                }
+
+                if (xhttpSettingsStruct->scMaxEachPostBytes) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "scMaxEachPostBytes", xhttpSettingsStruct->scMaxEachPostBytes);
+
+                }
+
+                cJSON_AddBoolToObject(xhttpSettingsObj, "noSSEHeader", xhttpSettingsStruct->noSSEHeader);
+
+                cJSON_AddNumberToObject(xhttpSettingsObj, "scMaxBufferedPosts", xhttpSettingsStruct->scMaxBufferedPosts);
+
+                if (xhttpSettingsStruct->scStreamUpServerSecs) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "scStreamUpServerSecs", xhttpSettingsStruct->scStreamUpServerSecs);
+
+                }
+
+                cJSON_AddNumberToObject(xhttpSettingsObj, "serverMaxHeaderBytes", xhttpSettingsStruct->serverMaxHeaderBytes);
+
+                if (xhttpSettingsStruct->uplinkHTTPMethod) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "uplinkHTTPMethod", xhttpSettingsStruct->uplinkHTTPMethod);
+
+                }
+
+                if (xhttpSettingsStruct->jsonListInboundStreamSettingsXHTTPSettingsObjectHeadersStructSize) {
+                    cJSON* xhttpHeadersObj = cJSON_CreateObject();
+                    if (!xhttpHeadersObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create xhttpSettings headers object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(xhttpSettingsObj, "headers", xhttpHeadersObj);
+
+                    for (size_t xhttpHeaderIdx = 0; xhttpHeaderIdx < xhttpSettingsStruct->jsonListInboundStreamSettingsXHTTPSettingsObjectHeadersStructSize; xhttpHeaderIdx++) {
+                        struct jsonListInboundStreamSettingsXHTTPSettingsObjectHeadersStruct* xhttpHeaderStruct = &xhttpSettingsStruct->listInStreamSettingsXHTTPSettingsObjHeadersStruct[xhttpHeaderIdx];
+
+                        if (xhttpHeaderStruct->name && xhttpHeaderStruct->value) {
+                            cJSON_AddStringToObject(xhttpHeadersObj, xhttpHeaderStruct->name, xhttpHeaderStruct->value);
+
+                        }
+                    }
+                }
+
+                if (xhttpSettingsStruct->scMinPostsIntervalMs) {
+                    cJSON_AddStringToObject(xhttpSettingsObj, "scMinPostsIntervalMs", xhttpSettingsStruct->scMinPostsIntervalMs);
+
+                }
+
+                cJSON_AddNumberToObject(xhttpSettingsObj, "uplinkChunkSize", xhttpSettingsStruct->uplinkChunkSize);
+
+                cJSON_AddBoolToObject(xhttpSettingsObj, "noGRPCHeader", xhttpSettingsStruct->noGRPCHeader);
+
+                if (xhttpSettingsStruct->listInStreamSettingsXHTTPSettingsObjXMuxObjStruct) {
+                    cJSON* xhttpXMuxObj = cJSON_CreateObject();
+                    if (!xhttpXMuxObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create xhttpSettings xmux object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(xhttpSettingsObj, "xmux", xhttpXMuxObj);
+
+                    struct jsonListInboundStreamSettingsXHTTPSettingsObjectXMuxObjectStruct* xhttpXMuxStruct = xhttpSettingsStruct->listInStreamSettingsXHTTPSettingsObjXMuxObjStruct;
+
+                    if (xhttpXMuxStruct->maxConcurrency) {
+                        cJSON_AddStringToObject(xhttpXMuxObj, "maxConcurrency", xhttpXMuxStruct->maxConcurrency);
+
+                    }
+
+                    cJSON_AddNumberToObject(xhttpXMuxObj, "maxConnections", xhttpXMuxStruct->maxConnections);
+
+                    cJSON_AddNumberToObject(xhttpXMuxObj, "cMaxReuseTimes", xhttpXMuxStruct->cMaxReuseTimes);
+
+                    if (xhttpXMuxStruct->hMaxRequestTimes) {
+                        cJSON_AddStringToObject(xhttpXMuxObj, "hMaxRequestTimes", xhttpXMuxStruct->hMaxRequestTimes);
+
+                    }
+
+                    if (xhttpXMuxStruct->hMaxReusableSecs) {
+                        cJSON_AddStringToObject(xhttpXMuxObj, "hMaxReusableSecs", xhttpXMuxStruct->hMaxReusableSecs);
+
+                    }
+
+                    cJSON_AddNumberToObject(xhttpXMuxObj, "hKeepAlivePeriod", xhttpXMuxStruct->hKeepAlivePeriod);
+                }
+            }
+
+            if (streamSettingsStruct->security) {
+                cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
+
+            }
+
+            if (streamSettingsStruct->listInStreamSettingsXHTTPFinalMaskObjStruct) {
+                cJSON* finalmaskObj = cJSON_CreateObject();
+                if (!finalmaskObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "finalmask", finalmaskObj);
+
+                struct jsonListInboundStreamSettingsXHTTPFinalMaskObjectStruct* finalmaskStruct = streamSettingsStruct->listInStreamSettingsXHTTPFinalMaskObjStruct;
+
+                if (finalmaskStruct->jsonListInboundStreamSettingsXHTTPFinalMaskTcpStructSize) {
+                    cJSON* finalmaskXHTTPArray = cJSON_CreateArray();
+                    if (!finalmaskXHTTPArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(finalmaskObj, "tcp", finalmaskXHTTPArray);
+
+                    const char* xhttpMaskTypes[] = {
+                        "fragment",
+                        "header-custom",
+                        "sudoku",
+                        "xmc"
+
+                    };
+
+                    enum xhttpMaskTypesEnum {
+                        XHTTPMASKTYPE_FRAGMENT,
+                        XHTTPMASKTYPE_HEADERCUSTOM,
+                        XHTTPMASKTYPE_SUDOKU,
+                        XHTTPMASKTYPE_XMC,
+                        XHTTPMASKTYPE_COUNT
+
+                    };
+
+                    for (size_t xhttpIdx = 0; xhttpIdx < finalmaskStruct->jsonListInboundStreamSettingsXHTTPFinalMaskTcpStructSize; xhttpIdx++) {
+                        struct jsonListInboundStreamSettingsXHTTPFinalMaskTcpObjectStruct* finalmaskXHTTPStruct = &finalmaskStruct->listInStreamSettingsXHTTPFinalMaskTcpStruct[xhttpIdx];
+
+                        cJSON* finalmaskXHTTPItem = cJSON_CreateObject();
+                        if (!finalmaskXHTTPItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(finalmaskXHTTPArray, finalmaskXHTTPItem);
+
+                        cJSON_AddStringToObject(finalmaskXHTTPItem, "type", finalmaskXHTTPStruct->type);
+
+                        enum xhttpMaskTypesEnum xType = XHTTPMASKTYPE_COUNT;
+                        for (int x2 = 0; x2 < XHTTPMASKTYPE_COUNT; x2++) {
+                            if (strncmp(xhttpMaskTypes[x2], finalmaskXHTTPStruct->type, strlen(xhttpMaskTypes[x2])) == 0) {
+                                xType = (enum xhttpMaskTypesEnum)x2;
+                                break;
+
+                            }
+
+                        }
+
+                        switch (xType) {
+                            case XHTTPMASKTYPE_FRAGMENT:
+                            case XHTTPMASKTYPE_HEADERCUSTOM:
+                            case XHTTPMASKTYPE_SUDOKU:
+                            case XHTTPMASKTYPE_XMC:
+                            case XHTTPMASKTYPE_COUNT:
+                                break;
+
+                        }
+                    }
+                }
+            }
+
+            break;
+
         case NETWORKTYPE_COUNT:
             break;
 
