@@ -1410,14 +1410,6 @@ struct jsonDeleteMultipleInboundResponseStruct {
 // json )
 // =====================================================
 
-struct jsonSetEnableInboundPostStruct {
-    int64_t                     id;
-    unsigned char               enabled;
-
-};
-
-
-
 struct jsonSetEnableInboundResponseStruct {
     unsigned char               success;
     const char*                 msg;
@@ -1432,13 +1424,6 @@ struct jsonSetEnableInboundResponseStruct {
 // touch the per-client counters )
 // =====================================================
 
-struct jsonResetInboundPostStruct {
-    int64_t id;
-
-};
-
-
-
 struct jsonResetInboundResponseStruct {
     unsigned char               success;
     const char*                 msg;
@@ -1451,13 +1436,6 @@ struct jsonResetInboundResponseStruct {
 // Remove every client attached to a single inbound post
 // and response structs
 // =====================================================
-
-struct jsonRemoveEveryClientFromInboundPostStruct {
-    int64_t                     id;
-
-};
-
-
 
 struct jsonRemoveEveryClientFromInboundResponseObjectStruct {
     int                         deleted;
@@ -1955,15 +1933,9 @@ void        jsonDeleteMultipleInboundResponseSkippedArrayStructDelete(struct jso
 
 void        jsonDeleteMultipleInboundResponseStructDelete(struct jsonDeleteMultipleInboundResponseStruct* deleteMultiInRStruct);
 
-void        jsonSetEnableInboundPostStructDelete(struct jsonSetEnableInboundPostStruct* setEnableInboundPostStruct);
-
 void        jsonSetEnableInboundResponseStructDelete(struct jsonSetEnableInboundResponseStruct* setEnableInRStruct);
 
-void        jsonResetInboundPostStructDelete(struct jsonResetInboundPostStruct* resetInboundPostStruct);
-
 void        jsonResetInboundResponseStructDelete(struct jsonResetInboundResponseStruct* resetInRStruct);
-
-void        jsonRemoveEveryClientFromInboundPostStructDelete(struct jsonRemoveEveryClientFromInboundPostStruct* removeEveryClientFromInboundPostStruct);
 
 void        jsonRemoveEveryClientFromInboundResponseObjectStructDelete(struct jsonRemoveEveryClientFromInboundResponseObjectStruct* rmEveryCliFromInResObjStruct);
 
@@ -2023,15 +1995,9 @@ const char*                                        jsonDeleteMultipleInboundsPos
 
 struct jsonDeleteMultipleInboundResponseStruct*    jsonDeleteMultipleInboundResponse(const char* json);
 
-const char*                                        jsonSetEnableInboundPost(struct jsonSetEnableInboundPostStruct* setEnableInboundPostStruct);
-
 struct jsonSetEnableInboundResponseStruct*         jsonSetEnableInboundResponse(const char* json);
 
-const char*                                        jsonResetInboundPost(struct jsonResetInboundPostStruct* resetInboundPostStruct);
-
 struct jsonResetInboundResponseStruct*             jsonResetInboundResponse(const char* json);
-
-const char*                                        jsonRemoveEveryClientFromInboundPost(struct jsonRemoveEveryClientFromInboundPostStruct* removeEveryClientFromInboundPostStruct);
 
 struct jsonRemoveEveryClientFromInboundResponseStruct* jsonRemoveEveryClientFromInboundResponse(const char* json);
 

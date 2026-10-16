@@ -2014,11 +2014,6 @@ void jsonDeleteMultipleInboundResponseStructDelete(struct jsonDeleteMultipleInbo
 
 }
 
-void jsonSetEnableInboundPostStructDelete(struct jsonSetEnableInboundPostStruct* setEnableInboundPostStruct) {
-    free(setEnableInboundPostStruct);
-
-}
-
 void jsonSetEnableInboundResponseStructDelete(struct jsonSetEnableInboundResponseStruct* setEnableInRStruct) {
     free((char*)setEnableInRStruct->msg);
 
@@ -2026,20 +2021,10 @@ void jsonSetEnableInboundResponseStructDelete(struct jsonSetEnableInboundRespons
 
 }
 
-void jsonResetInboundPostStructDelete(struct jsonResetInboundPostStruct* resetInboundPostStruct) {
-    free(resetInboundPostStruct);
-
-}
-
 void jsonResetInboundResponseStructDelete(struct jsonResetInboundResponseStruct* resetInRStruct) {
     free((char*)resetInRStruct->msg);
 
     free(resetInRStruct);
-
-}
-
-void jsonRemoveEveryClientFromInboundPostStructDelete(struct jsonRemoveEveryClientFromInboundPostStruct* removeEveryClientFromInboundPostStruct) {
-    free(removeEveryClientFromInboundPostStruct);
 
 }
 
