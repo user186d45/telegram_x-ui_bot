@@ -13365,6 +13365,20 @@ struct jsonListInboundOptionsStruct* jsonListInboundOptions(const char* json) {
 
 }
 
+const char* jsonAddInboundPost(struct jsonListInboundObjectStruct* addInboundObjStruct) {
+    if (!addInboundObjStruct) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "addInboundObjStruct is a null pointer");
+
+        return NULL;
+
+    }
+
+    // the add inbound request body is the same flat inbound object the import serializer reverses into
+
+    return jsonImportInboundsPost(addInboundObjStruct);
+
+}
+
 struct jsonAddInboundResponseStruct* jsonAddInboundResponse(const char* json) {
     DBG(LOG_INFO, "Function called");
 
