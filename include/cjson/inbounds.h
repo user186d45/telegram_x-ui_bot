@@ -1322,22 +1322,6 @@ struct jsonAddInboundSniffingObjectPostStruct {
 
 
 
-struct jsonAddInboundPostStruct {
-    unsigned char               enable;
-    const char*                 remark;
-    const char*                 listen;
-    int                         port;
-    const char*                 protocol;
-    int64_t                     expiryTime;
-    const char*                 total;
-    struct jsonAddInboundSettingsObjPostStruct* addInSettingsObjPStruct;
-    struct jsonAddInboundStreamSettingsObjPostStruct* addInStreamSettingsObjPStruct;
-    struct jsonAddInboundSniffingObjectPostStruct* addInSniffingObjPStruct;
-
-};
-
-
-
 struct jsonAddInboundResponseStruct {
     unsigned char               success;
     const char*                 msg;
@@ -1919,8 +1903,6 @@ void        jsonAddInboundStreamSettingsObjPostStructDelete(struct jsonAddInboun
 
 void        jsonAddInboundSniffingObjectPostStructDelete(struct jsonAddInboundSniffingObjectPostStruct* addInSniffingObjPStruct);
 
-void        jsonAddInboundPostStructDelete(struct jsonAddInboundPostStruct* addInboundPostStruct);
-
 void        jsonAddInboundResponseStructDelete(struct jsonAddInboundResponseStruct* addInRStruct);
 
 void        jsonDeleteSingleInboundPostStructDelete(struct jsonDeleteSingleInboundPostStruct* deleteSingleInboundPostStruct);
@@ -1983,7 +1965,7 @@ struct jsonListInboundSlimStruct*                  jsonListInboundSlim(const cha
 
 struct jsonListInboundOptionsStruct*               jsonListInboundOptions(const char* json);
 
-const char*                                        jsonAddInboundPost(struct jsonAddInboundPostStruct* addInboundPostStruct);
+const char*                                        jsonAddInboundPost(struct jsonListInboundObjectStruct* addInboundObjStruct);
 
 struct jsonAddInboundResponseStruct*               jsonAddInboundResponse(const char* json);
 

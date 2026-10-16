@@ -1936,34 +1936,6 @@ void jsonAddInboundSniffingObjectPostStructDelete(struct jsonAddInboundSniffingO
 
 }
 
-void jsonAddInboundPostStructDelete(struct jsonAddInboundPostStruct* addInboundPostStruct) {
-    free((char*)addInboundPostStruct->remark);
-    free((char*)addInboundPostStruct->listen);
-    free((char*)addInboundPostStruct->protocol);
-    free((char*)addInboundPostStruct->total);
-
-    if (addInboundPostStruct->addInSettingsObjPStruct) {
-        jsonAddInboundSettingsObjPostStructDelete(addInboundPostStruct->addInSettingsObjPStruct);
-        addInboundPostStruct->addInSettingsObjPStruct = NULL;
-
-    }
-
-    if (addInboundPostStruct->addInStreamSettingsObjPStruct) {
-        jsonAddInboundStreamSettingsObjPostStructDelete(addInboundPostStruct->addInStreamSettingsObjPStruct);
-        addInboundPostStruct->addInStreamSettingsObjPStruct = NULL;
-
-    }
-
-    if (addInboundPostStruct->addInSniffingObjPStruct) {
-        jsonAddInboundSniffingObjectPostStructDelete(addInboundPostStruct->addInSniffingObjPStruct);
-        addInboundPostStruct->addInSniffingObjPStruct = NULL;
-
-    }
-
-    free(addInboundPostStruct);
-
-}
-
 void jsonAddInboundResponseStructDelete(struct jsonAddInboundResponseStruct* addInRStruct) {
     free((char*)addInRStruct->msg);
 
