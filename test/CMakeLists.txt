@@ -42,6 +42,9 @@ add_test(NAME import_post_httpupgrade_negative COMMAND test_import_post false ht
 add_cjson_test(test_delete_multi test_delete_multi.c ${INBOUNDS_SRC} ${LOG_SRC})
 add_test(NAME delete_multi COMMAND test_delete_multi)
 
+add_cjson_test(test_security_sample test_security_sample.c ${INBOUNDS_SRC} ${LOG_SRC})
+add_test(NAME security_sample COMMAND test_security_sample ${CMAKE_CURRENT_SOURCE_DIR}/sample_inbounds.json)
+
 # Assertion mutants return early without freeing, so LeakSanitizer would exit
 # before stdout is flushed and hide the FAILED line. Leak detection is turned off
 # for them; the delete_leak mutant keeps it on, since LSan is what catches it.
@@ -99,3 +102,11 @@ make_mutant(delete_rawjson_leak
 add_cjson_test(mutant_delete_leak test_delete_multi.c ${DELETE_LEAK_SRC} ${LOG_SRC})
 add_test(NAME mutant_delete_leak_is_caught COMMAND mutant_delete_leak)
 set_tests_properties(mutant_delete_leak_is_caught PROPERTIES WILL_FAIL TRUE)
+
+make_mutant(reality_key
+    "cJSON_AddNumberToObject(realitySettingsObj, \"maxTimediff\""
+    "cJSON_AddNumberToObject(realitySettingsObj, \"maxTimeDiff\""
+    REALITY_KEY_SRC)
+add_cjson_test(mutant_reality_key test_security_sample.c ${REALITY_KEY_SRC} ${LOG_SRC})
+add_test(NAME mutant_reality_key_is_caught COMMAND mutant_reality_key ${CMAKE_CURRENT_SOURCE_DIR}/sample_inbounds.json)
+set_tests_properties(mutant_reality_key_is_caught PROPERTIES WILL_FAIL TRUE)
