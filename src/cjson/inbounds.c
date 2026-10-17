@@ -26869,6 +26869,82 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case XHTTPMASKTYPE_XMC:
+                                if (finalmaskXHTTPStruct->listInStreamSettingsXHTTPFinalMaskXmcObjStruct) {
+                                    cJSON* xmcSettingsObj = cJSON_CreateObject();
+                                    if (!xmcSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp xmc settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskXHTTPItem, "settings", xmcSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsXHTTPFinalMaskXmcObjectStruct* xmcStruct = finalmaskXHTTPStruct->listInStreamSettingsXHTTPFinalMaskXmcObjStruct;
+
+                                    if (xmcStruct->hostname) {
+                                        cJSON_AddStringToObject(xmcSettingsObj, "hostname", xmcStruct->hostname);
+
+                                    }
+
+                                    if (xmcStruct->jsonListInboundStreamSettingsXHTTPFinalMaskXmcProfileStructSize) {
+                                        cJSON* xmcProfilesArray = cJSON_CreateArray();
+                                        if (!xmcProfilesArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp xmc profiles array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(xmcSettingsObj, "profiles", xmcProfilesArray);
+
+                                        for (int64_t xmcProfileIdx = 0; xmcProfileIdx < xmcStruct->jsonListInboundStreamSettingsXHTTPFinalMaskXmcProfileStructSize; xmcProfileIdx++) {
+                                            struct jsonListInboundStreamSettingsXHTTPFinalMaskXmcProfileObjectStruct* xmcProfileStruct = &xmcStruct->listInStreamSettingsXHTTPFinalMaskXmcProfileStruct[xmcProfileIdx];
+
+                                            cJSON* xmcProfileObj = cJSON_CreateObject();
+                                            if (!xmcProfileObj) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp xmc profile object");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(xmcProfilesArray, xmcProfileObj);
+
+                                            if (xmcProfileStruct->username) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "username", xmcProfileStruct->username);
+
+                                            }
+
+                                            if (xmcProfileStruct->uuid) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "uuid", xmcProfileStruct->uuid);
+
+                                            }
+
+                                            if (xmcProfileStruct->texturesValue) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "texturesValue", xmcProfileStruct->texturesValue);
+
+                                            }
+
+                                            if (xmcProfileStruct->texturesSignature) {
+                                                cJSON_AddStringToObject(xmcProfileObj, "texturesSignature", xmcProfileStruct->texturesSignature);
+
+                                            }
+
+                                        }
+                                    }
+
+                                    if (xmcStruct->password) {
+                                        cJSON_AddStringToObject(xmcSettingsObj, "password", xmcStruct->password);
+
+                                    }
+                                }
+
+                                break;
+
                             case XHTTPMASKTYPE_COUNT:
                                 break;
 
