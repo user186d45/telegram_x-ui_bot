@@ -26650,6 +26650,161 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case XHTTPMASKTYPE_HEADERCUSTOM:
+                                if (finalmaskXHTTPStruct->listInStreamSettingsXHTTPFinalMaskHeaderCustomObjStruct) {
+                                    cJSON* headerCustomSettingsObj = cJSON_CreateObject();
+                                    if (!headerCustomSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp header-custom settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskXHTTPItem, "settings", headerCustomSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsXHTTPFinalMaskHeaderCustomObjectStruct* headerCustomStruct = finalmaskXHTTPStruct->listInStreamSettingsXHTTPFinalMaskHeaderCustomObjStruct;
+
+                                    if (headerCustomStruct->jsonListInboundStreamSettingsXHTTPFinalMaskHeaderCustomClientGroupStructSize) {
+                                        cJSON* headerCustomClientsArray = cJSON_CreateArray();
+                                        if (!headerCustomClientsArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp header-custom clients array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(headerCustomSettingsObj, "clients", headerCustomClientsArray);
+
+                                        for (size_t clientGroupIdx = 0; clientGroupIdx < headerCustomStruct->jsonListInboundStreamSettingsXHTTPFinalMaskHeaderCustomClientGroupStructSize; clientGroupIdx++) {
+                                            struct jsonListInboundStreamSettingsXHTTPFinalMaskHeaderCustomGroupObjectStruct* clientGroupStruct = &headerCustomStruct->listInStreamSettingsXHTTPFinalMaskHeaderCustomClientGroupStruct[clientGroupIdx];
+
+                                            cJSON* clientGroupArray = cJSON_CreateArray();
+                                            if (!clientGroupArray) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp header-custom client group array");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(headerCustomClientsArray, clientGroupArray);
+
+                                            for (size_t clientPacketIdx = 0; clientPacketIdx < clientGroupStruct->jsonListInboundStreamSettingsXHTTPFinalMaskHeaderCustomPacketStructSize; clientPacketIdx++) {
+                                                struct jsonListInboundStreamSettingsXHTTPFinalMaskHeaderCustomPacketObjectStruct* clientPacketStruct = &clientGroupStruct->listInStreamSettingsXHTTPFinalMaskHeaderCustomPacketStruct[clientPacketIdx];
+
+                                                cJSON* clientPacketObj = cJSON_CreateObject();
+                                                if (!clientPacketObj) {
+                                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp header-custom client packet object");
+
+                                                    cJSON_Delete(json);
+
+                                                    return NULL;
+
+                                                }
+                                                cJSON_AddItemToArray(clientGroupArray, clientPacketObj);
+
+                                                if (clientPacketStruct->type) {
+                                                    cJSON_AddStringToObject(clientPacketObj, "type", clientPacketStruct->type);
+
+                                                }
+
+                                                if (clientPacketStruct->delay) {
+                                                    cJSON_AddStringToObject(clientPacketObj, "delay", clientPacketStruct->delay);
+
+                                                }
+
+                                                if (clientPacketStruct->rand) {
+                                                    cJSON_AddStringToObject(clientPacketObj, "rand", clientPacketStruct->rand);
+
+                                                }
+
+                                                if (clientPacketStruct->randRange) {
+                                                    cJSON_AddStringToObject(clientPacketObj, "randRange", clientPacketStruct->randRange);
+
+                                                }
+
+                                                if (clientPacketStruct->packet) {
+                                                    cJSON_AddStringToObject(clientPacketObj, "packet", clientPacketStruct->packet);
+
+                                                }
+
+                                            }
+                                        }
+                                    }
+
+                                    if (headerCustomStruct->jsonListInboundStreamSettingsXHTTPFinalMaskHeaderCustomServerGroupStructSize) {
+                                        cJSON* headerCustomServersArray = cJSON_CreateArray();
+                                        if (!headerCustomServersArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp header-custom servers array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(headerCustomSettingsObj, "servers", headerCustomServersArray);
+
+                                        for (size_t serverGroupIdx = 0; serverGroupIdx < headerCustomStruct->jsonListInboundStreamSettingsXHTTPFinalMaskHeaderCustomServerGroupStructSize; serverGroupIdx++) {
+                                            struct jsonListInboundStreamSettingsXHTTPFinalMaskHeaderCustomGroupObjectStruct* serverGroupStruct = &headerCustomStruct->listInStreamSettingsXHTTPFinalMaskHeaderCustomServerGroupStruct[serverGroupIdx];
+
+                                            cJSON* serverGroupArray = cJSON_CreateArray();
+                                            if (!serverGroupArray) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp header-custom server group array");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(headerCustomServersArray, serverGroupArray);
+
+                                            for (size_t serverPacketIdx = 0; serverPacketIdx < serverGroupStruct->jsonListInboundStreamSettingsXHTTPFinalMaskHeaderCustomPacketStructSize; serverPacketIdx++) {
+                                                struct jsonListInboundStreamSettingsXHTTPFinalMaskHeaderCustomPacketObjectStruct* serverPacketStruct = &serverGroupStruct->listInStreamSettingsXHTTPFinalMaskHeaderCustomPacketStruct[serverPacketIdx];
+
+                                                cJSON* serverPacketObj = cJSON_CreateObject();
+                                                if (!serverPacketObj) {
+                                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp header-custom server packet object");
+
+                                                    cJSON_Delete(json);
+
+                                                    return NULL;
+
+                                                }
+                                                cJSON_AddItemToArray(serverGroupArray, serverPacketObj);
+
+                                                if (serverPacketStruct->type) {
+                                                    cJSON_AddStringToObject(serverPacketObj, "type", serverPacketStruct->type);
+
+                                                }
+
+                                                if (serverPacketStruct->delay) {
+                                                    cJSON_AddStringToObject(serverPacketObj, "delay", serverPacketStruct->delay);
+
+                                                }
+
+                                                if (serverPacketStruct->rand) {
+                                                    cJSON_AddStringToObject(serverPacketObj, "rand", serverPacketStruct->rand);
+
+                                                }
+
+                                                if (serverPacketStruct->randRange) {
+                                                    cJSON_AddStringToObject(serverPacketObj, "randRange", serverPacketStruct->randRange);
+
+                                                }
+
+                                                if (serverPacketStruct->packet) {
+                                                    cJSON_AddStringToObject(serverPacketObj, "packet", serverPacketStruct->packet);
+
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+
+                                break;
+
                             case XHTTPMASKTYPE_SUDOKU:
                             case XHTTPMASKTYPE_XMC:
                             case XHTTPMASKTYPE_COUNT:
