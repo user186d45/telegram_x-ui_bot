@@ -13512,7 +13512,7 @@ const char* jsonDeleteMultipleInboundsPost(struct jsonDeleteMultipleInboundsPost
 
     }
 
-    if(deleteMultipleInboundsPostStruct->idsCount) {
+    if(!deleteMultipleInboundsPostStruct->idsCount) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "ids array size is zero");
 
         return NULL;
@@ -13538,7 +13538,7 @@ const char* jsonDeleteMultipleInboundsPost(struct jsonDeleteMultipleInboundsPost
     }
     cJSON_AddItemToObject(json, "ids", idsArray);
 
-    for (int i = 0; i < deleteMultipleInboundsPostStruct->idsCount; i++) {
+    for (size_t i = 0; i < deleteMultipleInboundsPostStruct->idsCount; i++) {
         cJSON* id = cJSON_CreateNumber(deleteMultipleInboundsPostStruct->ids[i]);
         if (!id) {
             applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "id is a null pointer, failed to create number");
@@ -13567,6 +13567,7 @@ const char* jsonDeleteMultipleInboundsPost(struct jsonDeleteMultipleInboundsPost
     if (!rawJsonCopy) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "rawJsonCopy is a null pointer, failed to allocate memory");
 
+        free(rawJson);
         cJSON_Delete(json);
 
         return NULL;
@@ -13576,6 +13577,7 @@ const char* jsonDeleteMultipleInboundsPost(struct jsonDeleteMultipleInboundsPost
     strncpy(rawJsonCopy, rawJson, rawJsonLen);
     rawJsonCopy[rawJsonLen] = '\0';
 
+    free(rawJson);
     cJSON_Delete(json);
 
     return rawJsonCopy;
