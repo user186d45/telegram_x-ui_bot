@@ -26806,6 +26806,68 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                                 break;
 
                             case XHTTPMASKTYPE_SUDOKU:
+                                if (finalmaskXHTTPStruct->listInStreamSettingsXHTTPFinalMaskSudokuObjStruct) {
+                                    cJSON* sudokuSettingsObj = cJSON_CreateObject();
+                                    if (!sudokuSettingsObj) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp sudoku settings object");
+
+                                        cJSON_Delete(json);
+
+                                        return NULL;
+
+                                    }
+                                    cJSON_AddItemToObject(finalmaskXHTTPItem, "settings", sudokuSettingsObj);
+
+                                    struct jsonListInboundStreamSettingsXHTTPFinalMaskSudokuObjectStruct* sudokuStruct = finalmaskXHTTPStruct->listInStreamSettingsXHTTPFinalMaskSudokuObjStruct;
+
+                                    if (sudokuStruct->password) {
+                                        cJSON_AddStringToObject(sudokuSettingsObj, "password", sudokuStruct->password);
+
+                                    }
+
+                                    if (sudokuStruct->customTablesCount) {
+                                        cJSON* sudokuCustomTablesArray = cJSON_CreateArray();
+                                        if (!sudokuCustomTablesArray) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp sudoku customTables array");
+
+                                            cJSON_Delete(json);
+
+                                            return NULL;
+
+                                        }
+                                        cJSON_AddItemToObject(sudokuSettingsObj, "customTables", sudokuCustomTablesArray);
+
+                                        for (int64_t customTablesIdx = 0; customTablesIdx < sudokuStruct->customTablesCount; customTablesIdx++) {
+                                            cJSON* sudokuCustomTablesItem = cJSON_CreateString(sudokuStruct->customTables[customTablesIdx]);
+                                            if (!sudokuCustomTablesItem) {
+                                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create finalmask xhttp sudoku customTables item");
+
+                                                cJSON_Delete(json);
+
+                                                return NULL;
+
+                                            }
+                                            cJSON_AddItemToArray(sudokuCustomTablesArray, sudokuCustomTablesItem);
+
+                                        }
+                                    }
+
+                                    if (sudokuStruct->ascii) {
+                                        cJSON_AddStringToObject(sudokuSettingsObj, "ascii", sudokuStruct->ascii);
+
+                                    }
+
+                                    if (sudokuStruct->customTable) {
+                                        cJSON_AddStringToObject(sudokuSettingsObj, "customTable", sudokuStruct->customTable);
+
+                                    }
+
+                                    cJSON_AddNumberToObject(sudokuSettingsObj, "paddingMin", sudokuStruct->paddingMin);
+                                    cJSON_AddNumberToObject(sudokuSettingsObj, "paddingMax", sudokuStruct->paddingMax);
+                                }
+
+                                break;
+
                             case XHTTPMASKTYPE_XMC:
                             case XHTTPMASKTYPE_COUNT:
                                 break;
