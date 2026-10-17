@@ -27636,6 +27636,148 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
             break;
 
         case NETWORKTYPE_XHTTP:
+            if (streamSettingsStruct->listInStreamSettingsXHTTPSockoptObjStruct) {
+                cJSON* sockoptObj = cJSON_CreateObject();
+                if (!sockoptObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "sockopt", sockoptObj);
+
+                struct jsonListInboundStreamSettingsXHTTPSockoptObjectStruct* xhttpSockoptStruct = streamSettingsStruct->listInStreamSettingsXHTTPSockoptObjStruct;
+
+                if (xhttpSockoptStruct->acceptProxyProtocolEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "acceptProxyProtocol", xhttpSockoptStruct->acceptProxyProtocol);
+
+                }
+
+                if (xhttpSockoptStruct->tcpFastOpenEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "tcpFastOpen", xhttpSockoptStruct->tcpFastOpen);
+
+                }
+
+                if (xhttpSockoptStruct->markEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "mark", xhttpSockoptStruct->mark);
+
+                }
+
+                if (xhttpSockoptStruct->tproxyEnabled) {
+                    cJSON_AddStringToObject(sockoptObj, "tproxy", xhttpSockoptStruct->tproxy);
+
+                }
+
+                if (xhttpSockoptStruct->penetrateEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "penetrate", xhttpSockoptStruct->penetrate);
+
+                }
+
+                if (xhttpSockoptStruct->tcpMaxSegEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpMaxSeg", xhttpSockoptStruct->tcpMaxSeg);
+
+                }
+
+                if (xhttpSockoptStruct->tcpKeepAliveIntervalEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpKeepAliveInterval", xhttpSockoptStruct->tcpKeepAliveInterval);
+
+                }
+
+                if (xhttpSockoptStruct->tcpKeepAliveIdleEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpKeepAliveIdle", xhttpSockoptStruct->tcpKeepAliveIdle);
+
+                }
+
+                if (xhttpSockoptStruct->tcpUserTimeoutEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpUserTimeout", xhttpSockoptStruct->tcpUserTimeout);
+
+                }
+
+                if (xhttpSockoptStruct->tcpcongestionEnabled) {
+                    cJSON_AddStringToObject(sockoptObj, "tcpcongestion", xhttpSockoptStruct->tcpcongestion);
+
+                }
+
+                if (xhttpSockoptStruct->V6OnlyEnabled) {
+                    cJSON_AddBoolToObject(sockoptObj, "V6Only", xhttpSockoptStruct->V6Only);
+
+                }
+
+                if (xhttpSockoptStruct->tcpWindowClampEnabled) {
+                    cJSON_AddNumberToObject(sockoptObj, "tcpWindowClamp", xhttpSockoptStruct->tcpWindowClamp);
+
+                }
+
+                if (xhttpSockoptStruct->listInStreamSettingsXHTTPSockoptObjCustomScokArrStructEnabled) {
+                    cJSON* customSockoptArray = cJSON_CreateArray();
+                    if (!customSockoptArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt customSockopt array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(sockoptObj, "customSockopt", customSockoptArray);
+
+                    for (size_t customSockoptIdx = 0; customSockoptIdx < xhttpSockoptStruct->jsonListInboundStreamSettingsXHTTPSockoptCustomSockOptArrayStructSize; customSockoptIdx++) {
+                        struct jsonListInboundStreamSettingsXHTTPSockoptObjectCustomSockOptArrayStruct* customSockoptEntry = &xhttpSockoptStruct->listInStreamSettingsXHTTPSockoptObjCustomScokArrStruct[customSockoptIdx];
+
+                        cJSON* customSockoptItem = cJSON_CreateObject();
+                        if (!customSockoptItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt customSockopt item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(customSockoptArray, customSockoptItem);
+
+                        if (customSockoptEntry->system != NULL) {
+                            cJSON_AddStringToObject(customSockoptItem, "system", customSockoptEntry->system);
+
+                        }
+
+                        cJSON_AddStringToObject(customSockoptItem, "type", customSockoptEntry->type);
+                        cJSON_AddStringToObject(customSockoptItem, "level", customSockoptEntry->level);
+                        cJSON_AddStringToObject(customSockoptItem, "opt", customSockoptEntry->opt);
+                        cJSON_AddStringToObject(customSockoptItem, "value", customSockoptEntry->value);
+
+                    }
+                }
+
+                if (xhttpSockoptStruct->trustedXForwardedForCount) {
+                    cJSON* trustedXForwardedForArray = cJSON_CreateArray();
+                    if (!trustedXForwardedForArray) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt trustedXForwardedFor array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(sockoptObj, "trustedXForwardedFor", trustedXForwardedForArray);
+
+                    for (int64_t trustedIdx = 0; trustedIdx < xhttpSockoptStruct->trustedXForwardedForCount; trustedIdx++) {
+                        cJSON* trustedXForwardedForItem = cJSON_CreateString(xhttpSockoptStruct->trustedXForwardedFor[trustedIdx]);
+                        if (!trustedXForwardedForItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create sockopt trustedXForwardedFor item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(trustedXForwardedForArray, trustedXForwardedForItem);
+
+                    }
+                }
+            }
+            break;
+
         case NETWORKTYPE_COUNT:
             break;
 
