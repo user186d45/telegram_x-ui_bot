@@ -1968,6 +1968,13 @@ void        jsonListInboundStreamSettingsWSSockoptObjectStructDelete(struct json
 void        jsonListInboundStreamSettingsHTTPUpgradeSockoptObjectStructDelete(struct jsonListInboundStreamSettingsHTTPUpgradeSockoptObjectStruct* listInStreamSettingsHTTPUpgradeSockoptObjStruct);
 
 void        jsonListInboundStreamSettingsXHTTPSockoptObjectStructDelete(struct jsonListInboundStreamSettingsXHTTPSockoptObjectStruct* listInStreamSettingsXHTTPSockoptObjStruct);
+void        jsonListInboundStreamSettingsTlsSettingsCertificateObjectStructDelete(struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct* p);
+void        jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStructDelete(struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct* p);
+void        jsonListInboundStreamSettingsTlsSettingsSettingsObjectStructDelete(struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct* p);
+void        jsonListInboundStreamSettingsTlsSettingsObjectStructDelete(struct jsonListInboundStreamSettingsTlsSettingsObjectStruct* p);
+void        jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStructDelete(struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* p);
+void        jsonListInboundStreamSettingsRealitySettingsSettingsObjectStructDelete(struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct* p);
+void        jsonListInboundStreamSettingsRealitySettingsObjectStructDelete(struct jsonListInboundStreamSettingsRealitySettingsObjectStruct* p);
 
 void        jsonListInboundStreamSettingsGRPCSettingsObjectStructDelete(struct jsonListInboundStreamSettingsGRPCSettingsObjectStruct* listInStreamSettingsGRPCSettingsObjStruct);
 

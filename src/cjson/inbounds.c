@@ -1515,9 +1515,157 @@ void jsonListInboundSettingsObjectStructDelete(struct jsonListInboundSettingsObj
 
 }
 
+void jsonListInboundStreamSettingsTlsSettingsCertificateObjectStructDelete(struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct* p) {
+    free((char*)p->certificateFile);
+    free((char*)p->keyFile);
+    for (int64_t i = 0; i < p->certificateCount; i++) {
+        free((char*)p->certificate[i]);
+    }
+    free((char**)p->certificate);
+
+    for (int64_t i = 0; i < p->keyCount; i++) {
+        free((char*)p->key[i]);
+    }
+    free((char**)p->key);
+
+    free((char*)p->usage);
+    free(p);
+}
+
+void jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStructDelete(struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct* p) {
+    free((char*)p->domainStrategy);
+    free((char*)p->dialerProxy);
+    free((char*)p->tcpcongestion);
+    free(p);
+}
+
+void jsonListInboundStreamSettingsTlsSettingsSettingsObjectStructDelete(struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct* p) {
+    free((char*)p->fingerprint);
+    free((char*)p->echConfigList);
+    for (int64_t i = 0; i < p->pinnedPeerCertSha256Count; i++) {
+        free((char*)p->pinnedPeerCertSha256[i]);
+    }
+    free((char**)p->pinnedPeerCertSha256);
+
+    free((char*)p->verifyPeerCertByName);
+    free(p);
+}
+
+void jsonListInboundStreamSettingsTlsSettingsObjectStructDelete(struct jsonListInboundStreamSettingsTlsSettingsObjectStruct* p) {
+    free((char*)p->serverName);
+    free((char*)p->minVersion);
+    free((char*)p->maxVersion);
+    free((char*)p->cipherSuites);
+    if (p->listInStreamSettingsTlsSettingsCertificateArrStruct) {
+        for (size_t i = 0; i < p->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize; i++) {
+            struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct* listInStreamSettingsTlsSettingsCertificateArrStructEntry = &p->listInStreamSettingsTlsSettingsCertificateArrStruct[i];
+            free((char*)listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile);
+            free((char*)listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile);
+            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount; i++) {
+                free((char*)listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate[i]);
+            }
+            free((char**)listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate);
+
+            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount; i++) {
+                free((char*)listInStreamSettingsTlsSettingsCertificateArrStructEntry->key[i]);
+            }
+            free((char**)listInStreamSettingsTlsSettingsCertificateArrStructEntry->key);
+
+            free((char*)listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage);
+        }
+        free(p->listInStreamSettingsTlsSettingsCertificateArrStruct);
+        p->listInStreamSettingsTlsSettingsCertificateArrStruct = NULL;
+        p->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize = 0;
+    }
+
+    for (int64_t i = 0; i < p->alpnCount; i++) {
+        free((char*)p->alpn[i]);
+    }
+    free((char**)p->alpn);
+
+    free((char*)p->echServerKeys);
+    for (int64_t i = 0; i < p->curvePreferencesCount; i++) {
+        free((char*)p->curvePreferences[i]);
+    }
+    free((char**)p->curvePreferences);
+
+    free((char*)p->masterKeyLog);
+    if (p->listInStreamSettingsTlsSettingsEchSockoptObjStruct) {
+        jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStructDelete(p->listInStreamSettingsTlsSettingsEchSockoptObjStruct);
+        p->listInStreamSettingsTlsSettingsEchSockoptObjStruct = NULL;
+    }
+
+    if (p->listInStreamSettingsTlsSettingsSettingsObjStruct) {
+        jsonListInboundStreamSettingsTlsSettingsSettingsObjectStructDelete(p->listInStreamSettingsTlsSettingsSettingsObjStruct);
+        p->listInStreamSettingsTlsSettingsSettingsObjStruct = NULL;
+    }
+
+    free(p);
+}
+
+void jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStructDelete(struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* p) {
+    free(p);
+}
+
+void jsonListInboundStreamSettingsRealitySettingsSettingsObjectStructDelete(struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct* p) {
+    free((char*)p->publicKey);
+    free((char*)p->fingerprint);
+    free((char*)p->serverName);
+    free((char*)p->spiderX);
+    free((char*)p->mldsa65Verify);
+    free(p);
+}
+
+void jsonListInboundStreamSettingsRealitySettingsObjectStructDelete(struct jsonListInboundStreamSettingsRealitySettingsObjectStruct* p) {
+    free((char*)p->target);
+    for (int64_t i = 0; i < p->serverNamesCount; i++) {
+        free((char*)p->serverNames[i]);
+    }
+    free((char**)p->serverNames);
+
+    free((char*)p->privateKey);
+    free((char*)p->minClientVer);
+    free((char*)p->maxClientVer);
+    for (int64_t i = 0; i < p->shortIdsCount; i++) {
+        free((char*)p->shortIds[i]);
+    }
+    free((char**)p->shortIds);
+
+    free((char*)p->mldsa65Seed);
+    free((char*)p->masterKeyLog);
+    if (p->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct) {
+        jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStructDelete(p->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct);
+        p->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct = NULL;
+    }
+
+    if (p->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct) {
+        jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStructDelete(p->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct);
+        p->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct = NULL;
+    }
+
+    if (p->listInStreamSettingsRealitySettingsSettingsObjStruct) {
+        jsonListInboundStreamSettingsRealitySettingsSettingsObjectStructDelete(p->listInStreamSettingsRealitySettingsSettingsObjStruct);
+        p->listInStreamSettingsRealitySettingsSettingsObjStruct = NULL;
+    }
+
+    free(p);
+}
+
 void jsonListInboundStreamSettingsObjectStructDelete(struct jsonListInboundStreamSettingsObjectStruct* listInStreamSettingsObjStruct) {
     free((char*)listInStreamSettingsObjStruct->network);
     free((char*)listInStreamSettingsObjStruct->security);
+
+    if (listInStreamSettingsObjStruct->listInStreamSettingsTlsSettingsObjStruct) {
+        jsonListInboundStreamSettingsTlsSettingsObjectStructDelete(listInStreamSettingsObjStruct->listInStreamSettingsTlsSettingsObjStruct);
+        listInStreamSettingsObjStruct->listInStreamSettingsTlsSettingsObjStruct = NULL;
+
+    }
+
+    if (listInStreamSettingsObjStruct->listInStreamSettingsRealitySettingsObjStruct) {
+        jsonListInboundStreamSettingsRealitySettingsObjectStructDelete(listInStreamSettingsObjStruct->listInStreamSettingsRealitySettingsObjStruct);
+        listInStreamSettingsObjStruct->listInStreamSettingsRealitySettingsObjStruct = NULL;
+
+    }
 
     if (listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct) {
         jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(listInStreamSettingsObjStruct->listInStreamSettingsTcpSettingsObjStruct);
@@ -3798,6 +3946,865 @@ static int jsonListInboundStreamSettingsSockoptParse(cJSON* sockOptObj, struct j
 
 }
 
+static int jsonListInboundStreamSettingsTlsSettingsParse(cJSON* streamSettingsObj, struct jsonListInboundStreamSettingsObjectStruct* streamSettingsStruct) {
+    // tlsSettings sits in the streamSettings object and is present only when the security field is tls
+
+    streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct = NULL;
+    if (!cJSON_HasObjectItem(streamSettingsObj, "tlsSettings") || !cJSON_IsObject(cJSON_GetObjectItem(streamSettingsObj, "tlsSettings"))) {
+        return 1;
+    }
+
+    cJSON* tlsSettingsObj = cJSON_GetObjectItem(streamSettingsObj, "tlsSettings");
+    struct jsonListInboundStreamSettingsTlsSettingsObjectStruct* tlsSettingsStruct = (struct jsonListInboundStreamSettingsTlsSettingsObjectStruct*)calloc(1, sizeof(struct jsonListInboundStreamSettingsTlsSettingsObjectStruct));
+    if (!tlsSettingsStruct) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "tlsSettings is a null pointer, failed to allocate memory");
+
+        return 0;
+
+    }
+    streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct = tlsSettingsStruct;
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "serverName") && cJSON_IsString(cJSON_GetObjectItem(tlsSettingsObj, "serverName"))) {
+        size_t serverNameLen = strlen(cJSON_GetObjectItem(tlsSettingsObj, "serverName")->valuestring);
+        char* serverNameCopy = (char*)malloc((serverNameLen + 1) * sizeof(char));
+        if (!serverNameCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "serverName is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(serverNameCopy, cJSON_GetObjectItem(tlsSettingsObj, "serverName")->valuestring, serverNameLen);
+        serverNameCopy[serverNameLen] = '\0';
+        tlsSettingsStruct->serverName = serverNameCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "minVersion") && cJSON_IsString(cJSON_GetObjectItem(tlsSettingsObj, "minVersion"))) {
+        size_t minVersionLen = strlen(cJSON_GetObjectItem(tlsSettingsObj, "minVersion")->valuestring);
+        char* minVersionCopy = (char*)malloc((minVersionLen + 1) * sizeof(char));
+        if (!minVersionCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "minVersion is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(minVersionCopy, cJSON_GetObjectItem(tlsSettingsObj, "minVersion")->valuestring, minVersionLen);
+        minVersionCopy[minVersionLen] = '\0';
+        tlsSettingsStruct->minVersion = minVersionCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "maxVersion") && cJSON_IsString(cJSON_GetObjectItem(tlsSettingsObj, "maxVersion"))) {
+        size_t maxVersionLen = strlen(cJSON_GetObjectItem(tlsSettingsObj, "maxVersion")->valuestring);
+        char* maxVersionCopy = (char*)malloc((maxVersionLen + 1) * sizeof(char));
+        if (!maxVersionCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "maxVersion is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(maxVersionCopy, cJSON_GetObjectItem(tlsSettingsObj, "maxVersion")->valuestring, maxVersionLen);
+        maxVersionCopy[maxVersionLen] = '\0';
+        tlsSettingsStruct->maxVersion = maxVersionCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "cipherSuites") && cJSON_IsString(cJSON_GetObjectItem(tlsSettingsObj, "cipherSuites"))) {
+        size_t cipherSuitesLen = strlen(cJSON_GetObjectItem(tlsSettingsObj, "cipherSuites")->valuestring);
+        char* cipherSuitesCopy = (char*)malloc((cipherSuitesLen + 1) * sizeof(char));
+        if (!cipherSuitesCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "cipherSuites is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(cipherSuitesCopy, cJSON_GetObjectItem(tlsSettingsObj, "cipherSuites")->valuestring, cipherSuitesLen);
+        cipherSuitesCopy[cipherSuitesLen] = '\0';
+        tlsSettingsStruct->cipherSuites = cipherSuitesCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "rejectUnknownSni") && cJSON_IsBool(cJSON_GetObjectItem(tlsSettingsObj, "rejectUnknownSni"))) {
+        tlsSettingsStruct->rejectUnknownSni = cJSON_IsTrue(cJSON_GetObjectItem(tlsSettingsObj, "rejectUnknownSni")) ? 1 : 0;
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "disableSystemRoot") && cJSON_IsBool(cJSON_GetObjectItem(tlsSettingsObj, "disableSystemRoot"))) {
+        tlsSettingsStruct->disableSystemRoot = cJSON_IsTrue(cJSON_GetObjectItem(tlsSettingsObj, "disableSystemRoot")) ? 1 : 0;
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "enableSessionResumption") && cJSON_IsBool(cJSON_GetObjectItem(tlsSettingsObj, "enableSessionResumption"))) {
+        tlsSettingsStruct->enableSessionResumption = cJSON_IsTrue(cJSON_GetObjectItem(tlsSettingsObj, "enableSessionResumption")) ? 1 : 0;
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "certificates") && cJSON_IsArray(cJSON_GetObjectItem(tlsSettingsObj, "certificates"))) {
+        cJSON* listInStreamSettingsTlsSettingsCertificateArrStructArr = cJSON_GetObjectItem(tlsSettingsObj, "certificates");
+        size_t listInStreamSettingsTlsSettingsCertificateArrStructCount = cJSON_GetArraySize(listInStreamSettingsTlsSettingsCertificateArrStructArr);
+        if (listInStreamSettingsTlsSettingsCertificateArrStructCount) {
+            tlsSettingsStruct->listInStreamSettingsTlsSettingsCertificateArrStruct = (struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct*)calloc(listInStreamSettingsTlsSettingsCertificateArrStructCount, sizeof(struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct));
+            if (!tlsSettingsStruct->listInStreamSettingsTlsSettingsCertificateArrStruct) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTlsSettingsCertificateArrStruct is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            tlsSettingsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize = listInStreamSettingsTlsSettingsCertificateArrStructCount;
+            for (size_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructCount; i++) {
+                cJSON* listInStreamSettingsTlsSettingsCertificateArrStructItem = cJSON_GetArrayItem(listInStreamSettingsTlsSettingsCertificateArrStructArr, i);
+                if (cJSON_IsObject(listInStreamSettingsTlsSettingsCertificateArrStructItem)) {
+                    struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct* listInStreamSettingsTlsSettingsCertificateArrStructEntry = &tlsSettingsStruct->listInStreamSettingsTlsSettingsCertificateArrStruct[i];
+
+                    if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificateFile") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificateFile"))) {
+                        size_t certificateFileLen = strlen(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificateFile")->valuestring);
+                        char* certificateFileCopy = (char*)malloc((certificateFileLen + 1) * sizeof(char));
+                        if (!certificateFileCopy) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "certificateFile is a null pointer, failed to allocate memory");
+
+                            return 0;
+
+                        }
+                        strncpy(certificateFileCopy, cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificateFile")->valuestring, certificateFileLen);
+                        certificateFileCopy[certificateFileLen] = '\0';
+                        listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile = certificateFileCopy;
+
+                    }
+
+                    if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "keyFile") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "keyFile"))) {
+                        size_t keyFileLen = strlen(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "keyFile")->valuestring);
+                        char* keyFileCopy = (char*)malloc((keyFileLen + 1) * sizeof(char));
+                        if (!keyFileCopy) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "keyFile is a null pointer, failed to allocate memory");
+
+                            return 0;
+
+                        }
+                        strncpy(keyFileCopy, cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "keyFile")->valuestring, keyFileLen);
+                        keyFileCopy[keyFileLen] = '\0';
+                        listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile = keyFileCopy;
+
+                    }
+
+                    if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificate") && cJSON_IsArray(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificate"))) {
+                        cJSON* certificateArr = cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificate");
+                        size_t certificateCount = cJSON_GetArraySize(certificateArr);
+                        if (certificateCount) {
+                            listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate = (const char**)malloc(certificateCount * sizeof(char*));
+                            if (!listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "certificate is a null pointer, failed to allocate memory");
+
+                                return 0;
+
+                            }
+                            listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount = (int64_t)certificateCount;
+                            for (size_t i = 0; i < certificateCount; i++) {
+                                listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate[i] = NULL;
+                                cJSON* certificateItem = cJSON_GetArrayItem(certificateArr, i);
+                                if (cJSON_IsString(certificateItem)) {
+                                    size_t certificateItemLen = strlen(certificateItem->valuestring);
+                                    char* certificateItemCopy = (char*)malloc((certificateItemLen + 1) * sizeof(char));
+                                    if (!certificateItemCopy) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "certificate item is a null pointer, failed to allocate memory");
+
+                                        return 0;
+
+                                    }
+                                    strncpy(certificateItemCopy, certificateItem->valuestring, certificateItemLen);
+                                    certificateItemCopy[certificateItemLen] = '\0';
+                                    listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate[i] = certificateItemCopy;
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "key") && cJSON_IsArray(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "key"))) {
+                        cJSON* keyArr = cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "key");
+                        size_t keyCount = cJSON_GetArraySize(keyArr);
+                        if (keyCount) {
+                            listInStreamSettingsTlsSettingsCertificateArrStructEntry->key = (const char**)malloc(keyCount * sizeof(char*));
+                            if (!listInStreamSettingsTlsSettingsCertificateArrStructEntry->key) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "key is a null pointer, failed to allocate memory");
+
+                                return 0;
+
+                            }
+                            listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount = (int64_t)keyCount;
+                            for (size_t i = 0; i < keyCount; i++) {
+                                listInStreamSettingsTlsSettingsCertificateArrStructEntry->key[i] = NULL;
+                                cJSON* keyItem = cJSON_GetArrayItem(keyArr, i);
+                                if (cJSON_IsString(keyItem)) {
+                                    size_t keyItemLen = strlen(keyItem->valuestring);
+                                    char* keyItemCopy = (char*)malloc((keyItemLen + 1) * sizeof(char));
+                                    if (!keyItemCopy) {
+                                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "key item is a null pointer, failed to allocate memory");
+
+                                        return 0;
+
+                                    }
+                                    strncpy(keyItemCopy, keyItem->valuestring, keyItemLen);
+                                    keyItemCopy[keyItemLen] = '\0';
+                                    listInStreamSettingsTlsSettingsCertificateArrStructEntry->key[i] = keyItemCopy;
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "ocspStapling") && cJSON_IsNumber(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "ocspStapling"))) {
+                        listInStreamSettingsTlsSettingsCertificateArrStructEntry->ocspStapling = (int64_t)cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "ocspStapling")->valuedouble;
+
+                    }
+
+                    if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "oneTimeLoading") && cJSON_IsBool(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "oneTimeLoading"))) {
+                        listInStreamSettingsTlsSettingsCertificateArrStructEntry->oneTimeLoading = cJSON_IsTrue(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "oneTimeLoading")) ? 1 : 0;
+
+                    }
+
+                    if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "usage") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "usage"))) {
+                        size_t usageLen = strlen(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "usage")->valuestring);
+                        char* usageCopy = (char*)malloc((usageLen + 1) * sizeof(char));
+                        if (!usageCopy) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "usage is a null pointer, failed to allocate memory");
+
+                            return 0;
+
+                        }
+                        strncpy(usageCopy, cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "usage")->valuestring, usageLen);
+                        usageCopy[usageLen] = '\0';
+                        listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage = usageCopy;
+
+                    }
+
+                    if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "buildChain") && cJSON_IsBool(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "buildChain"))) {
+                        listInStreamSettingsTlsSettingsCertificateArrStructEntry->buildChain = cJSON_IsTrue(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsCertificateArrStructItem, "buildChain")) ? 1 : 0;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "alpn") && cJSON_IsArray(cJSON_GetObjectItem(tlsSettingsObj, "alpn"))) {
+        cJSON* alpnArr = cJSON_GetObjectItem(tlsSettingsObj, "alpn");
+        size_t alpnCount = cJSON_GetArraySize(alpnArr);
+        if (alpnCount) {
+            tlsSettingsStruct->alpn = (const char**)malloc(alpnCount * sizeof(char*));
+            if (!tlsSettingsStruct->alpn) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "alpn is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            tlsSettingsStruct->alpnCount = (int64_t)alpnCount;
+            for (size_t i = 0; i < alpnCount; i++) {
+                tlsSettingsStruct->alpn[i] = NULL;
+                cJSON* alpnItem = cJSON_GetArrayItem(alpnArr, i);
+                if (cJSON_IsString(alpnItem)) {
+                    size_t alpnItemLen = strlen(alpnItem->valuestring);
+                    char* alpnItemCopy = (char*)malloc((alpnItemLen + 1) * sizeof(char));
+                    if (!alpnItemCopy) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "alpn item is a null pointer, failed to allocate memory");
+
+                        return 0;
+
+                    }
+                    strncpy(alpnItemCopy, alpnItem->valuestring, alpnItemLen);
+                    alpnItemCopy[alpnItemLen] = '\0';
+                    tlsSettingsStruct->alpn[i] = alpnItemCopy;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "echServerKeys") && cJSON_IsString(cJSON_GetObjectItem(tlsSettingsObj, "echServerKeys"))) {
+        size_t echServerKeysLen = strlen(cJSON_GetObjectItem(tlsSettingsObj, "echServerKeys")->valuestring);
+        char* echServerKeysCopy = (char*)malloc((echServerKeysLen + 1) * sizeof(char));
+        if (!echServerKeysCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "echServerKeys is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(echServerKeysCopy, cJSON_GetObjectItem(tlsSettingsObj, "echServerKeys")->valuestring, echServerKeysLen);
+        echServerKeysCopy[echServerKeysLen] = '\0';
+        tlsSettingsStruct->echServerKeys = echServerKeysCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "curvePreferences") && cJSON_IsArray(cJSON_GetObjectItem(tlsSettingsObj, "curvePreferences"))) {
+        cJSON* curvePreferencesArr = cJSON_GetObjectItem(tlsSettingsObj, "curvePreferences");
+        size_t curvePreferencesCount = cJSON_GetArraySize(curvePreferencesArr);
+        if (curvePreferencesCount) {
+            tlsSettingsStruct->curvePreferences = (const char**)malloc(curvePreferencesCount * sizeof(char*));
+            if (!tlsSettingsStruct->curvePreferences) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "curvePreferences is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            tlsSettingsStruct->curvePreferencesCount = (int64_t)curvePreferencesCount;
+            for (size_t i = 0; i < curvePreferencesCount; i++) {
+                tlsSettingsStruct->curvePreferences[i] = NULL;
+                cJSON* curvePreferencesItem = cJSON_GetArrayItem(curvePreferencesArr, i);
+                if (cJSON_IsString(curvePreferencesItem)) {
+                    size_t curvePreferencesItemLen = strlen(curvePreferencesItem->valuestring);
+                    char* curvePreferencesItemCopy = (char*)malloc((curvePreferencesItemLen + 1) * sizeof(char));
+                    if (!curvePreferencesItemCopy) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "curvePreferences item is a null pointer, failed to allocate memory");
+
+                        return 0;
+
+                    }
+                    strncpy(curvePreferencesItemCopy, curvePreferencesItem->valuestring, curvePreferencesItemLen);
+                    curvePreferencesItemCopy[curvePreferencesItemLen] = '\0';
+                    tlsSettingsStruct->curvePreferences[i] = curvePreferencesItemCopy;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "masterKeyLog") && cJSON_IsString(cJSON_GetObjectItem(tlsSettingsObj, "masterKeyLog"))) {
+        size_t masterKeyLogLen = strlen(cJSON_GetObjectItem(tlsSettingsObj, "masterKeyLog")->valuestring);
+        char* masterKeyLogCopy = (char*)malloc((masterKeyLogLen + 1) * sizeof(char));
+        if (!masterKeyLogCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "masterKeyLog is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(masterKeyLogCopy, cJSON_GetObjectItem(tlsSettingsObj, "masterKeyLog")->valuestring, masterKeyLogLen);
+        masterKeyLogCopy[masterKeyLogLen] = '\0';
+        tlsSettingsStruct->masterKeyLog = masterKeyLogCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "echSockopt") && cJSON_IsObject(cJSON_GetObjectItem(tlsSettingsObj, "echSockopt"))) {
+        cJSON* listInStreamSettingsTlsSettingsEchSockoptObjStructObj = cJSON_GetObjectItem(tlsSettingsObj, "echSockopt");
+        struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct* listInStreamSettingsTlsSettingsEchSockoptObjStructStruct = (struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct*)calloc(1, sizeof(struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct));
+        if (!listInStreamSettingsTlsSettingsEchSockoptObjStructStruct) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTlsSettingsEchSockoptObjStruct is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        tlsSettingsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct = listInStreamSettingsTlsSettingsEchSockoptObjStructStruct;
+
+        if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpFastOpen") && cJSON_IsBool(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpFastOpen"))) {
+            listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpFastOpen = cJSON_IsTrue(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpFastOpen")) ? 1 : 0;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpMptcp") && cJSON_IsBool(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpMptcp"))) {
+            listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpMptcp = cJSON_IsTrue(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpMptcp")) ? 1 : 0;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "domainStrategy") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "domainStrategy"))) {
+            size_t domainStrategyLen = strlen(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "domainStrategy")->valuestring);
+            char* domainStrategyCopy = (char*)malloc((domainStrategyLen + 1) * sizeof(char));
+            if (!domainStrategyCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "domainStrategy is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            strncpy(domainStrategyCopy, cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "domainStrategy")->valuestring, domainStrategyLen);
+            domainStrategyCopy[domainStrategyLen] = '\0';
+            listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy = domainStrategyCopy;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "dialerProxy") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "dialerProxy"))) {
+            size_t dialerProxyLen = strlen(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "dialerProxy")->valuestring);
+            char* dialerProxyCopy = (char*)malloc((dialerProxyLen + 1) * sizeof(char));
+            if (!dialerProxyCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "dialerProxy is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            strncpy(dialerProxyCopy, cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "dialerProxy")->valuestring, dialerProxyLen);
+            dialerProxyCopy[dialerProxyLen] = '\0';
+            listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy = dialerProxyCopy;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpcongestion") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpcongestion"))) {
+            size_t tcpcongestionLen = strlen(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpcongestion")->valuestring);
+            char* tcpcongestionCopy = (char*)malloc((tcpcongestionLen + 1) * sizeof(char));
+            if (!tcpcongestionCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "tcpcongestion is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            strncpy(tcpcongestionCopy, cJSON_GetObjectItem(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpcongestion")->valuestring, tcpcongestionLen);
+            tcpcongestionCopy[tcpcongestionLen] = '\0';
+            listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion = tcpcongestionCopy;
+
+        }
+
+    }
+
+    if (cJSON_HasObjectItem(tlsSettingsObj, "settings") && cJSON_IsObject(cJSON_GetObjectItem(tlsSettingsObj, "settings"))) {
+        cJSON* listInStreamSettingsTlsSettingsSettingsObjStructObj = cJSON_GetObjectItem(tlsSettingsObj, "settings");
+        struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct* listInStreamSettingsTlsSettingsSettingsObjStructStruct = (struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct*)calloc(1, sizeof(struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct));
+        if (!listInStreamSettingsTlsSettingsSettingsObjStructStruct) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTlsSettingsSettingsObjStruct is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        tlsSettingsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct = listInStreamSettingsTlsSettingsSettingsObjStructStruct;
+
+        if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "fingerprint") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "fingerprint"))) {
+            size_t fingerprintLen = strlen(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "fingerprint")->valuestring);
+            char* fingerprintCopy = (char*)malloc((fingerprintLen + 1) * sizeof(char));
+            if (!fingerprintCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "fingerprint is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            strncpy(fingerprintCopy, cJSON_GetObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "fingerprint")->valuestring, fingerprintLen);
+            fingerprintCopy[fingerprintLen] = '\0';
+            listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint = fingerprintCopy;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "echConfigList") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "echConfigList"))) {
+            size_t echConfigListLen = strlen(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "echConfigList")->valuestring);
+            char* echConfigListCopy = (char*)malloc((echConfigListLen + 1) * sizeof(char));
+            if (!echConfigListCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "echConfigList is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            strncpy(echConfigListCopy, cJSON_GetObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "echConfigList")->valuestring, echConfigListLen);
+            echConfigListCopy[echConfigListLen] = '\0';
+            listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList = echConfigListCopy;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "pinnedPeerCertSha256") && cJSON_IsArray(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "pinnedPeerCertSha256"))) {
+            cJSON* pinnedPeerCertSha256Arr = cJSON_GetObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "pinnedPeerCertSha256");
+            size_t pinnedPeerCertSha256Count = cJSON_GetArraySize(pinnedPeerCertSha256Arr);
+            if (pinnedPeerCertSha256Count) {
+                listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256 = (const char**)malloc(pinnedPeerCertSha256Count * sizeof(char*));
+                if (!listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "pinnedPeerCertSha256 is a null pointer, failed to allocate memory");
+
+                    return 0;
+
+                }
+                listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count = (int64_t)pinnedPeerCertSha256Count;
+                for (size_t i = 0; i < pinnedPeerCertSha256Count; i++) {
+                    listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256[i] = NULL;
+                    cJSON* pinnedPeerCertSha256Item = cJSON_GetArrayItem(pinnedPeerCertSha256Arr, i);
+                    if (cJSON_IsString(pinnedPeerCertSha256Item)) {
+                        size_t pinnedPeerCertSha256ItemLen = strlen(pinnedPeerCertSha256Item->valuestring);
+                        char* pinnedPeerCertSha256ItemCopy = (char*)malloc((pinnedPeerCertSha256ItemLen + 1) * sizeof(char));
+                        if (!pinnedPeerCertSha256ItemCopy) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "pinnedPeerCertSha256 item is a null pointer, failed to allocate memory");
+
+                            return 0;
+
+                        }
+                        strncpy(pinnedPeerCertSha256ItemCopy, pinnedPeerCertSha256Item->valuestring, pinnedPeerCertSha256ItemLen);
+                        pinnedPeerCertSha256ItemCopy[pinnedPeerCertSha256ItemLen] = '\0';
+                        listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256[i] = pinnedPeerCertSha256ItemCopy;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "verifyPeerCertByName") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "verifyPeerCertByName"))) {
+            size_t verifyPeerCertByNameLen = strlen(cJSON_GetObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "verifyPeerCertByName")->valuestring);
+            char* verifyPeerCertByNameCopy = (char*)malloc((verifyPeerCertByNameLen + 1) * sizeof(char));
+            if (!verifyPeerCertByNameCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "verifyPeerCertByName is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            strncpy(verifyPeerCertByNameCopy, cJSON_GetObjectItem(listInStreamSettingsTlsSettingsSettingsObjStructObj, "verifyPeerCertByName")->valuestring, verifyPeerCertByNameLen);
+            verifyPeerCertByNameCopy[verifyPeerCertByNameLen] = '\0';
+            listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName = verifyPeerCertByNameCopy;
+
+        }
+
+    }
+
+    return 1;
+}
+
+static int jsonListInboundStreamSettingsRealitySettingsParse(cJSON* streamSettingsObj, struct jsonListInboundStreamSettingsObjectStruct* streamSettingsStruct) {
+    // realitySettings sits in the streamSettings object and is present only when the security field is reality
+
+    streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct = NULL;
+    if (!cJSON_HasObjectItem(streamSettingsObj, "realitySettings") || !cJSON_IsObject(cJSON_GetObjectItem(streamSettingsObj, "realitySettings"))) {
+        return 1;
+    }
+
+    cJSON* realitySettingsObj = cJSON_GetObjectItem(streamSettingsObj, "realitySettings");
+    struct jsonListInboundStreamSettingsRealitySettingsObjectStruct* realitySettingsStruct = (struct jsonListInboundStreamSettingsRealitySettingsObjectStruct*)calloc(1, sizeof(struct jsonListInboundStreamSettingsRealitySettingsObjectStruct));
+    if (!realitySettingsStruct) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "realitySettings is a null pointer, failed to allocate memory");
+
+        return 0;
+
+    }
+    streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct = realitySettingsStruct;
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "show") && cJSON_IsBool(cJSON_GetObjectItem(realitySettingsObj, "show"))) {
+        realitySettingsStruct->show = cJSON_IsTrue(cJSON_GetObjectItem(realitySettingsObj, "show")) ? 1 : 0;
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "xver") && cJSON_IsNumber(cJSON_GetObjectItem(realitySettingsObj, "xver"))) {
+        realitySettingsStruct->xver = (int64_t)cJSON_GetObjectItem(realitySettingsObj, "xver")->valuedouble;
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "target") && cJSON_IsString(cJSON_GetObjectItem(realitySettingsObj, "target"))) {
+        size_t targetLen = strlen(cJSON_GetObjectItem(realitySettingsObj, "target")->valuestring);
+        char* targetCopy = (char*)malloc((targetLen + 1) * sizeof(char));
+        if (!targetCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "target is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(targetCopy, cJSON_GetObjectItem(realitySettingsObj, "target")->valuestring, targetLen);
+        targetCopy[targetLen] = '\0';
+        realitySettingsStruct->target = targetCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "serverNames") && cJSON_IsArray(cJSON_GetObjectItem(realitySettingsObj, "serverNames"))) {
+        cJSON* serverNamesArr = cJSON_GetObjectItem(realitySettingsObj, "serverNames");
+        size_t serverNamesCount = cJSON_GetArraySize(serverNamesArr);
+        if (serverNamesCount) {
+            realitySettingsStruct->serverNames = (const char**)malloc(serverNamesCount * sizeof(char*));
+            if (!realitySettingsStruct->serverNames) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "serverNames is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            realitySettingsStruct->serverNamesCount = (int64_t)serverNamesCount;
+            for (size_t i = 0; i < serverNamesCount; i++) {
+                realitySettingsStruct->serverNames[i] = NULL;
+                cJSON* serverNamesItem = cJSON_GetArrayItem(serverNamesArr, i);
+                if (cJSON_IsString(serverNamesItem)) {
+                    size_t serverNamesItemLen = strlen(serverNamesItem->valuestring);
+                    char* serverNamesItemCopy = (char*)malloc((serverNamesItemLen + 1) * sizeof(char));
+                    if (!serverNamesItemCopy) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "serverNames item is a null pointer, failed to allocate memory");
+
+                        return 0;
+
+                    }
+                    strncpy(serverNamesItemCopy, serverNamesItem->valuestring, serverNamesItemLen);
+                    serverNamesItemCopy[serverNamesItemLen] = '\0';
+                    realitySettingsStruct->serverNames[i] = serverNamesItemCopy;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "privateKey") && cJSON_IsString(cJSON_GetObjectItem(realitySettingsObj, "privateKey"))) {
+        size_t privateKeyLen = strlen(cJSON_GetObjectItem(realitySettingsObj, "privateKey")->valuestring);
+        char* privateKeyCopy = (char*)malloc((privateKeyLen + 1) * sizeof(char));
+        if (!privateKeyCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "privateKey is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(privateKeyCopy, cJSON_GetObjectItem(realitySettingsObj, "privateKey")->valuestring, privateKeyLen);
+        privateKeyCopy[privateKeyLen] = '\0';
+        realitySettingsStruct->privateKey = privateKeyCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "minClientVer") && cJSON_IsString(cJSON_GetObjectItem(realitySettingsObj, "minClientVer"))) {
+        size_t minClientVerLen = strlen(cJSON_GetObjectItem(realitySettingsObj, "minClientVer")->valuestring);
+        char* minClientVerCopy = (char*)malloc((minClientVerLen + 1) * sizeof(char));
+        if (!minClientVerCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "minClientVer is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(minClientVerCopy, cJSON_GetObjectItem(realitySettingsObj, "minClientVer")->valuestring, minClientVerLen);
+        minClientVerCopy[minClientVerLen] = '\0';
+        realitySettingsStruct->minClientVer = minClientVerCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "maxClientVer") && cJSON_IsString(cJSON_GetObjectItem(realitySettingsObj, "maxClientVer"))) {
+        size_t maxClientVerLen = strlen(cJSON_GetObjectItem(realitySettingsObj, "maxClientVer")->valuestring);
+        char* maxClientVerCopy = (char*)malloc((maxClientVerLen + 1) * sizeof(char));
+        if (!maxClientVerCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "maxClientVer is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(maxClientVerCopy, cJSON_GetObjectItem(realitySettingsObj, "maxClientVer")->valuestring, maxClientVerLen);
+        maxClientVerCopy[maxClientVerLen] = '\0';
+        realitySettingsStruct->maxClientVer = maxClientVerCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "maxTimediff") && cJSON_IsNumber(cJSON_GetObjectItem(realitySettingsObj, "maxTimediff"))) {
+        realitySettingsStruct->maxTimediff = (int64_t)cJSON_GetObjectItem(realitySettingsObj, "maxTimediff")->valuedouble;
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "shortIds") && cJSON_IsArray(cJSON_GetObjectItem(realitySettingsObj, "shortIds"))) {
+        cJSON* shortIdsArr = cJSON_GetObjectItem(realitySettingsObj, "shortIds");
+        size_t shortIdsCount = cJSON_GetArraySize(shortIdsArr);
+        if (shortIdsCount) {
+            realitySettingsStruct->shortIds = (const char**)malloc(shortIdsCount * sizeof(char*));
+            if (!realitySettingsStruct->shortIds) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "shortIds is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            realitySettingsStruct->shortIdsCount = (int64_t)shortIdsCount;
+            for (size_t i = 0; i < shortIdsCount; i++) {
+                realitySettingsStruct->shortIds[i] = NULL;
+                cJSON* shortIdsItem = cJSON_GetArrayItem(shortIdsArr, i);
+                if (cJSON_IsString(shortIdsItem)) {
+                    size_t shortIdsItemLen = strlen(shortIdsItem->valuestring);
+                    char* shortIdsItemCopy = (char*)malloc((shortIdsItemLen + 1) * sizeof(char));
+                    if (!shortIdsItemCopy) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "shortIds item is a null pointer, failed to allocate memory");
+
+                        return 0;
+
+                    }
+                    strncpy(shortIdsItemCopy, shortIdsItem->valuestring, shortIdsItemLen);
+                    shortIdsItemCopy[shortIdsItemLen] = '\0';
+                    realitySettingsStruct->shortIds[i] = shortIdsItemCopy;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "mldsa65Seed") && cJSON_IsString(cJSON_GetObjectItem(realitySettingsObj, "mldsa65Seed"))) {
+        size_t mldsa65SeedLen = strlen(cJSON_GetObjectItem(realitySettingsObj, "mldsa65Seed")->valuestring);
+        char* mldsa65SeedCopy = (char*)malloc((mldsa65SeedLen + 1) * sizeof(char));
+        if (!mldsa65SeedCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "mldsa65Seed is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(mldsa65SeedCopy, cJSON_GetObjectItem(realitySettingsObj, "mldsa65Seed")->valuestring, mldsa65SeedLen);
+        mldsa65SeedCopy[mldsa65SeedLen] = '\0';
+        realitySettingsStruct->mldsa65Seed = mldsa65SeedCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "masterKeyLog") && cJSON_IsString(cJSON_GetObjectItem(realitySettingsObj, "masterKeyLog"))) {
+        size_t masterKeyLogLen = strlen(cJSON_GetObjectItem(realitySettingsObj, "masterKeyLog")->valuestring);
+        char* masterKeyLogCopy = (char*)malloc((masterKeyLogLen + 1) * sizeof(char));
+        if (!masterKeyLogCopy) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "masterKeyLog is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        strncpy(masterKeyLogCopy, cJSON_GetObjectItem(realitySettingsObj, "masterKeyLog")->valuestring, masterKeyLogLen);
+        masterKeyLogCopy[masterKeyLogLen] = '\0';
+        realitySettingsStruct->masterKeyLog = masterKeyLogCopy;
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "limitFallbackUpload") && cJSON_IsObject(cJSON_GetObjectItem(realitySettingsObj, "limitFallbackUpload"))) {
+        cJSON* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj = cJSON_GetObjectItem(realitySettingsObj, "limitFallbackUpload");
+        struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct = (struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct*)calloc(1, sizeof(struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct));
+        if (!listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        realitySettingsStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct = listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct;
+
+        if (cJSON_HasObjectItem(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "afterBytes") && cJSON_IsNumber(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "afterBytes"))) {
+            listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->afterBytes = (int64_t)cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "afterBytes")->valuedouble;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "bytesPerSec") && cJSON_IsNumber(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "bytesPerSec"))) {
+            listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->bytesPerSec = (int64_t)cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "bytesPerSec")->valuedouble;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "burstBytesPerSec") && cJSON_IsNumber(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "burstBytesPerSec"))) {
+            listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->burstBytesPerSec = (int64_t)cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "burstBytesPerSec")->valuedouble;
+
+        }
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "limitFallbackDownload") && cJSON_IsObject(cJSON_GetObjectItem(realitySettingsObj, "limitFallbackDownload"))) {
+        cJSON* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj = cJSON_GetObjectItem(realitySettingsObj, "limitFallbackDownload");
+        struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct = (struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct*)calloc(1, sizeof(struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct));
+        if (!listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        realitySettingsStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct = listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct;
+
+        if (cJSON_HasObjectItem(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "afterBytes") && cJSON_IsNumber(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "afterBytes"))) {
+            listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->afterBytes = (int64_t)cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "afterBytes")->valuedouble;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "bytesPerSec") && cJSON_IsNumber(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "bytesPerSec"))) {
+            listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->bytesPerSec = (int64_t)cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "bytesPerSec")->valuedouble;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "burstBytesPerSec") && cJSON_IsNumber(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "burstBytesPerSec"))) {
+            listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->burstBytesPerSec = (int64_t)cJSON_GetObjectItem(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "burstBytesPerSec")->valuedouble;
+
+        }
+
+    }
+
+    if (cJSON_HasObjectItem(realitySettingsObj, "settings") && cJSON_IsObject(cJSON_GetObjectItem(realitySettingsObj, "settings"))) {
+        cJSON* listInStreamSettingsRealitySettingsSettingsObjStructObj = cJSON_GetObjectItem(realitySettingsObj, "settings");
+        struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct* listInStreamSettingsRealitySettingsSettingsObjStructStruct = (struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct*)calloc(1, sizeof(struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct));
+        if (!listInStreamSettingsRealitySettingsSettingsObjStructStruct) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsRealitySettingsSettingsObjStruct is a null pointer, failed to allocate memory");
+
+            return 0;
+
+        }
+        realitySettingsStruct->listInStreamSettingsRealitySettingsSettingsObjStruct = listInStreamSettingsRealitySettingsSettingsObjStructStruct;
+
+        if (cJSON_HasObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "publicKey") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "publicKey"))) {
+            size_t publicKeyLen = strlen(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "publicKey")->valuestring);
+            char* publicKeyCopy = (char*)malloc((publicKeyLen + 1) * sizeof(char));
+            if (!publicKeyCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "publicKey is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            strncpy(publicKeyCopy, cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "publicKey")->valuestring, publicKeyLen);
+            publicKeyCopy[publicKeyLen] = '\0';
+            listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey = publicKeyCopy;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "fingerprint") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "fingerprint"))) {
+            size_t fingerprintLen = strlen(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "fingerprint")->valuestring);
+            char* fingerprintCopy = (char*)malloc((fingerprintLen + 1) * sizeof(char));
+            if (!fingerprintCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "fingerprint is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            strncpy(fingerprintCopy, cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "fingerprint")->valuestring, fingerprintLen);
+            fingerprintCopy[fingerprintLen] = '\0';
+            listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint = fingerprintCopy;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "serverName") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "serverName"))) {
+            size_t serverNameLen = strlen(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "serverName")->valuestring);
+            char* serverNameCopy = (char*)malloc((serverNameLen + 1) * sizeof(char));
+            if (!serverNameCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "serverName is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            strncpy(serverNameCopy, cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "serverName")->valuestring, serverNameLen);
+            serverNameCopy[serverNameLen] = '\0';
+            listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName = serverNameCopy;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "spiderX") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "spiderX"))) {
+            size_t spiderXLen = strlen(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "spiderX")->valuestring);
+            char* spiderXCopy = (char*)malloc((spiderXLen + 1) * sizeof(char));
+            if (!spiderXCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "spiderX is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            strncpy(spiderXCopy, cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "spiderX")->valuestring, spiderXLen);
+            spiderXCopy[spiderXLen] = '\0';
+            listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX = spiderXCopy;
+
+        }
+
+        if (cJSON_HasObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "mldsa65Verify") && cJSON_IsString(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "mldsa65Verify"))) {
+            size_t mldsa65VerifyLen = strlen(cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "mldsa65Verify")->valuestring);
+            char* mldsa65VerifyCopy = (char*)malloc((mldsa65VerifyLen + 1) * sizeof(char));
+            if (!mldsa65VerifyCopy) {
+                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "mldsa65Verify is a null pointer, failed to allocate memory");
+
+                return 0;
+
+            }
+            strncpy(mldsa65VerifyCopy, cJSON_GetObjectItem(listInStreamSettingsRealitySettingsSettingsObjStructObj, "mldsa65Verify")->valuestring, mldsa65VerifyLen);
+            mldsa65VerifyCopy[mldsa65VerifyLen] = '\0';
+            listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify = mldsa65VerifyCopy;
+
+        }
+
+    }
+
+    return 1;
+}
+
 struct jsonListInboundStruct* jsonListInbound(const char* json) {
     DBG(LOG_INFO, "Function called");
 
@@ -4388,6 +5395,8 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                 streamSettingsStruct->listInStreamSettingsHTTPUpgradeSettingsObjStruct = NULL;
                 streamSettingsStruct->listInStreamSettingsXHTTPSettingsObjStruct = NULL;
                 streamSettingsStruct->security = NULL;
+                streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct = NULL;
+                streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct = NULL;
 
                 streamSettingsStruct->listInStreamSettingsTcpFinalMaskObjStruct = NULL;
                 streamSettingsStruct->listInStreamSettingsMKcpFinalMaskObjStruct = NULL;
@@ -4972,6 +5981,69 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                                         headerResStruct->jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize = responseHeadersCount;
                                     }
 
+                                    } else if (
+                                        cJSON_HasObjectItem(tcpHeaderObj, "type") &&
+                                        cJSON_IsString(cJSON_GetObjectItem(tcpHeaderObj, "type"))
+                                       ) {
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = (struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct*)calloc(1, sizeof(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct));
+                                        if (!tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTcpSettingsObjHeaderObjStruct is a null pointer, failed to allocate space");
+
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(tcpSettingsStruct);
+
+                                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                        inboundObj->listInSniffingObjStruct = NULL;
+                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                        listInStruct->listInObjStruct = NULL;
+                                        jsonListInboundStructDelete(listInStruct);
+
+                                        cJSON_Delete(jsonParser);
+
+                                        return NULL;
+
+                                        }
+
+                                        struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct* typeOnlyHeaderStruct = tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct;
+                                        char* headerType = cJSON_GetObjectItem(tcpHeaderObj, "type")->valuestring;
+                                        size_t headerTypeLen = strlen(headerType);
+                                        char* headerTypeCopy = (char*)malloc((headerTypeLen + 1) * sizeof(char));
+                                        if (!headerTypeCopy) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "headerType is a null pointer, failed to allocate memory");
+
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(tcpSettingsStruct);
+
+                                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                        inboundObj->listInSniffingObjStruct = NULL;
+                                        jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                                        jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                                        listInStruct->listInObjStruct = NULL;
+                                        jsonListInboundStructDelete(listInStruct);
+
+                                        cJSON_Delete(jsonParser);
+
+                                        return NULL;
+
+                                        }
+
+                                        strncpy(headerTypeCopy, headerType, headerTypeLen);
+                                        headerTypeCopy[headerTypeLen] = '\0';
+                                        typeOnlyHeaderStruct->type = headerTypeCopy;
+                                        typeOnlyHeaderStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct = NULL;
+                                        typeOnlyHeaderStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct = NULL;
+
                                     } else {
                                         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Some elements are missing from the tcpSettings header object, type/request/response are not present");
 
@@ -5053,6 +6125,42 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                             streamSettingsStruct->security = securityCopy;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
                         // The tcp mask ( finalmask ) is an optional field, it holds a "tcp" array
                         // whose elements carry a "type" ( fragment, header-custom, sudoku, xmc )
@@ -6160,6 +7268,42 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                             streamSettingsStruct->security = securityCopy;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
                         // The udp mask ( finalmask ) is an optional field, it holds a "udp" array
                         // whose elements carry a "type" ( mkcp-legacy, xdns, xicmp, realm,
@@ -7732,6 +8876,42 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                             streamSettingsStruct->security = securityCopy;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
                         // The ws mask ( finalmask ) is an optional field, it holds a "ws" array
                         // whose elements carry a "type" ( fragment, header-custom, sudoku, xmc )
@@ -8854,6 +10034,42 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                             streamSettingsStruct->security = NULL;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
 
                         // The grpc mask ( finalmask ) is an optional field, it holds a "grpc" array
@@ -10052,6 +11268,42 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                             streamSettingsStruct->security = NULL;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
                         // The httpupgrade mask ( finalmask ) is an optional field, it holds a "httpupgrade" array
                         // whose elements carry a "type" ( fragment, header-custom, sudoku, xmc )
@@ -11726,6 +12978,42 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
                             streamSettingsStruct->security = NULL;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectStructDeleteElement(&listInStruct->listInObjStruct[i]);
+
+                            jsonListInboundObjectStructDelete(listInStruct->listInObjStruct, i);
+
+                            listInStruct->listInObjStruct = NULL;
+                            jsonListInboundStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
                         // The xhttp mask ( finalmask ) is an optional field, it holds a "tcp" array
                         // whose elements carry a "type" ( fragment, header-custom, sudoku, xmc )
@@ -14482,6 +15770,8 @@ struct jsonListInboundSlimStruct* jsonListInboundSlim(const char* json) {
                 streamSettingsStruct->listInStreamSettingsHTTPUpgradeSettingsObjStruct = NULL;
                 streamSettingsStruct->listInStreamSettingsXHTTPSettingsObjStruct = NULL;
                 streamSettingsStruct->security = NULL;
+                streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct = NULL;
+                streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct = NULL;
 
                 streamSettingsStruct->listInStreamSettingsTcpFinalMaskObjStruct = NULL;
                 streamSettingsStruct->listInStreamSettingsMKcpFinalMaskObjStruct = NULL;
@@ -15066,6 +16356,69 @@ struct jsonListInboundSlimStruct* jsonListInboundSlim(const char* json) {
                                         headerResStruct->jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectHeadersStructSize = responseHeadersCount;
                                     }
 
+                                    } else if (
+                                        cJSON_HasObjectItem(tcpHeaderObj, "type") &&
+                                        cJSON_IsString(cJSON_GetObjectItem(tcpHeaderObj, "type"))
+                                       ) {
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = (struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct*)calloc(1, sizeof(struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct));
+                                        if (!tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "listInStreamSettingsTcpSettingsObjHeaderObjStruct is a null pointer, failed to allocate space");
+
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(tcpSettingsStruct);
+
+                                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                        inboundObj->listInSniffingObjStruct = NULL;
+                                        jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                                        jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                                        listInStruct->listInObjSlimStruct = NULL;
+                                        jsonListInboundSlimStructDelete(listInStruct);
+
+                                        cJSON_Delete(jsonParser);
+
+                                        return NULL;
+
+                                        }
+
+                                        struct jsonListInboundStreamSettingsTcpSettingsObjectHeaderObjectStruct* typeOnlyHeaderStruct = tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct;
+                                        char* headerType = cJSON_GetObjectItem(tcpHeaderObj, "type")->valuestring;
+                                        size_t headerTypeLen = strlen(headerType);
+                                        char* headerTypeCopy = (char*)malloc((headerTypeLen + 1) * sizeof(char));
+                                        if (!headerTypeCopy) {
+                                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "headerType is a null pointer, failed to allocate memory");
+
+                                        tcpSettingsStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct = NULL;
+                                        jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(tcpSettingsStruct);
+
+                                        streamSettingsStruct->listInStreamSettingsTcpSettingsObjStruct = NULL;
+                                        jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                                        inboundObj->listInStreamSettingsObjStruct = NULL;
+                                        inboundObj->listInSniffingObjStruct = NULL;
+                                        jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                                        jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                                        listInStruct->listInObjSlimStruct = NULL;
+                                        jsonListInboundSlimStructDelete(listInStruct);
+
+                                        cJSON_Delete(jsonParser);
+
+                                        return NULL;
+
+                                        }
+
+                                        strncpy(headerTypeCopy, headerType, headerTypeLen);
+                                        headerTypeCopy[headerTypeLen] = '\0';
+                                        typeOnlyHeaderStruct->type = headerTypeCopy;
+                                        typeOnlyHeaderStruct->listInStreamSettingsTcpSettingsObjHeaderObjReqObjStruct = NULL;
+                                        typeOnlyHeaderStruct->listInStreamSettingsTcpSettingsObjHeaderObjResObjStruct = NULL;
+
                                     } else {
                                         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Some elements are missing from the tcpSettings header object, type/request/response are not present");
 
@@ -15147,6 +16500,42 @@ struct jsonListInboundSlimStruct* jsonListInboundSlim(const char* json) {
                             streamSettingsStruct->security = securityCopy;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
                         // The tcp mask ( finalmask ) is an optional field, it holds a "tcp" array
                         // whose elements carry a "type" ( fragment, header-custom, sudoku, xmc )
@@ -16254,6 +17643,42 @@ struct jsonListInboundSlimStruct* jsonListInboundSlim(const char* json) {
                             streamSettingsStruct->security = securityCopy;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
                         // The udp mask ( finalmask ) is an optional field, it holds a "udp" array
                         // whose elements carry a "type" ( mkcp-legacy, xdns, xicmp, realm,
@@ -17826,6 +19251,42 @@ struct jsonListInboundSlimStruct* jsonListInboundSlim(const char* json) {
                             streamSettingsStruct->security = securityCopy;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
                         // The ws mask ( finalmask ) is an optional field, it holds a "ws" array
                         // whose elements carry a "type" ( fragment, header-custom, sudoku, xmc )
@@ -18948,6 +20409,42 @@ struct jsonListInboundSlimStruct* jsonListInboundSlim(const char* json) {
                             streamSettingsStruct->security = NULL;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
 
                         // The grpc mask ( finalmask ) is an optional field, it holds a "grpc" array
@@ -20146,6 +21643,42 @@ struct jsonListInboundSlimStruct* jsonListInboundSlim(const char* json) {
                             streamSettingsStruct->security = NULL;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
                         // The httpupgrade mask ( finalmask ) is an optional field, it holds a "httpupgrade" array
                         // whose elements carry a "type" ( fragment, header-custom, sudoku, xmc )
@@ -21820,6 +23353,42 @@ struct jsonListInboundSlimStruct* jsonListInboundSlim(const char* json) {
                             streamSettingsStruct->security = NULL;
 
                         }
+                        if (jsonListInboundStreamSettingsTlsSettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
+                        if (jsonListInboundStreamSettingsRealitySettingsParse(streamSettingsObj, streamSettingsStruct) == 0) {
+                            jsonListInboundStreamSettingsObjectStructDelete(streamSettingsStruct);
+
+                            inboundObj->listInStreamSettingsObjStruct = NULL;
+                            inboundObj->listInSniffingObjStruct = NULL;
+                            jsonListInboundObjectSlimStructDeleteElement(&listInStruct->listInObjSlimStruct[i]);
+
+                            jsonListInboundObjectSlimStructDelete(listInStruct->listInObjSlimStruct, i);
+
+                            listInStruct->listInObjSlimStruct = NULL;
+                            jsonListInboundSlimStructDelete(listInStruct);
+
+                            cJSON_Delete(jsonParser);
+
+                            return NULL;
+
+                        }
+
 
                         // The xhttp mask ( finalmask ) is an optional field, it holds a "tcp" array
                         // whose elements carry a "type" ( fragment, header-custom, sudoku, xmc )
@@ -23652,6 +25221,491 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                 cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
 
             }
+            if (streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct) {
+                cJSON* tlsSettingsObj = cJSON_CreateObject();
+                if (!tlsSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tlsSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "tlsSettings", tlsSettingsObj);
+
+                struct jsonListInboundStreamSettingsTlsSettingsObjectStruct* tlsStruct = streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct;
+
+                if (tlsStruct->serverName) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "serverName", tlsStruct->serverName);
+
+                }
+
+                if (tlsStruct->minVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "minVersion", tlsStruct->minVersion);
+
+                }
+
+                if (tlsStruct->maxVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "maxVersion", tlsStruct->maxVersion);
+
+                }
+
+                if (tlsStruct->cipherSuites) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "cipherSuites", tlsStruct->cipherSuites);
+
+                }
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "rejectUnknownSni", tlsStruct->rejectUnknownSni);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "disableSystemRoot", tlsStruct->disableSystemRoot);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "enableSessionResumption", tlsStruct->enableSessionResumption);
+
+                if (tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize) {
+                    cJSON* listInStreamSettingsTlsSettingsCertificateArrStructArr = cJSON_CreateArray();
+                    if (!listInStreamSettingsTlsSettingsCertificateArrStructArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "certificates", listInStreamSettingsTlsSettingsCertificateArrStructArr);
+                    for (size_t i = 0; i < tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize; i++) {
+                        struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct* listInStreamSettingsTlsSettingsCertificateArrStructEntry = &tlsStruct->listInStreamSettingsTlsSettingsCertificateArrStruct[i];
+                        cJSON* listInStreamSettingsTlsSettingsCertificateArrStructItem = cJSON_CreateObject();
+                        if (!listInStreamSettingsTlsSettingsCertificateArrStructItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(listInStreamSettingsTlsSettingsCertificateArrStructArr, listInStreamSettingsTlsSettingsCertificateArrStructItem);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificateFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "keyFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount) {
+                            cJSON* certificateArr = cJSON_CreateArray();
+                            if (!certificateArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificate", certificateArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount; i++) {
+                                cJSON* certificateItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate[i]);
+                                if (!certificateItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(certificateArr, certificateItem);
+
+                            }
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount) {
+                            cJSON* keyArr = cJSON_CreateArray();
+                            if (!keyArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "key", keyArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount; i++) {
+                                cJSON* keyItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->key[i]);
+                                if (!keyItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(keyArr, keyItem);
+
+                            }
+                        }
+
+                        cJSON_AddNumberToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "ocspStapling", listInStreamSettingsTlsSettingsCertificateArrStructEntry->ocspStapling);
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "oneTimeLoading", listInStreamSettingsTlsSettingsCertificateArrStructEntry->oneTimeLoading);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "usage", listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage);
+
+                        }
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "buildChain", listInStreamSettingsTlsSettingsCertificateArrStructEntry->buildChain);
+
+                    }
+                }
+
+                if (tlsStruct->alpnCount) {
+                    cJSON* alpnArr = cJSON_CreateArray();
+                    if (!alpnArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "alpn", alpnArr);
+                    for (int64_t i = 0; i < tlsStruct->alpnCount; i++) {
+                        cJSON* alpnItem = cJSON_CreateString(tlsStruct->alpn[i]);
+                        if (!alpnItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(alpnArr, alpnItem);
+
+                    }
+                }
+
+                if (tlsStruct->echServerKeys) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "echServerKeys", tlsStruct->echServerKeys);
+
+                }
+
+                if (tlsStruct->curvePreferencesCount) {
+                    cJSON* curvePreferencesArr = cJSON_CreateArray();
+                    if (!curvePreferencesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "curvePreferences", curvePreferencesArr);
+                    for (int64_t i = 0; i < tlsStruct->curvePreferencesCount; i++) {
+                        cJSON* curvePreferencesItem = cJSON_CreateString(tlsStruct->curvePreferences[i]);
+                        if (!curvePreferencesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(curvePreferencesArr, curvePreferencesItem);
+
+                    }
+                }
+
+                if (tlsStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "masterKeyLog", tlsStruct->masterKeyLog);
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsEchSockoptObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsEchSockoptObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create echSockopt object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "echSockopt", listInStreamSettingsTlsSettingsEchSockoptObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct* listInStreamSettingsTlsSettingsEchSockoptObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct;
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpFastOpen", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpFastOpen);
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpMptcp", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpMptcp);
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "domainStrategy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "dialerProxy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpcongestion", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion);
+
+                    }
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "settings", listInStreamSettingsTlsSettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct* listInStreamSettingsTlsSettingsSettingsObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "echConfigList", listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count) {
+                        cJSON* pinnedPeerCertSha256Arr = cJSON_CreateArray();
+                        if (!pinnedPeerCertSha256Arr) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 array");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "pinnedPeerCertSha256", pinnedPeerCertSha256Arr);
+                        for (int64_t i = 0; i < listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count; i++) {
+                            cJSON* pinnedPeerCertSha256Item = cJSON_CreateString(listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256[i]);
+                            if (!pinnedPeerCertSha256Item) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 item");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToArray(pinnedPeerCertSha256Arr, pinnedPeerCertSha256Item);
+
+                        }
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "verifyPeerCertByName", listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName);
+
+                    }
+
+                }
+
+            }
+
+            if (streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct) {
+                cJSON* realitySettingsObj = cJSON_CreateObject();
+                if (!realitySettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create realitySettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "realitySettings", realitySettingsObj);
+
+                struct jsonListInboundStreamSettingsRealitySettingsObjectStruct* realityStruct = streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct;
+
+                cJSON_AddBoolToObject(realitySettingsObj, "show", realityStruct->show);
+
+                cJSON_AddNumberToObject(realitySettingsObj, "xver", realityStruct->xver);
+
+                if (realityStruct->target) {
+                    cJSON_AddStringToObject(realitySettingsObj, "target", realityStruct->target);
+
+                }
+
+                if (realityStruct->serverNamesCount) {
+                    cJSON* serverNamesArr = cJSON_CreateArray();
+                    if (!serverNamesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "serverNames", serverNamesArr);
+                    for (int64_t i = 0; i < realityStruct->serverNamesCount; i++) {
+                        cJSON* serverNamesItem = cJSON_CreateString(realityStruct->serverNames[i]);
+                        if (!serverNamesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(serverNamesArr, serverNamesItem);
+
+                    }
+                }
+
+                if (realityStruct->privateKey) {
+                    cJSON_AddStringToObject(realitySettingsObj, "privateKey", realityStruct->privateKey);
+
+                }
+
+                if (realityStruct->minClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "minClientVer", realityStruct->minClientVer);
+
+                }
+
+                if (realityStruct->maxClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "maxClientVer", realityStruct->maxClientVer);
+
+                }
+
+                cJSON_AddNumberToObject(realitySettingsObj, "maxTimediff", realityStruct->maxTimediff);
+
+                if (realityStruct->shortIdsCount) {
+                    cJSON* shortIdsArr = cJSON_CreateArray();
+                    if (!shortIdsArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "shortIds", shortIdsArr);
+                    for (int64_t i = 0; i < realityStruct->shortIdsCount; i++) {
+                        cJSON* shortIdsItem = cJSON_CreateString(realityStruct->shortIds[i]);
+                        if (!shortIdsItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(shortIdsArr, shortIdsItem);
+
+                    }
+                }
+
+                if (realityStruct->mldsa65Seed) {
+                    cJSON_AddStringToObject(realitySettingsObj, "mldsa65Seed", realityStruct->mldsa65Seed);
+
+                }
+
+                if (realityStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(realitySettingsObj, "masterKeyLog", realityStruct->masterKeyLog);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackUpload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackUpload", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackDownload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackDownload", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "settings", listInStreamSettingsRealitySettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct* listInStreamSettingsRealitySettingsSettingsObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "publicKey", listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "serverName", listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "spiderX", listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "mldsa65Verify", listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify);
+
+                    }
+
+                }
+
+            }
+
 
             if (streamSettingsStruct->listInStreamSettingsTcpFinalMaskObjStruct) {
                 cJSON* finalmaskObj = cJSON_CreateObject();
@@ -24139,6 +26193,491 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                 cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
 
             }
+            if (streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct) {
+                cJSON* tlsSettingsObj = cJSON_CreateObject();
+                if (!tlsSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tlsSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "tlsSettings", tlsSettingsObj);
+
+                struct jsonListInboundStreamSettingsTlsSettingsObjectStruct* tlsStruct = streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct;
+
+                if (tlsStruct->serverName) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "serverName", tlsStruct->serverName);
+
+                }
+
+                if (tlsStruct->minVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "minVersion", tlsStruct->minVersion);
+
+                }
+
+                if (tlsStruct->maxVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "maxVersion", tlsStruct->maxVersion);
+
+                }
+
+                if (tlsStruct->cipherSuites) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "cipherSuites", tlsStruct->cipherSuites);
+
+                }
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "rejectUnknownSni", tlsStruct->rejectUnknownSni);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "disableSystemRoot", tlsStruct->disableSystemRoot);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "enableSessionResumption", tlsStruct->enableSessionResumption);
+
+                if (tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize) {
+                    cJSON* listInStreamSettingsTlsSettingsCertificateArrStructArr = cJSON_CreateArray();
+                    if (!listInStreamSettingsTlsSettingsCertificateArrStructArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "certificates", listInStreamSettingsTlsSettingsCertificateArrStructArr);
+                    for (size_t i = 0; i < tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize; i++) {
+                        struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct* listInStreamSettingsTlsSettingsCertificateArrStructEntry = &tlsStruct->listInStreamSettingsTlsSettingsCertificateArrStruct[i];
+                        cJSON* listInStreamSettingsTlsSettingsCertificateArrStructItem = cJSON_CreateObject();
+                        if (!listInStreamSettingsTlsSettingsCertificateArrStructItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(listInStreamSettingsTlsSettingsCertificateArrStructArr, listInStreamSettingsTlsSettingsCertificateArrStructItem);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificateFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "keyFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount) {
+                            cJSON* certificateArr = cJSON_CreateArray();
+                            if (!certificateArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificate", certificateArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount; i++) {
+                                cJSON* certificateItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate[i]);
+                                if (!certificateItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(certificateArr, certificateItem);
+
+                            }
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount) {
+                            cJSON* keyArr = cJSON_CreateArray();
+                            if (!keyArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "key", keyArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount; i++) {
+                                cJSON* keyItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->key[i]);
+                                if (!keyItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(keyArr, keyItem);
+
+                            }
+                        }
+
+                        cJSON_AddNumberToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "ocspStapling", listInStreamSettingsTlsSettingsCertificateArrStructEntry->ocspStapling);
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "oneTimeLoading", listInStreamSettingsTlsSettingsCertificateArrStructEntry->oneTimeLoading);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "usage", listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage);
+
+                        }
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "buildChain", listInStreamSettingsTlsSettingsCertificateArrStructEntry->buildChain);
+
+                    }
+                }
+
+                if (tlsStruct->alpnCount) {
+                    cJSON* alpnArr = cJSON_CreateArray();
+                    if (!alpnArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "alpn", alpnArr);
+                    for (int64_t i = 0; i < tlsStruct->alpnCount; i++) {
+                        cJSON* alpnItem = cJSON_CreateString(tlsStruct->alpn[i]);
+                        if (!alpnItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(alpnArr, alpnItem);
+
+                    }
+                }
+
+                if (tlsStruct->echServerKeys) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "echServerKeys", tlsStruct->echServerKeys);
+
+                }
+
+                if (tlsStruct->curvePreferencesCount) {
+                    cJSON* curvePreferencesArr = cJSON_CreateArray();
+                    if (!curvePreferencesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "curvePreferences", curvePreferencesArr);
+                    for (int64_t i = 0; i < tlsStruct->curvePreferencesCount; i++) {
+                        cJSON* curvePreferencesItem = cJSON_CreateString(tlsStruct->curvePreferences[i]);
+                        if (!curvePreferencesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(curvePreferencesArr, curvePreferencesItem);
+
+                    }
+                }
+
+                if (tlsStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "masterKeyLog", tlsStruct->masterKeyLog);
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsEchSockoptObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsEchSockoptObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create echSockopt object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "echSockopt", listInStreamSettingsTlsSettingsEchSockoptObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct* listInStreamSettingsTlsSettingsEchSockoptObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct;
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpFastOpen", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpFastOpen);
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpMptcp", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpMptcp);
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "domainStrategy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "dialerProxy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpcongestion", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion);
+
+                    }
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "settings", listInStreamSettingsTlsSettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct* listInStreamSettingsTlsSettingsSettingsObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "echConfigList", listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count) {
+                        cJSON* pinnedPeerCertSha256Arr = cJSON_CreateArray();
+                        if (!pinnedPeerCertSha256Arr) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 array");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "pinnedPeerCertSha256", pinnedPeerCertSha256Arr);
+                        for (int64_t i = 0; i < listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count; i++) {
+                            cJSON* pinnedPeerCertSha256Item = cJSON_CreateString(listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256[i]);
+                            if (!pinnedPeerCertSha256Item) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 item");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToArray(pinnedPeerCertSha256Arr, pinnedPeerCertSha256Item);
+
+                        }
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "verifyPeerCertByName", listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName);
+
+                    }
+
+                }
+
+            }
+
+            if (streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct) {
+                cJSON* realitySettingsObj = cJSON_CreateObject();
+                if (!realitySettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create realitySettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "realitySettings", realitySettingsObj);
+
+                struct jsonListInboundStreamSettingsRealitySettingsObjectStruct* realityStruct = streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct;
+
+                cJSON_AddBoolToObject(realitySettingsObj, "show", realityStruct->show);
+
+                cJSON_AddNumberToObject(realitySettingsObj, "xver", realityStruct->xver);
+
+                if (realityStruct->target) {
+                    cJSON_AddStringToObject(realitySettingsObj, "target", realityStruct->target);
+
+                }
+
+                if (realityStruct->serverNamesCount) {
+                    cJSON* serverNamesArr = cJSON_CreateArray();
+                    if (!serverNamesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "serverNames", serverNamesArr);
+                    for (int64_t i = 0; i < realityStruct->serverNamesCount; i++) {
+                        cJSON* serverNamesItem = cJSON_CreateString(realityStruct->serverNames[i]);
+                        if (!serverNamesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(serverNamesArr, serverNamesItem);
+
+                    }
+                }
+
+                if (realityStruct->privateKey) {
+                    cJSON_AddStringToObject(realitySettingsObj, "privateKey", realityStruct->privateKey);
+
+                }
+
+                if (realityStruct->minClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "minClientVer", realityStruct->minClientVer);
+
+                }
+
+                if (realityStruct->maxClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "maxClientVer", realityStruct->maxClientVer);
+
+                }
+
+                cJSON_AddNumberToObject(realitySettingsObj, "maxTimediff", realityStruct->maxTimediff);
+
+                if (realityStruct->shortIdsCount) {
+                    cJSON* shortIdsArr = cJSON_CreateArray();
+                    if (!shortIdsArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "shortIds", shortIdsArr);
+                    for (int64_t i = 0; i < realityStruct->shortIdsCount; i++) {
+                        cJSON* shortIdsItem = cJSON_CreateString(realityStruct->shortIds[i]);
+                        if (!shortIdsItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(shortIdsArr, shortIdsItem);
+
+                    }
+                }
+
+                if (realityStruct->mldsa65Seed) {
+                    cJSON_AddStringToObject(realitySettingsObj, "mldsa65Seed", realityStruct->mldsa65Seed);
+
+                }
+
+                if (realityStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(realitySettingsObj, "masterKeyLog", realityStruct->masterKeyLog);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackUpload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackUpload", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackDownload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackDownload", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "settings", listInStreamSettingsRealitySettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct* listInStreamSettingsRealitySettingsSettingsObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "publicKey", listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "serverName", listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "spiderX", listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "mldsa65Verify", listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify);
+
+                    }
+
+                }
+
+            }
+
 
             if (streamSettingsStruct->listInStreamSettingsMKcpFinalMaskObjStruct) {
                 cJSON* finalmaskObj = cJSON_CreateObject();
@@ -24845,6 +27384,491 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                 cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
 
             }
+            if (streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct) {
+                cJSON* tlsSettingsObj = cJSON_CreateObject();
+                if (!tlsSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tlsSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "tlsSettings", tlsSettingsObj);
+
+                struct jsonListInboundStreamSettingsTlsSettingsObjectStruct* tlsStruct = streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct;
+
+                if (tlsStruct->serverName) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "serverName", tlsStruct->serverName);
+
+                }
+
+                if (tlsStruct->minVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "minVersion", tlsStruct->minVersion);
+
+                }
+
+                if (tlsStruct->maxVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "maxVersion", tlsStruct->maxVersion);
+
+                }
+
+                if (tlsStruct->cipherSuites) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "cipherSuites", tlsStruct->cipherSuites);
+
+                }
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "rejectUnknownSni", tlsStruct->rejectUnknownSni);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "disableSystemRoot", tlsStruct->disableSystemRoot);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "enableSessionResumption", tlsStruct->enableSessionResumption);
+
+                if (tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize) {
+                    cJSON* listInStreamSettingsTlsSettingsCertificateArrStructArr = cJSON_CreateArray();
+                    if (!listInStreamSettingsTlsSettingsCertificateArrStructArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "certificates", listInStreamSettingsTlsSettingsCertificateArrStructArr);
+                    for (size_t i = 0; i < tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize; i++) {
+                        struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct* listInStreamSettingsTlsSettingsCertificateArrStructEntry = &tlsStruct->listInStreamSettingsTlsSettingsCertificateArrStruct[i];
+                        cJSON* listInStreamSettingsTlsSettingsCertificateArrStructItem = cJSON_CreateObject();
+                        if (!listInStreamSettingsTlsSettingsCertificateArrStructItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(listInStreamSettingsTlsSettingsCertificateArrStructArr, listInStreamSettingsTlsSettingsCertificateArrStructItem);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificateFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "keyFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount) {
+                            cJSON* certificateArr = cJSON_CreateArray();
+                            if (!certificateArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificate", certificateArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount; i++) {
+                                cJSON* certificateItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate[i]);
+                                if (!certificateItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(certificateArr, certificateItem);
+
+                            }
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount) {
+                            cJSON* keyArr = cJSON_CreateArray();
+                            if (!keyArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "key", keyArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount; i++) {
+                                cJSON* keyItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->key[i]);
+                                if (!keyItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(keyArr, keyItem);
+
+                            }
+                        }
+
+                        cJSON_AddNumberToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "ocspStapling", listInStreamSettingsTlsSettingsCertificateArrStructEntry->ocspStapling);
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "oneTimeLoading", listInStreamSettingsTlsSettingsCertificateArrStructEntry->oneTimeLoading);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "usage", listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage);
+
+                        }
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "buildChain", listInStreamSettingsTlsSettingsCertificateArrStructEntry->buildChain);
+
+                    }
+                }
+
+                if (tlsStruct->alpnCount) {
+                    cJSON* alpnArr = cJSON_CreateArray();
+                    if (!alpnArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "alpn", alpnArr);
+                    for (int64_t i = 0; i < tlsStruct->alpnCount; i++) {
+                        cJSON* alpnItem = cJSON_CreateString(tlsStruct->alpn[i]);
+                        if (!alpnItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(alpnArr, alpnItem);
+
+                    }
+                }
+
+                if (tlsStruct->echServerKeys) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "echServerKeys", tlsStruct->echServerKeys);
+
+                }
+
+                if (tlsStruct->curvePreferencesCount) {
+                    cJSON* curvePreferencesArr = cJSON_CreateArray();
+                    if (!curvePreferencesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "curvePreferences", curvePreferencesArr);
+                    for (int64_t i = 0; i < tlsStruct->curvePreferencesCount; i++) {
+                        cJSON* curvePreferencesItem = cJSON_CreateString(tlsStruct->curvePreferences[i]);
+                        if (!curvePreferencesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(curvePreferencesArr, curvePreferencesItem);
+
+                    }
+                }
+
+                if (tlsStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "masterKeyLog", tlsStruct->masterKeyLog);
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsEchSockoptObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsEchSockoptObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create echSockopt object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "echSockopt", listInStreamSettingsTlsSettingsEchSockoptObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct* listInStreamSettingsTlsSettingsEchSockoptObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct;
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpFastOpen", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpFastOpen);
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpMptcp", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpMptcp);
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "domainStrategy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "dialerProxy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpcongestion", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion);
+
+                    }
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "settings", listInStreamSettingsTlsSettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct* listInStreamSettingsTlsSettingsSettingsObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "echConfigList", listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count) {
+                        cJSON* pinnedPeerCertSha256Arr = cJSON_CreateArray();
+                        if (!pinnedPeerCertSha256Arr) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 array");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "pinnedPeerCertSha256", pinnedPeerCertSha256Arr);
+                        for (int64_t i = 0; i < listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count; i++) {
+                            cJSON* pinnedPeerCertSha256Item = cJSON_CreateString(listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256[i]);
+                            if (!pinnedPeerCertSha256Item) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 item");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToArray(pinnedPeerCertSha256Arr, pinnedPeerCertSha256Item);
+
+                        }
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "verifyPeerCertByName", listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName);
+
+                    }
+
+                }
+
+            }
+
+            if (streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct) {
+                cJSON* realitySettingsObj = cJSON_CreateObject();
+                if (!realitySettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create realitySettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "realitySettings", realitySettingsObj);
+
+                struct jsonListInboundStreamSettingsRealitySettingsObjectStruct* realityStruct = streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct;
+
+                cJSON_AddBoolToObject(realitySettingsObj, "show", realityStruct->show);
+
+                cJSON_AddNumberToObject(realitySettingsObj, "xver", realityStruct->xver);
+
+                if (realityStruct->target) {
+                    cJSON_AddStringToObject(realitySettingsObj, "target", realityStruct->target);
+
+                }
+
+                if (realityStruct->serverNamesCount) {
+                    cJSON* serverNamesArr = cJSON_CreateArray();
+                    if (!serverNamesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "serverNames", serverNamesArr);
+                    for (int64_t i = 0; i < realityStruct->serverNamesCount; i++) {
+                        cJSON* serverNamesItem = cJSON_CreateString(realityStruct->serverNames[i]);
+                        if (!serverNamesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(serverNamesArr, serverNamesItem);
+
+                    }
+                }
+
+                if (realityStruct->privateKey) {
+                    cJSON_AddStringToObject(realitySettingsObj, "privateKey", realityStruct->privateKey);
+
+                }
+
+                if (realityStruct->minClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "minClientVer", realityStruct->minClientVer);
+
+                }
+
+                if (realityStruct->maxClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "maxClientVer", realityStruct->maxClientVer);
+
+                }
+
+                cJSON_AddNumberToObject(realitySettingsObj, "maxTimediff", realityStruct->maxTimediff);
+
+                if (realityStruct->shortIdsCount) {
+                    cJSON* shortIdsArr = cJSON_CreateArray();
+                    if (!shortIdsArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "shortIds", shortIdsArr);
+                    for (int64_t i = 0; i < realityStruct->shortIdsCount; i++) {
+                        cJSON* shortIdsItem = cJSON_CreateString(realityStruct->shortIds[i]);
+                        if (!shortIdsItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(shortIdsArr, shortIdsItem);
+
+                    }
+                }
+
+                if (realityStruct->mldsa65Seed) {
+                    cJSON_AddStringToObject(realitySettingsObj, "mldsa65Seed", realityStruct->mldsa65Seed);
+
+                }
+
+                if (realityStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(realitySettingsObj, "masterKeyLog", realityStruct->masterKeyLog);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackUpload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackUpload", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackDownload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackDownload", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "settings", listInStreamSettingsRealitySettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct* listInStreamSettingsRealitySettingsSettingsObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "publicKey", listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "serverName", listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "spiderX", listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "mldsa65Verify", listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify);
+
+                    }
+
+                }
+
+            }
+
 
             if (streamSettingsStruct->listInStreamSettingsWSFinalMaskObjStruct) {
                 cJSON* finalmaskObj = cJSON_CreateObject();
@@ -25336,6 +28360,491 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                 cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
 
             }
+            if (streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct) {
+                cJSON* tlsSettingsObj = cJSON_CreateObject();
+                if (!tlsSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tlsSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "tlsSettings", tlsSettingsObj);
+
+                struct jsonListInboundStreamSettingsTlsSettingsObjectStruct* tlsStruct = streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct;
+
+                if (tlsStruct->serverName) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "serverName", tlsStruct->serverName);
+
+                }
+
+                if (tlsStruct->minVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "minVersion", tlsStruct->minVersion);
+
+                }
+
+                if (tlsStruct->maxVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "maxVersion", tlsStruct->maxVersion);
+
+                }
+
+                if (tlsStruct->cipherSuites) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "cipherSuites", tlsStruct->cipherSuites);
+
+                }
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "rejectUnknownSni", tlsStruct->rejectUnknownSni);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "disableSystemRoot", tlsStruct->disableSystemRoot);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "enableSessionResumption", tlsStruct->enableSessionResumption);
+
+                if (tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize) {
+                    cJSON* listInStreamSettingsTlsSettingsCertificateArrStructArr = cJSON_CreateArray();
+                    if (!listInStreamSettingsTlsSettingsCertificateArrStructArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "certificates", listInStreamSettingsTlsSettingsCertificateArrStructArr);
+                    for (size_t i = 0; i < tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize; i++) {
+                        struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct* listInStreamSettingsTlsSettingsCertificateArrStructEntry = &tlsStruct->listInStreamSettingsTlsSettingsCertificateArrStruct[i];
+                        cJSON* listInStreamSettingsTlsSettingsCertificateArrStructItem = cJSON_CreateObject();
+                        if (!listInStreamSettingsTlsSettingsCertificateArrStructItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(listInStreamSettingsTlsSettingsCertificateArrStructArr, listInStreamSettingsTlsSettingsCertificateArrStructItem);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificateFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "keyFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount) {
+                            cJSON* certificateArr = cJSON_CreateArray();
+                            if (!certificateArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificate", certificateArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount; i++) {
+                                cJSON* certificateItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate[i]);
+                                if (!certificateItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(certificateArr, certificateItem);
+
+                            }
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount) {
+                            cJSON* keyArr = cJSON_CreateArray();
+                            if (!keyArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "key", keyArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount; i++) {
+                                cJSON* keyItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->key[i]);
+                                if (!keyItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(keyArr, keyItem);
+
+                            }
+                        }
+
+                        cJSON_AddNumberToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "ocspStapling", listInStreamSettingsTlsSettingsCertificateArrStructEntry->ocspStapling);
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "oneTimeLoading", listInStreamSettingsTlsSettingsCertificateArrStructEntry->oneTimeLoading);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "usage", listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage);
+
+                        }
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "buildChain", listInStreamSettingsTlsSettingsCertificateArrStructEntry->buildChain);
+
+                    }
+                }
+
+                if (tlsStruct->alpnCount) {
+                    cJSON* alpnArr = cJSON_CreateArray();
+                    if (!alpnArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "alpn", alpnArr);
+                    for (int64_t i = 0; i < tlsStruct->alpnCount; i++) {
+                        cJSON* alpnItem = cJSON_CreateString(tlsStruct->alpn[i]);
+                        if (!alpnItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(alpnArr, alpnItem);
+
+                    }
+                }
+
+                if (tlsStruct->echServerKeys) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "echServerKeys", tlsStruct->echServerKeys);
+
+                }
+
+                if (tlsStruct->curvePreferencesCount) {
+                    cJSON* curvePreferencesArr = cJSON_CreateArray();
+                    if (!curvePreferencesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "curvePreferences", curvePreferencesArr);
+                    for (int64_t i = 0; i < tlsStruct->curvePreferencesCount; i++) {
+                        cJSON* curvePreferencesItem = cJSON_CreateString(tlsStruct->curvePreferences[i]);
+                        if (!curvePreferencesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(curvePreferencesArr, curvePreferencesItem);
+
+                    }
+                }
+
+                if (tlsStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "masterKeyLog", tlsStruct->masterKeyLog);
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsEchSockoptObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsEchSockoptObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create echSockopt object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "echSockopt", listInStreamSettingsTlsSettingsEchSockoptObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct* listInStreamSettingsTlsSettingsEchSockoptObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct;
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpFastOpen", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpFastOpen);
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpMptcp", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpMptcp);
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "domainStrategy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "dialerProxy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpcongestion", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion);
+
+                    }
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "settings", listInStreamSettingsTlsSettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct* listInStreamSettingsTlsSettingsSettingsObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "echConfigList", listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count) {
+                        cJSON* pinnedPeerCertSha256Arr = cJSON_CreateArray();
+                        if (!pinnedPeerCertSha256Arr) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 array");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "pinnedPeerCertSha256", pinnedPeerCertSha256Arr);
+                        for (int64_t i = 0; i < listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count; i++) {
+                            cJSON* pinnedPeerCertSha256Item = cJSON_CreateString(listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256[i]);
+                            if (!pinnedPeerCertSha256Item) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 item");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToArray(pinnedPeerCertSha256Arr, pinnedPeerCertSha256Item);
+
+                        }
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "verifyPeerCertByName", listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName);
+
+                    }
+
+                }
+
+            }
+
+            if (streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct) {
+                cJSON* realitySettingsObj = cJSON_CreateObject();
+                if (!realitySettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create realitySettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "realitySettings", realitySettingsObj);
+
+                struct jsonListInboundStreamSettingsRealitySettingsObjectStruct* realityStruct = streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct;
+
+                cJSON_AddBoolToObject(realitySettingsObj, "show", realityStruct->show);
+
+                cJSON_AddNumberToObject(realitySettingsObj, "xver", realityStruct->xver);
+
+                if (realityStruct->target) {
+                    cJSON_AddStringToObject(realitySettingsObj, "target", realityStruct->target);
+
+                }
+
+                if (realityStruct->serverNamesCount) {
+                    cJSON* serverNamesArr = cJSON_CreateArray();
+                    if (!serverNamesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "serverNames", serverNamesArr);
+                    for (int64_t i = 0; i < realityStruct->serverNamesCount; i++) {
+                        cJSON* serverNamesItem = cJSON_CreateString(realityStruct->serverNames[i]);
+                        if (!serverNamesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(serverNamesArr, serverNamesItem);
+
+                    }
+                }
+
+                if (realityStruct->privateKey) {
+                    cJSON_AddStringToObject(realitySettingsObj, "privateKey", realityStruct->privateKey);
+
+                }
+
+                if (realityStruct->minClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "minClientVer", realityStruct->minClientVer);
+
+                }
+
+                if (realityStruct->maxClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "maxClientVer", realityStruct->maxClientVer);
+
+                }
+
+                cJSON_AddNumberToObject(realitySettingsObj, "maxTimediff", realityStruct->maxTimediff);
+
+                if (realityStruct->shortIdsCount) {
+                    cJSON* shortIdsArr = cJSON_CreateArray();
+                    if (!shortIdsArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "shortIds", shortIdsArr);
+                    for (int64_t i = 0; i < realityStruct->shortIdsCount; i++) {
+                        cJSON* shortIdsItem = cJSON_CreateString(realityStruct->shortIds[i]);
+                        if (!shortIdsItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(shortIdsArr, shortIdsItem);
+
+                    }
+                }
+
+                if (realityStruct->mldsa65Seed) {
+                    cJSON_AddStringToObject(realitySettingsObj, "mldsa65Seed", realityStruct->mldsa65Seed);
+
+                }
+
+                if (realityStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(realitySettingsObj, "masterKeyLog", realityStruct->masterKeyLog);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackUpload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackUpload", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackDownload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackDownload", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "settings", listInStreamSettingsRealitySettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct* listInStreamSettingsRealitySettingsSettingsObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "publicKey", listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "serverName", listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "spiderX", listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "mldsa65Verify", listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify);
+
+                    }
+
+                }
+
+            }
+
 
             if (streamSettingsStruct->listInStreamSettingsGRPCFinalMaskObjStruct) {
                 cJSON* finalmaskObj = cJSON_CreateObject();
@@ -25849,6 +29358,491 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                 cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
 
             }
+            if (streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct) {
+                cJSON* tlsSettingsObj = cJSON_CreateObject();
+                if (!tlsSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tlsSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "tlsSettings", tlsSettingsObj);
+
+                struct jsonListInboundStreamSettingsTlsSettingsObjectStruct* tlsStruct = streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct;
+
+                if (tlsStruct->serverName) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "serverName", tlsStruct->serverName);
+
+                }
+
+                if (tlsStruct->minVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "minVersion", tlsStruct->minVersion);
+
+                }
+
+                if (tlsStruct->maxVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "maxVersion", tlsStruct->maxVersion);
+
+                }
+
+                if (tlsStruct->cipherSuites) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "cipherSuites", tlsStruct->cipherSuites);
+
+                }
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "rejectUnknownSni", tlsStruct->rejectUnknownSni);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "disableSystemRoot", tlsStruct->disableSystemRoot);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "enableSessionResumption", tlsStruct->enableSessionResumption);
+
+                if (tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize) {
+                    cJSON* listInStreamSettingsTlsSettingsCertificateArrStructArr = cJSON_CreateArray();
+                    if (!listInStreamSettingsTlsSettingsCertificateArrStructArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "certificates", listInStreamSettingsTlsSettingsCertificateArrStructArr);
+                    for (size_t i = 0; i < tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize; i++) {
+                        struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct* listInStreamSettingsTlsSettingsCertificateArrStructEntry = &tlsStruct->listInStreamSettingsTlsSettingsCertificateArrStruct[i];
+                        cJSON* listInStreamSettingsTlsSettingsCertificateArrStructItem = cJSON_CreateObject();
+                        if (!listInStreamSettingsTlsSettingsCertificateArrStructItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(listInStreamSettingsTlsSettingsCertificateArrStructArr, listInStreamSettingsTlsSettingsCertificateArrStructItem);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificateFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "keyFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount) {
+                            cJSON* certificateArr = cJSON_CreateArray();
+                            if (!certificateArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificate", certificateArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount; i++) {
+                                cJSON* certificateItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate[i]);
+                                if (!certificateItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(certificateArr, certificateItem);
+
+                            }
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount) {
+                            cJSON* keyArr = cJSON_CreateArray();
+                            if (!keyArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "key", keyArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount; i++) {
+                                cJSON* keyItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->key[i]);
+                                if (!keyItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(keyArr, keyItem);
+
+                            }
+                        }
+
+                        cJSON_AddNumberToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "ocspStapling", listInStreamSettingsTlsSettingsCertificateArrStructEntry->ocspStapling);
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "oneTimeLoading", listInStreamSettingsTlsSettingsCertificateArrStructEntry->oneTimeLoading);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "usage", listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage);
+
+                        }
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "buildChain", listInStreamSettingsTlsSettingsCertificateArrStructEntry->buildChain);
+
+                    }
+                }
+
+                if (tlsStruct->alpnCount) {
+                    cJSON* alpnArr = cJSON_CreateArray();
+                    if (!alpnArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "alpn", alpnArr);
+                    for (int64_t i = 0; i < tlsStruct->alpnCount; i++) {
+                        cJSON* alpnItem = cJSON_CreateString(tlsStruct->alpn[i]);
+                        if (!alpnItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(alpnArr, alpnItem);
+
+                    }
+                }
+
+                if (tlsStruct->echServerKeys) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "echServerKeys", tlsStruct->echServerKeys);
+
+                }
+
+                if (tlsStruct->curvePreferencesCount) {
+                    cJSON* curvePreferencesArr = cJSON_CreateArray();
+                    if (!curvePreferencesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "curvePreferences", curvePreferencesArr);
+                    for (int64_t i = 0; i < tlsStruct->curvePreferencesCount; i++) {
+                        cJSON* curvePreferencesItem = cJSON_CreateString(tlsStruct->curvePreferences[i]);
+                        if (!curvePreferencesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(curvePreferencesArr, curvePreferencesItem);
+
+                    }
+                }
+
+                if (tlsStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "masterKeyLog", tlsStruct->masterKeyLog);
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsEchSockoptObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsEchSockoptObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create echSockopt object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "echSockopt", listInStreamSettingsTlsSettingsEchSockoptObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct* listInStreamSettingsTlsSettingsEchSockoptObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct;
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpFastOpen", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpFastOpen);
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpMptcp", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpMptcp);
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "domainStrategy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "dialerProxy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpcongestion", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion);
+
+                    }
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "settings", listInStreamSettingsTlsSettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct* listInStreamSettingsTlsSettingsSettingsObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "echConfigList", listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count) {
+                        cJSON* pinnedPeerCertSha256Arr = cJSON_CreateArray();
+                        if (!pinnedPeerCertSha256Arr) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 array");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "pinnedPeerCertSha256", pinnedPeerCertSha256Arr);
+                        for (int64_t i = 0; i < listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count; i++) {
+                            cJSON* pinnedPeerCertSha256Item = cJSON_CreateString(listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256[i]);
+                            if (!pinnedPeerCertSha256Item) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 item");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToArray(pinnedPeerCertSha256Arr, pinnedPeerCertSha256Item);
+
+                        }
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "verifyPeerCertByName", listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName);
+
+                    }
+
+                }
+
+            }
+
+            if (streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct) {
+                cJSON* realitySettingsObj = cJSON_CreateObject();
+                if (!realitySettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create realitySettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "realitySettings", realitySettingsObj);
+
+                struct jsonListInboundStreamSettingsRealitySettingsObjectStruct* realityStruct = streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct;
+
+                cJSON_AddBoolToObject(realitySettingsObj, "show", realityStruct->show);
+
+                cJSON_AddNumberToObject(realitySettingsObj, "xver", realityStruct->xver);
+
+                if (realityStruct->target) {
+                    cJSON_AddStringToObject(realitySettingsObj, "target", realityStruct->target);
+
+                }
+
+                if (realityStruct->serverNamesCount) {
+                    cJSON* serverNamesArr = cJSON_CreateArray();
+                    if (!serverNamesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "serverNames", serverNamesArr);
+                    for (int64_t i = 0; i < realityStruct->serverNamesCount; i++) {
+                        cJSON* serverNamesItem = cJSON_CreateString(realityStruct->serverNames[i]);
+                        if (!serverNamesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(serverNamesArr, serverNamesItem);
+
+                    }
+                }
+
+                if (realityStruct->privateKey) {
+                    cJSON_AddStringToObject(realitySettingsObj, "privateKey", realityStruct->privateKey);
+
+                }
+
+                if (realityStruct->minClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "minClientVer", realityStruct->minClientVer);
+
+                }
+
+                if (realityStruct->maxClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "maxClientVer", realityStruct->maxClientVer);
+
+                }
+
+                cJSON_AddNumberToObject(realitySettingsObj, "maxTimediff", realityStruct->maxTimediff);
+
+                if (realityStruct->shortIdsCount) {
+                    cJSON* shortIdsArr = cJSON_CreateArray();
+                    if (!shortIdsArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "shortIds", shortIdsArr);
+                    for (int64_t i = 0; i < realityStruct->shortIdsCount; i++) {
+                        cJSON* shortIdsItem = cJSON_CreateString(realityStruct->shortIds[i]);
+                        if (!shortIdsItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(shortIdsArr, shortIdsItem);
+
+                    }
+                }
+
+                if (realityStruct->mldsa65Seed) {
+                    cJSON_AddStringToObject(realitySettingsObj, "mldsa65Seed", realityStruct->mldsa65Seed);
+
+                }
+
+                if (realityStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(realitySettingsObj, "masterKeyLog", realityStruct->masterKeyLog);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackUpload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackUpload", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackDownload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackDownload", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "settings", listInStreamSettingsRealitySettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct* listInStreamSettingsRealitySettingsSettingsObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "publicKey", listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "serverName", listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "spiderX", listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "mldsa65Verify", listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify);
+
+                    }
+
+                }
+
+            }
+
 
             if (streamSettingsStruct->listInStreamSettingsHTTPUpgradeFinalMaskObjStruct) {
                 cJSON* finalmaskObj = cJSON_CreateObject();
@@ -26498,6 +30492,491 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                 cJSON_AddStringToObject(streamSettingsObj, "security", streamSettingsStruct->security);
 
             }
+            if (streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct) {
+                cJSON* tlsSettingsObj = cJSON_CreateObject();
+                if (!tlsSettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create tlsSettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "tlsSettings", tlsSettingsObj);
+
+                struct jsonListInboundStreamSettingsTlsSettingsObjectStruct* tlsStruct = streamSettingsStruct->listInStreamSettingsTlsSettingsObjStruct;
+
+                if (tlsStruct->serverName) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "serverName", tlsStruct->serverName);
+
+                }
+
+                if (tlsStruct->minVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "minVersion", tlsStruct->minVersion);
+
+                }
+
+                if (tlsStruct->maxVersion) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "maxVersion", tlsStruct->maxVersion);
+
+                }
+
+                if (tlsStruct->cipherSuites) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "cipherSuites", tlsStruct->cipherSuites);
+
+                }
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "rejectUnknownSni", tlsStruct->rejectUnknownSni);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "disableSystemRoot", tlsStruct->disableSystemRoot);
+
+                cJSON_AddBoolToObject(tlsSettingsObj, "enableSessionResumption", tlsStruct->enableSessionResumption);
+
+                if (tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize) {
+                    cJSON* listInStreamSettingsTlsSettingsCertificateArrStructArr = cJSON_CreateArray();
+                    if (!listInStreamSettingsTlsSettingsCertificateArrStructArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "certificates", listInStreamSettingsTlsSettingsCertificateArrStructArr);
+                    for (size_t i = 0; i < tlsStruct->jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize; i++) {
+                        struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct* listInStreamSettingsTlsSettingsCertificateArrStructEntry = &tlsStruct->listInStreamSettingsTlsSettingsCertificateArrStruct[i];
+                        cJSON* listInStreamSettingsTlsSettingsCertificateArrStructItem = cJSON_CreateObject();
+                        if (!listInStreamSettingsTlsSettingsCertificateArrStructItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificates item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(listInStreamSettingsTlsSettingsCertificateArrStructArr, listInStreamSettingsTlsSettingsCertificateArrStructItem);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificateFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "keyFile", listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyFile);
+
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount) {
+                            cJSON* certificateArr = cJSON_CreateArray();
+                            if (!certificateArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "certificate", certificateArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificateCount; i++) {
+                                cJSON* certificateItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->certificate[i]);
+                                if (!certificateItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create certificate item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(certificateArr, certificateItem);
+
+                            }
+                        }
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount) {
+                            cJSON* keyArr = cJSON_CreateArray();
+                            if (!keyArr) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key array");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "key", keyArr);
+                            for (int64_t i = 0; i < listInStreamSettingsTlsSettingsCertificateArrStructEntry->keyCount; i++) {
+                                cJSON* keyItem = cJSON_CreateString(listInStreamSettingsTlsSettingsCertificateArrStructEntry->key[i]);
+                                if (!keyItem) {
+                                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create key item");
+
+                                    cJSON_Delete(json);
+
+                                    return NULL;
+
+                                }
+                                cJSON_AddItemToArray(keyArr, keyItem);
+
+                            }
+                        }
+
+                        cJSON_AddNumberToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "ocspStapling", listInStreamSettingsTlsSettingsCertificateArrStructEntry->ocspStapling);
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "oneTimeLoading", listInStreamSettingsTlsSettingsCertificateArrStructEntry->oneTimeLoading);
+
+                        if (listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage) {
+                            cJSON_AddStringToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "usage", listInStreamSettingsTlsSettingsCertificateArrStructEntry->usage);
+
+                        }
+
+                        cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsCertificateArrStructItem, "buildChain", listInStreamSettingsTlsSettingsCertificateArrStructEntry->buildChain);
+
+                    }
+                }
+
+                if (tlsStruct->alpnCount) {
+                    cJSON* alpnArr = cJSON_CreateArray();
+                    if (!alpnArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "alpn", alpnArr);
+                    for (int64_t i = 0; i < tlsStruct->alpnCount; i++) {
+                        cJSON* alpnItem = cJSON_CreateString(tlsStruct->alpn[i]);
+                        if (!alpnItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create alpn item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(alpnArr, alpnItem);
+
+                    }
+                }
+
+                if (tlsStruct->echServerKeys) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "echServerKeys", tlsStruct->echServerKeys);
+
+                }
+
+                if (tlsStruct->curvePreferencesCount) {
+                    cJSON* curvePreferencesArr = cJSON_CreateArray();
+                    if (!curvePreferencesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "curvePreferences", curvePreferencesArr);
+                    for (int64_t i = 0; i < tlsStruct->curvePreferencesCount; i++) {
+                        cJSON* curvePreferencesItem = cJSON_CreateString(tlsStruct->curvePreferences[i]);
+                        if (!curvePreferencesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create curvePreferences item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(curvePreferencesArr, curvePreferencesItem);
+
+                    }
+                }
+
+                if (tlsStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(tlsSettingsObj, "masterKeyLog", tlsStruct->masterKeyLog);
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsEchSockoptObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsEchSockoptObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create echSockopt object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "echSockopt", listInStreamSettingsTlsSettingsEchSockoptObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct* listInStreamSettingsTlsSettingsEchSockoptObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsEchSockoptObjStruct;
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpFastOpen", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpFastOpen);
+
+                    cJSON_AddBoolToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpMptcp", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpMptcp);
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "domainStrategy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->domainStrategy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "dialerProxy", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->dialerProxy);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsEchSockoptObjStructObj, "tcpcongestion", listInStreamSettingsTlsSettingsEchSockoptObjStructStruct->tcpcongestion);
+
+                    }
+
+                }
+
+                if (tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsTlsSettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsTlsSettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(tlsSettingsObj, "settings", listInStreamSettingsTlsSettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct* listInStreamSettingsTlsSettingsSettingsObjStructStruct = tlsStruct->listInStreamSettingsTlsSettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsTlsSettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "echConfigList", listInStreamSettingsTlsSettingsSettingsObjStructStruct->echConfigList);
+
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count) {
+                        cJSON* pinnedPeerCertSha256Arr = cJSON_CreateArray();
+                        if (!pinnedPeerCertSha256Arr) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 array");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "pinnedPeerCertSha256", pinnedPeerCertSha256Arr);
+                        for (int64_t i = 0; i < listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256Count; i++) {
+                            cJSON* pinnedPeerCertSha256Item = cJSON_CreateString(listInStreamSettingsTlsSettingsSettingsObjStructStruct->pinnedPeerCertSha256[i]);
+                            if (!pinnedPeerCertSha256Item) {
+                                applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create pinnedPeerCertSha256 item");
+
+                                cJSON_Delete(json);
+
+                                return NULL;
+
+                            }
+                            cJSON_AddItemToArray(pinnedPeerCertSha256Arr, pinnedPeerCertSha256Item);
+
+                        }
+                    }
+
+                    if (listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName) {
+                        cJSON_AddStringToObject(listInStreamSettingsTlsSettingsSettingsObjStructObj, "verifyPeerCertByName", listInStreamSettingsTlsSettingsSettingsObjStructStruct->verifyPeerCertByName);
+
+                    }
+
+                }
+
+            }
+
+            if (streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct) {
+                cJSON* realitySettingsObj = cJSON_CreateObject();
+                if (!realitySettingsObj) {
+                    applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create realitySettings object");
+
+                    cJSON_Delete(json);
+
+                    return NULL;
+
+                }
+                cJSON_AddItemToObject(streamSettingsObj, "realitySettings", realitySettingsObj);
+
+                struct jsonListInboundStreamSettingsRealitySettingsObjectStruct* realityStruct = streamSettingsStruct->listInStreamSettingsRealitySettingsObjStruct;
+
+                cJSON_AddBoolToObject(realitySettingsObj, "show", realityStruct->show);
+
+                cJSON_AddNumberToObject(realitySettingsObj, "xver", realityStruct->xver);
+
+                if (realityStruct->target) {
+                    cJSON_AddStringToObject(realitySettingsObj, "target", realityStruct->target);
+
+                }
+
+                if (realityStruct->serverNamesCount) {
+                    cJSON* serverNamesArr = cJSON_CreateArray();
+                    if (!serverNamesArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "serverNames", serverNamesArr);
+                    for (int64_t i = 0; i < realityStruct->serverNamesCount; i++) {
+                        cJSON* serverNamesItem = cJSON_CreateString(realityStruct->serverNames[i]);
+                        if (!serverNamesItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create serverNames item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(serverNamesArr, serverNamesItem);
+
+                    }
+                }
+
+                if (realityStruct->privateKey) {
+                    cJSON_AddStringToObject(realitySettingsObj, "privateKey", realityStruct->privateKey);
+
+                }
+
+                if (realityStruct->minClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "minClientVer", realityStruct->minClientVer);
+
+                }
+
+                if (realityStruct->maxClientVer) {
+                    cJSON_AddStringToObject(realitySettingsObj, "maxClientVer", realityStruct->maxClientVer);
+
+                }
+
+                cJSON_AddNumberToObject(realitySettingsObj, "maxTimediff", realityStruct->maxTimediff);
+
+                if (realityStruct->shortIdsCount) {
+                    cJSON* shortIdsArr = cJSON_CreateArray();
+                    if (!shortIdsArr) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds array");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "shortIds", shortIdsArr);
+                    for (int64_t i = 0; i < realityStruct->shortIdsCount; i++) {
+                        cJSON* shortIdsItem = cJSON_CreateString(realityStruct->shortIds[i]);
+                        if (!shortIdsItem) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create shortIds item");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToArray(shortIdsArr, shortIdsItem);
+
+                    }
+                }
+
+                if (realityStruct->mldsa65Seed) {
+                    cJSON_AddStringToObject(realitySettingsObj, "mldsa65Seed", realityStruct->mldsa65Seed);
+
+                }
+
+                if (realityStruct->masterKeyLog) {
+                    cJSON_AddStringToObject(realitySettingsObj, "masterKeyLog", realityStruct->masterKeyLog);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackUpload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackUpload", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackUploadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create limitFallbackDownload object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "limitFallbackDownload", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct;
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "afterBytes", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->afterBytes);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "bytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->bytesPerSec);
+
+                    cJSON_AddNumberToObject(listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructObj, "burstBytesPerSec", listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStructStruct->burstBytesPerSec);
+
+                }
+
+                if (realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct) {
+                    cJSON* listInStreamSettingsRealitySettingsSettingsObjStructObj = cJSON_CreateObject();
+                    if (!listInStreamSettingsRealitySettingsSettingsObjStructObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create settings object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(realitySettingsObj, "settings", listInStreamSettingsRealitySettingsSettingsObjStructObj);
+
+                    struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct* listInStreamSettingsRealitySettingsSettingsObjStructStruct = realityStruct->listInStreamSettingsRealitySettingsSettingsObjStruct;
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "publicKey", listInStreamSettingsRealitySettingsSettingsObjStructStruct->publicKey);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "fingerprint", listInStreamSettingsRealitySettingsSettingsObjStructStruct->fingerprint);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "serverName", listInStreamSettingsRealitySettingsSettingsObjStructStruct->serverName);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "spiderX", listInStreamSettingsRealitySettingsSettingsObjStructStruct->spiderX);
+
+                    }
+
+                    if (listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify) {
+                        cJSON_AddStringToObject(listInStreamSettingsRealitySettingsSettingsObjStructObj, "mldsa65Verify", listInStreamSettingsRealitySettingsSettingsObjStructStruct->mldsa65Verify);
+
+                    }
+
+                }
+
+            }
+
 
             if (streamSettingsStruct->listInStreamSettingsXHTTPFinalMaskObjStruct) {
                 cJSON* finalmaskObj = cJSON_CreateObject();
