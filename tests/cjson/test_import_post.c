@@ -496,8 +496,23 @@ int main(int argc, char** argv) {
     in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->V6Only = 1;
     in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->tcpWindowClampEnabled = 0;
     in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->tcpWindowClamp = 999;
-    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStructEnabled = 0;
-    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->trustedXForwardedForCount = 0;
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStructEnabled = 1;
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->jsonListInboundStreamSettingsHTTPUpgradeSockoptCustomSockOptArrayStructSize = 2;
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct = (struct jsonListInboundStreamSettingsHTTPUpgradeSockoptObjectCustomSockOptArrayStruct*)calloc(2, sizeof(struct jsonListInboundStreamSettingsHTTPUpgradeSockoptObjectCustomSockOptArrayStruct));
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[0].system = strdup("linux");
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[0].type = strdup("int");
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[0].level = strdup("6");
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[0].opt = strdup("18");
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[0].value = strdup("1");
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[1].system = NULL;
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[1].type = strdup("str");
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[1].level = strdup("1");
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[1].opt = strdup("2");
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[1].value = strdup("3");
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->trustedXForwardedForCount = 2;
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->trustedXForwardedFor = (const char**)calloc(2, sizeof(const char*));
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->trustedXForwardedFor[0] = strdup("10.0.0.1");
+    in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->trustedXForwardedFor[1] = strdup("10.0.0.2");
 
     in->listInStreamSettingsObjStruct->listInStreamSettingsXHTTPSettingsObjStruct = (struct jsonListInboundStreamSettingsXHTTPSettingsObjectStruct*)calloc(1, sizeof(struct jsonListInboundStreamSettingsXHTTPSettingsObjectStruct));
     in->listInStreamSettingsObjStruct->listInStreamSettingsXHTTPSettingsObjStruct->path = strdup("/xhttp");
@@ -717,6 +732,20 @@ int main(int argc, char** argv) {
     in->listInSniffingObjStruct =(struct jsonListInboundSniffingObjectStruct*)calloc(1, sizeof(struct jsonListInboundSniffingObjectStruct));
     in->listInSniffingObjStruct->enabled = strdup(argc > 1 ? argv[1] : "false");
 
+    int negative = argc > 3 && strcmp(argv[3], "negative") == 0;
+    if (negative) {
+        in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStructEnabled = 0;
+        for (int64_t tx = 0; tx < in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->trustedXForwardedForCount; tx++) {
+            free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->trustedXForwardedFor[tx]);
+        }
+        in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->trustedXForwardedForCount = 0;
+        in->listInStreamSettingsObjStruct->listInStreamSettingsXHTTPSockoptObjStruct->listInStreamSettingsXHTTPSockoptObjCustomScokArrStructEnabled = 0;
+        for (int64_t tx = 0; tx < in->listInStreamSettingsObjStruct->listInStreamSettingsXHTTPSockoptObjStruct->trustedXForwardedForCount; tx++) {
+            free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsXHTTPSockoptObjStruct->trustedXForwardedFor[tx]);
+        }
+        in->listInStreamSettingsObjStruct->listInStreamSettingsXHTTPSockoptObjStruct->trustedXForwardedForCount = 0;
+    }
+
     const char* out = jsonImportInboundsPost(in);
     if (!out) {
         printf("FAILED: jsonImportInboundsPost returned NULL\n");
@@ -743,6 +772,21 @@ int main(int argc, char** argv) {
     }
 
     printf("ADD OK (identical to import)\n");
+    if (negative) {
+        if (strstr(addOut, "\"customSockopt\"") != NULL) {
+            printf("FAILED: customSockopt emitted while its Enabled flag is 0\n");
+
+            return 1;
+
+        }
+        if (strstr(addOut, "\"trustedXForwardedFor\"") != NULL) {
+            printf("FAILED: trustedXForwardedFor emitted while its count is 0\n");
+
+            return 1;
+
+        }
+        printf("NEGATIVE OK (customSockopt and trustedXForwardedFor omitted)\n");
+    }
 
     free((char*)addOut);
     free((char*)out);
@@ -1073,6 +1117,18 @@ int main(int argc, char** argv) {
     free(in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeFinalMaskObjStruct);
     free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->tproxy);
     free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->tcpcongestion);
+    for (size_t cs = 0; cs < in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->jsonListInboundStreamSettingsHTTPUpgradeSockoptCustomSockOptArrayStructSize; cs++) {
+        free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[cs].system);
+        free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[cs].type);
+        free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[cs].level);
+        free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[cs].opt);
+        free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct[cs].value);
+    }
+    free(in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjCustomScokArrStruct);
+    for (int64_t tx = 0; tx < in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->trustedXForwardedForCount; tx++) {
+        free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->trustedXForwardedFor[tx]);
+    }
+    free((char**)in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct->trustedXForwardedFor);
     free(in->listInStreamSettingsObjStruct->listInStreamSettingsHTTPUpgradeSockoptObjStruct);
     free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsXHTTPSettingsObjStruct->path);
     free((char*)in->listInStreamSettingsObjStruct->listInStreamSettingsXHTTPSettingsObjStruct->host);
