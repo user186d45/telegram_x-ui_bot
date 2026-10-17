@@ -26951,6 +26951,114 @@ const char* jsonImportInboundsPost(struct jsonListInboundObjectStruct* importInb
                         }
                     }
                 }
+
+                if (finalmaskStruct->listInStreamSettingsXHTTPFinalMaskQuicParamsObjStruct) {
+                    cJSON* quicParamsObj = cJSON_CreateObject();
+                    if (!quicParamsObj) {
+                        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create quicParams object");
+
+                        cJSON_Delete(json);
+
+                        return NULL;
+
+                    }
+                    cJSON_AddItemToObject(finalmaskObj, "quicParams", quicParamsObj);
+
+                    struct jsonListInboundStreamSettingsXHTTPFinalMaskQuicParamsObjectStruct* quicParamsStruct = finalmaskStruct->listInStreamSettingsXHTTPFinalMaskQuicParamsObjStruct;
+
+                    if (quicParamsStruct->congestion) {
+                        cJSON_AddStringToObject(quicParamsObj, "congestion", quicParamsStruct->congestion);
+
+                    }
+
+                    cJSON_AddBoolToObject(quicParamsObj, "debug", quicParamsStruct->debug);
+
+                    const char* xhttpCongestionTypes[] = {
+                        "reno",
+                        "bbr",
+                        "brutal",
+                        "force-brutal"
+
+                    };
+
+                    enum xhttpCongestionTypesEnum {
+                        CONGESTIONTYPE_RENO,
+                        CONGESTIONTYPE_BBR,
+                        CONGESTIONTYPE_BRUTAL,
+                        CONGESTIONTYPE_FORCEBRUTAL,
+                        CONGESTIONTYPE_COUNT
+
+                    };
+
+                    enum xhttpCongestionTypesEnum cType = CONGESTIONTYPE_COUNT;
+                    if (quicParamsStruct->congestion) {
+                        for (int c = 0; c < CONGESTIONTYPE_COUNT; c++) {
+                            if (strncmp(xhttpCongestionTypes[c], quicParamsStruct->congestion, strlen(xhttpCongestionTypes[c])) == 0) {
+                                cType = (enum xhttpCongestionTypesEnum)c;
+                                break;
+
+                            }
+
+                        }
+
+                    }
+
+                    switch (cType) {
+                        case CONGESTIONTYPE_BRUTAL:
+                        case CONGESTIONTYPE_FORCEBRUTAL:
+                            if (quicParamsStruct->brutalUp) {
+                                cJSON_AddStringToObject(quicParamsObj, "brutalUp", quicParamsStruct->brutalUp);
+
+                            }
+
+                            if (quicParamsStruct->brutalDown) {
+                                cJSON_AddStringToObject(quicParamsObj, "brutalDown", quicParamsStruct->brutalDown);
+
+                            }
+
+                            break;
+
+                        case CONGESTIONTYPE_RENO:
+                        case CONGESTIONTYPE_BBR:
+                        case CONGESTIONTYPE_COUNT:
+                            break;
+
+                    }
+
+                    if (quicParamsStruct->listInStreamSettingsXHTTPFinalMaskQuicParamsUdpHopObjStruct) {
+                        cJSON* udpHopObj = cJSON_CreateObject();
+                        if (!udpHopObj) {
+                            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create quicParams udpHop object");
+
+                            cJSON_Delete(json);
+
+                            return NULL;
+
+                        }
+                        cJSON_AddItemToObject(quicParamsObj, "udpHop", udpHopObj);
+
+                        struct jsonListInboundStreamSettingsXHTTPFinalMaskQuicParamsUdpHopObjectStruct* udpHopStruct = quicParamsStruct->listInStreamSettingsXHTTPFinalMaskQuicParamsUdpHopObjStruct;
+
+                        if (udpHopStruct->ports) {
+                            cJSON_AddStringToObject(udpHopObj, "ports", udpHopStruct->ports);
+
+                        }
+
+                        if (udpHopStruct->interval) {
+                            cJSON_AddStringToObject(udpHopObj, "interval", udpHopStruct->interval);
+
+                        }
+                    }
+
+                    cJSON_AddNumberToObject(quicParamsObj, "initStreamReceiveWindow", quicParamsStruct->initStreamReceiveWindow);
+                    cJSON_AddNumberToObject(quicParamsObj, "maxStreamReceiveWindow", quicParamsStruct->maxStreamReceiveWindow);
+                    cJSON_AddNumberToObject(quicParamsObj, "initConnectionReceiveWindow", quicParamsStruct->initConnectionReceiveWindow);
+                    cJSON_AddNumberToObject(quicParamsObj, "maxConnectionReceiveWindow", quicParamsStruct->maxConnectionReceiveWindow);
+                    cJSON_AddNumberToObject(quicParamsObj, "maxIdleTimeout", quicParamsStruct->maxIdleTimeout);
+                    cJSON_AddNumberToObject(quicParamsObj, "keepAlivePeriod", quicParamsStruct->keepAlivePeriod);
+                    cJSON_AddBoolToObject(quicParamsObj, "disablePathMTUDiscovery", quicParamsStruct->disablePathMTUDiscovery);
+                    cJSON_AddNumberToObject(quicParamsObj, "maxIncomingStreams", quicParamsStruct->maxIncomingStreams);
+                }
             }
 
             break;
