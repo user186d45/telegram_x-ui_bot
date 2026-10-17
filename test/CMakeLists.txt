@@ -42,6 +42,9 @@ add_test(NAME import_post_httpupgrade_negative COMMAND test_import_post false ht
 add_cjson_test(test_delete_multi test_delete_multi.c ${INBOUNDS_SRC} ${LOG_SRC})
 add_test(NAME delete_multi COMMAND test_delete_multi)
 
+add_cjson_test(test_set_fallbacks_response test_set_fallbacks_response.c ${INBOUNDS_SRC} ${LOG_SRC})
+add_test(NAME set_fallbacks_response COMMAND test_set_fallbacks_response)
+
 add_cjson_test(test_security_sample test_security_sample.c ${INBOUNDS_SRC} ${LOG_SRC})
 add_test(NAME security_sample COMMAND test_security_sample ${CMAKE_CURRENT_SOURCE_DIR}/sample_inbounds.json)
 
@@ -110,3 +113,12 @@ make_mutant(reality_key
 add_cjson_test(mutant_reality_key test_security_sample.c ${REALITY_KEY_SRC} ${LOG_SRC})
 add_test(NAME mutant_reality_key_is_caught COMMAND mutant_reality_key ${CMAKE_CURRENT_SOURCE_DIR}/sample_inbounds.json)
 set_tests_properties(mutant_reality_key_is_caught PROPERTIES WILL_FAIL TRUE)
+
+make_mutant(set_fallbacks_success
+    "        cJSON_IsTrue(cJSON_GetObjectItem(jsonParser, \"success\")) &&\n        cJSON_HasObjectItem(jsonParser, \"msg\") &&\n        cJSON_IsString("
+    "        cJSON_HasObjectItem(jsonParser, \"msg\") &&\n        cJSON_IsString("
+    SET_FALLBACKS_SUCCESS_SRC)
+add_cjson_test(mutant_set_fallbacks_success test_set_fallbacks_response.c ${SET_FALLBACKS_SUCCESS_SRC} ${LOG_SRC})
+add_test(NAME mutant_set_fallbacks_success_is_caught COMMAND mutant_set_fallbacks_success)
+set_tests_properties(mutant_set_fallbacks_success_is_caught PROPERTIES WILL_FAIL TRUE
+    ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")

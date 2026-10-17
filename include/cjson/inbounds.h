@@ -2067,6 +2067,7 @@ void        jsonSetInboundFallbacksArrayPostStructDelete(struct jsonSetInboundFa
 void        jsonSetInboundFallbacksPostStructDelete(struct jsonSetInboundFallbacksPostStruct* setInboundFallbacksPostStruct);
 
 void        jsonSetInboundFallbacksResponseStructDelete(struct jsonSetInboundFallbacksResponseStruct* setInboundFallbacksRStruct);
+struct jsonSetInboundFallbacksResponseStruct*    jsonSetInboundFallbacksResponse(const char* json);
 
 
 

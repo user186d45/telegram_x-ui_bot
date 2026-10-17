@@ -32355,3 +32355,63 @@ struct jsonImportInboundsResponseStruct* jsonImportInboundsResponse(const char* 
     return importInboundsRStruct;
 
 }
+
+struct jsonSetInboundFallbacksResponseStruct* jsonSetInboundFallbacksResponse(const char* json) {
+    DBG(LOG_INFO, "Function called");
+
+    if (!isJsonValid(json)) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
+
+        return NULL;
+
+    }
+
+    cJSON* jsonParser = cJSON_Parse(json);
+    if (!jsonParser) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "jsonParser is a null pointer");
+
+        return NULL;
+
+    }
+
+    if (
+        cJSON_HasObjectItem(jsonParser, "success") &&
+        cJSON_IsTrue(cJSON_GetObjectItem(jsonParser, "success")) &&
+        cJSON_HasObjectItem(jsonParser, "msg") &&
+        cJSON_IsString(cJSON_GetObjectItem(jsonParser, "msg"))
+       ) {
+        struct jsonSetInboundFallbacksResponseStruct* setInboundFallbacksRStruct = (struct jsonSetInboundFallbacksResponseStruct*)malloc(sizeof(struct jsonSetInboundFallbacksResponseStruct));
+        if (!setInboundFallbacksRStruct) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "setInboundFallbacksRStruct is a null pointer");
+
+            cJSON_Delete(jsonParser);
+
+            return NULL;
+
+        }
+
+        setInboundFallbacksRStruct->success = 1;
+
+        char* msg = cJSON_GetObjectItem(jsonParser, "msg")->valuestring;
+        size_t msgLen = strlen(msg);
+        char* msgCopy = (char*)malloc((msgLen + 1) * sizeof(char));
+        strncpy(msgCopy, msg, msgLen);
+        msgCopy[msgLen] = '\0';
+        setInboundFallbacksRStruct->msg = msgCopy;
+
+        setInboundFallbacksRStruct->obj = NULL;
+
+        cJSON_Delete(jsonParser);
+
+        return setInboundFallbacksRStruct;
+
+    } else {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Some elements are missing from the server response");
+
+        cJSON_Delete(jsonParser);
+
+        return NULL;
+
+    }
+
+}
