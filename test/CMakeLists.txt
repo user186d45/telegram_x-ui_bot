@@ -45,6 +45,9 @@ add_test(NAME delete_multi COMMAND test_delete_multi)
 add_cjson_test(test_set_fallbacks_response test_set_fallbacks_response.c ${INBOUNDS_SRC} ${LOG_SRC})
 add_test(NAME set_fallbacks_response COMMAND test_set_fallbacks_response)
 
+add_cjson_test(test_set_fallbacks_post test_set_fallbacks_post.c ${INBOUNDS_SRC} ${LOG_SRC})
+add_test(NAME set_fallbacks_post COMMAND test_set_fallbacks_post)
+
 add_cjson_test(test_security_sample test_security_sample.c ${INBOUNDS_SRC} ${LOG_SRC})
 add_test(NAME security_sample COMMAND test_security_sample ${CMAKE_CURRENT_SOURCE_DIR}/sample_inbounds.json)
 
@@ -121,4 +124,13 @@ make_mutant(set_fallbacks_success
 add_cjson_test(mutant_set_fallbacks_success test_set_fallbacks_response.c ${SET_FALLBACKS_SUCCESS_SRC} ${LOG_SRC})
 add_test(NAME mutant_set_fallbacks_success_is_caught COMMAND mutant_set_fallbacks_success)
 set_tests_properties(mutant_set_fallbacks_success_is_caught PROPERTIES WILL_FAIL TRUE
+    ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")
+
+make_mutant(set_fallbacks_xver_gate
+    "        if (fallbacksItem->xverEnabled) {"
+    "        if (fallbacksItem->xver) {"
+    SET_FALLBACKS_XVER_SRC)
+add_cjson_test(mutant_set_fallbacks_xver test_set_fallbacks_post.c ${SET_FALLBACKS_XVER_SRC} ${LOG_SRC})
+add_test(NAME mutant_set_fallbacks_xver_is_caught COMMAND mutant_set_fallbacks_xver)
+set_tests_properties(mutant_set_fallbacks_xver_is_caught PROPERTIES WILL_FAIL TRUE
     ENVIRONMENT "ASAN_OPTIONS=detect_leaks=0")

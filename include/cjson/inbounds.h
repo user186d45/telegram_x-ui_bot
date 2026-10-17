@@ -1768,12 +1768,15 @@ struct jsonListInboundFallbacksStruct {
 // =====================================================
 
 struct jsonSetInboundFallbacksArrayPostStruct {
+    unsigned char               childIdEnabled;
     int64_t                     childId;
     const char*                 name;
     const char*                 alpn;
     const char*                 path;
     const char*                 dest;
+    unsigned char               xverEnabled;
     int                         xver;
+    unsigned char               sortOrderEnabled;
     int                         sortOrder;
 
 };
@@ -2068,6 +2071,7 @@ void        jsonSetInboundFallbacksPostStructDelete(struct jsonSetInboundFallbac
 
 void        jsonSetInboundFallbacksResponseStructDelete(struct jsonSetInboundFallbacksResponseStruct* setInboundFallbacksRStruct);
 struct jsonSetInboundFallbacksResponseStruct*    jsonSetInboundFallbacksResponse(const char* json);
+const char*                             jsonSetInboundFallbacksPost(struct jsonSetInboundFallbacksPostStruct* setInboundFallbacksPostStruct);
 
 
 

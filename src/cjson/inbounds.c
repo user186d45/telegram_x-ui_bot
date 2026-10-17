@@ -32415,3 +32415,113 @@ struct jsonSetInboundFallbacksResponseStruct* jsonSetInboundFallbacksResponse(co
     }
 
 }
+
+const char* jsonSetInboundFallbacksPost(struct jsonSetInboundFallbacksPostStruct* setInboundFallbacksPostStruct) {
+    if (!setInboundFallbacksPostStruct) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "setInboundFallbacksPostStruct is a null pointer");
+
+        return NULL;
+
+    }
+
+    cJSON* json = cJSON_CreateObject();
+    if (!json) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create json object");
+
+        return NULL;
+
+    }
+
+    cJSON* fallbacksArray = cJSON_CreateArray();
+    if (!fallbacksArray) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create fallbacks array");
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+    cJSON_AddItemToObject(json, "fallbacks", fallbacksArray);
+
+    for (size_t i = 0; i < setInboundFallbacksPostStruct->jsonSetInboundFallbacksArrayPostStructSize; i++) {
+        struct jsonSetInboundFallbacksArrayPostStruct* fallbacksItem = &setInboundFallbacksPostStruct->setInboundFallbacksArrPStruct[i];
+
+        cJSON* item = cJSON_CreateObject();
+        if (!item) {
+            applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "failed to create fallbacks item object");
+
+            cJSON_Delete(json);
+
+            return NULL;
+
+        }
+        cJSON_AddItemToArray(fallbacksArray, item);
+
+        if (fallbacksItem->childIdEnabled) {
+            cJSON_AddNumberToObject(item, "childId", fallbacksItem->childId);
+
+        }
+
+        if (fallbacksItem->name) {
+            cJSON_AddStringToObject(item, "name", fallbacksItem->name);
+
+        }
+
+        if (fallbacksItem->alpn) {
+            cJSON_AddStringToObject(item, "alpn", fallbacksItem->alpn);
+
+        }
+
+        if (fallbacksItem->path) {
+            cJSON_AddStringToObject(item, "path", fallbacksItem->path);
+
+        }
+
+        if (fallbacksItem->dest) {
+            cJSON_AddStringToObject(item, "dest", fallbacksItem->dest);
+
+        }
+
+        if (fallbacksItem->xverEnabled) {
+            cJSON_AddNumberToObject(item, "xver", fallbacksItem->xver);
+
+        }
+
+        if (fallbacksItem->sortOrderEnabled) {
+            cJSON_AddNumberToObject(item, "sortOrder", fallbacksItem->sortOrder);
+
+        }
+
+    }
+
+    char* rawJson = cJSON_Print(json);
+    if (!rawJson) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Failed to print the raw json string");
+
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+
+    size_t rawJsonLen = strlen(rawJson);
+    char* rawJsonCopy = (char*)malloc((rawJsonLen + 1) * sizeof(char));
+    if (!rawJsonCopy) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "rawJsonCopy is a null pointer, failed to allocate memory");
+
+        free(rawJson);
+        cJSON_Delete(json);
+
+        return NULL;
+
+    }
+
+    strncpy(rawJsonCopy, rawJson, rawJsonLen);
+    rawJsonCopy[rawJsonLen] = '\0';
+
+    free(rawJson);
+    cJSON_Delete(json);
+
+    return rawJsonCopy;
+
+}
