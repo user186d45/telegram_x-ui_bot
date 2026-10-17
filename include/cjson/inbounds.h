@@ -1090,6 +1090,109 @@ struct jsonListInboundStreamSettingsMKcpSockoptObjectStruct {
 
 
 
+struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct {
+    const char*                 certificateFile;
+    const char*                 keyFile;
+    int64_t                     certificateCount;
+    const char**                certificate; // array
+    int64_t                     keyCount;
+    const char**                key; // array
+    int64_t                     ocspStapling;
+    unsigned char               oneTimeLoading;
+    const char*                 usage;
+    unsigned char               buildChain;
+
+};
+
+
+
+struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct {
+    unsigned char               tcpFastOpen;
+    unsigned char               tcpMptcp;
+    const char*                 domainStrategy;
+    const char*                 dialerProxy;
+    const char*                 tcpcongestion;
+
+};
+
+
+
+struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct {
+    const char*                 fingerprint;
+    const char*                 echConfigList;
+    int64_t                     pinnedPeerCertSha256Count;
+    const char**                pinnedPeerCertSha256; // array
+    const char*                 verifyPeerCertByName;
+
+};
+
+
+
+struct jsonListInboundStreamSettingsTlsSettingsObjectStruct {
+    const char*                 serverName;
+    const char*                 minVersion;
+    const char*                 maxVersion;
+    const char*                 cipherSuites;
+    unsigned char               rejectUnknownSni;
+    unsigned char               disableSystemRoot;
+    unsigned char               enableSessionResumption;
+    size_t                      jsonListInboundStreamSettingsTlsSettingsCertificateArrStructSize;
+    struct jsonListInboundStreamSettingsTlsSettingsCertificateObjectStruct* listInStreamSettingsTlsSettingsCertificateArrStruct; // array
+    int64_t                     alpnCount;
+    const char**                alpn; // array
+    const char*                 echServerKeys;
+    int64_t                     curvePreferencesCount;
+    const char**                curvePreferences; // array
+    const char*                 masterKeyLog;
+    struct jsonListInboundStreamSettingsTlsSettingsEchSockoptObjectStruct* listInStreamSettingsTlsSettingsEchSockoptObjStruct;
+    struct jsonListInboundStreamSettingsTlsSettingsSettingsObjectStruct* listInStreamSettingsTlsSettingsSettingsObjStruct;
+
+};
+
+
+
+struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct {
+    int64_t                     afterBytes;
+    int64_t                     bytesPerSec;
+    int64_t                     burstBytesPerSec;
+
+};
+
+
+
+struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct {
+    const char*                 publicKey;
+    const char*                 fingerprint;
+    const char*                 serverName;
+    const char*                 spiderX;
+    const char*                 mldsa65Verify;
+
+};
+
+
+
+struct jsonListInboundStreamSettingsRealitySettingsObjectStruct {
+    unsigned char               show;
+    int64_t                     xver;
+    const char*                 target;
+    int64_t                     serverNamesCount;
+    const char**                serverNames; // array
+    const char*                 privateKey;
+    const char*                 minClientVer;
+    const char*                 maxClientVer;
+    int64_t                     maxTimediff;
+    int64_t                     shortIdsCount;
+    const char**                shortIds; // array
+    const char*                 mldsa65Seed;
+    const char*                 masterKeyLog;
+    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackUploadObjStruct;
+    struct jsonListInboundStreamSettingsRealitySettingsLimitFallbackObjectStruct* listInStreamSettingsRealitySettingsLimitFallbackDownloadObjStruct;
+    struct jsonListInboundStreamSettingsRealitySettingsSettingsObjectStruct* listInStreamSettingsRealitySettingsSettingsObjStruct;
+
+};
+
+
+
 struct jsonListInboundStreamSettingsObjectStruct {
     const char*                 network;
     struct jsonListInboundStreamSettingsTcpSettingsObjectStruct* listInStreamSettingsTcpSettingsObjStruct;
@@ -1112,6 +1215,9 @@ struct jsonListInboundStreamSettingsObjectStruct {
     struct jsonListInboundStreamSettingsGRPCSockoptObjectStruct* listInStreamSettingsGRPCSockoptObjStruct;
     struct jsonListInboundStreamSettingsHTTPUpgradeSockoptObjectStruct* listInStreamSettingsHTTPUpgradeSockoptObjStruct;
     struct jsonListInboundStreamSettingsXHTTPSockoptObjectStruct* listInStreamSettingsXHTTPSockoptObjStruct;
+
+    struct jsonListInboundStreamSettingsTlsSettingsObjectStruct* listInStreamSettingsTlsSettingsObjStruct; // optional, NULL when the tlsSettings field is not present
+    struct jsonListInboundStreamSettingsRealitySettingsObjectStruct* listInStreamSettingsRealitySettingsObjStruct; // optional, NULL when the realitySettings field is not present
 
 };
 
