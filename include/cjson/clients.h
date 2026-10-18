@@ -14,7 +14,7 @@
 struct jsonListEveryClientObjectTrafficObjectStruct {
     int64_t                     id;
     int64_t                     inboundId;
-    const unsigned char         enable;
+    unsigned char         enable;
     const char*                 email;
     const char*                 uuid;
     const char*                 subId;
@@ -46,7 +46,7 @@ struct jsonListEveryClientArrayStruct {
     const char*                 publicKey;
     const char*                 allowedIps;
     const char*                 preSharedKey;
-    const unsigned char         keepAlive;
+    unsigned char         keepAlive;
     const char*                 forwardedPorts;
     const char*                 secret;
     const char*                 adTag;
@@ -54,8 +54,8 @@ struct jsonListEveryClientArrayStruct {
     int                         limitHwid;
     int64_t                     totalGB; // Albeit named totalGB, its the total traffic of the user in BYTES
     int64_t                     expiryTime;
-    const unsigned char         enable;
-    int64_t                     tagId;
+    unsigned char         enable;
+    int64_t                     tgId;
     const char*                 group;
     const char*                 comment;
     int                         reset;
@@ -67,6 +67,7 @@ struct jsonListEveryClientArrayStruct {
     int64_t                     updatedAt; // "updated_at" on server side
     const void*                 reverse; // This shall be null on normal ( not customized  ) setup
     int*                        inboundIds;
+    int64_t                     inboundIdsCount;
     struct jsonListEveryClientObjectTrafficObjectStruct* listEveryCliObjTrafficObjStruct;
 
 };
@@ -74,7 +75,7 @@ struct jsonListEveryClientArrayStruct {
 
 
 struct jsonListEveryClientStruct {
-    const unsigned char         success;
+    unsigned char                 success;
     const char*                 msg;
     size_t                      jsonListEveryClientArrayStructSize;
     struct jsonListEveryClientArrayStruct* listEveryCliArrStruct; // array
@@ -132,6 +133,7 @@ struct jsonFilterClientsObjectItemsArrayResponseStruct {
     int64_t                     expiryTime;
     const char*                 group;
     int*                        inboundIds; // every pointer presented is an element of the array
+    int64_t                     inboundIdsCount;
     int                         limitHwid;
     int                         limitIp;
     int                         reset;
@@ -310,6 +312,7 @@ struct jsonFetchClientByEmailObjectStruct {
     size_t                      jsonFetchClientByEmailObjectExternalLinksArrayStructSize;
     struct jsonFetchClientByEmailObjectExternalLinksArrayStruct* fetchCliByEmailObjExternalLinksArrStruct; // array
     int*                        inboundIds;
+    int64_t                     inboundIdsCount;
     const char*                 tunnelAllowedIPs;
     int64_t                     usedTraffic;
 
@@ -440,6 +443,7 @@ struct jsonFetchClientByTelegramIdObjectArrayStruct {
     size_t                      jsonFetchClientByTelegramIdObjectArrayExternalLinksArrayStructSize;
     struct jsonFetchClientByTelegramIdObjectArrayExternalLinksArrayStruct* fetchCliByTgIArrdObjExternalLinksArrStruct; // array
     int*                        inboundIds;
+    int64_t                     inboundIdsCount;
     const char*                 tunnelAllowedIPs;
     int64_t                     usedTraffic;
 
@@ -470,6 +474,7 @@ struct jsonCreateNewClientPostStruct {
     int                         limitHwid;
     unsigned char               enable;
     int*                        inboundIds;
+    int64_t                     inboundIdsCount;
 
 };
 
@@ -503,6 +508,7 @@ struct jsonUpdateClientByEmailPostStruct {
     int                         limitHwid;
     unsigned char               enable;
     int*                        inboundIds;
+    int64_t                     inboundIdsCount;
 
 };
 
@@ -535,6 +541,7 @@ struct jsonDeleteClientByEmailResponseStruct {
 
 struct jsonAttachClient2AdditionalInboundsPostStruct {
     int*                        inboundIds;
+    int64_t                     inboundIdsCount;
 
 };
 
@@ -555,6 +562,7 @@ struct jsonAttachClient2AdditionalInboundsResponseStruct {
 
 struct jsonDetachClient2AdditionalInboundsPostStruct {
     int*                        inboundIds;
+    int64_t                     inboundIdsCount;
 
 };
 
@@ -749,6 +757,7 @@ struct jsonExportAllClientsObjectArrayClientObjectResponseStruct {
 struct jsonExportAllClientsObjectArrayResponseStruct {
     struct jsonExportAllClientsObjectArrayClientObjectResponseStruct* exportAllCliObjArrCliObjRStruct;
     int* inboundIds;
+    int64_t                     inboundIdsCount;
 
 };
 
@@ -1010,6 +1019,7 @@ struct jsonBulkCreateClientsMainObjectPostStruct {
     int                         limitHwid;
     unsigned char               enable;
     int*                        inboundIds;
+    int64_t                     inboundIdsCount;
 
 };
 
@@ -1129,6 +1139,7 @@ struct jsonBulkRemoveClientsGroupResponseStruct {
 struct jsonBulkAttachClientsPostStruct {
     const char**                emails;
     int*                        inboundIds;
+    int64_t                     inboundIdsCount;
 
 };
 
@@ -1169,6 +1180,7 @@ struct jsonBulkAttachClientsResponseStruct {
 struct jsonBulkDetachClientsPostStruct {
     const char**                emails;
     int*                        inboundIds;
+    int64_t                     inboundIdsCount;
 
 };
 

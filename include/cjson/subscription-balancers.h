@@ -28,6 +28,7 @@ struct jsonSubBalancerObjectStruct {
     unsigned char               enabled; // whether the balancer is emitted
     int                         id;
     int*                        inboundIds; // member inbound ids; every pointer presented is
+    int64_t                     inboundIdsCount;
                                             // an element of the array
     void*                       memberWeights; // leastLoad only: JSON object mapping inbound
                                                // id to a static weight > 0, eg {"3":0.2};
@@ -64,6 +65,7 @@ struct jsonCreateSubBalancerPostStruct {
     const char*                 strategy; // "leastLoad", "leastPing", "roundRobin" or
                                           // "random", defaults to "random"
     int*                        inboundIds; // repeated form keys selecting the member
+    int64_t                     inboundIdsCount;
                                             // inbounds ( required, at least one ); every
                                             // pointer presented is an element of the array
     void*                       memberWeights; // leastLoad only: JSON object mapping inbound
@@ -100,6 +102,7 @@ struct jsonUpdateSubBalancerPostStruct {
     const char*                 strategy; // "leastLoad", "leastPing", "roundRobin" or
                                           // "random", defaults to "random"
     int*                        inboundIds; // repeated form keys selecting the member
+    int64_t                     inboundIdsCount;
                                             // inbounds ( required, at least one ); every
                                             // pointer presented is an element of the array
     void*                       memberWeights; // leastLoad only: JSON object mapping inbound

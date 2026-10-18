@@ -98,6 +98,7 @@ struct jsonHostGroupObjectStruct {
     const char*                 hostHeader;
     const char**                hosts; // every pointer presented is an element of the array
     int*                        inboundIds; // every pointer presented is an element of the array
+    int64_t                     inboundIdsCount;
     unsigned char               isDisabled;
     unsigned char               isHidden;
     unsigned char               keepSniBlank;
@@ -189,6 +190,7 @@ struct jsonListHostsTagsResponseStruct {
 struct jsonAddHostPostStruct {
     const char*                 remark;
     int*                        inboundIds; // every pointer presented is an element of the array
+    int64_t                     inboundIdsCount;
     const char**                hosts; // every pointer presented is an element of the array
     int                         port;
     const char*                 security; // "none", "tls" or "reality"
@@ -241,6 +243,7 @@ struct jsonUpdateHostPostStruct {
     int                         groupId; // path param, also sent in the body
     const char*                 remark;
     int*                        inboundIds; // every pointer presented is an element of the array
+    int64_t                     inboundIdsCount;
     const char**                hosts; // every pointer presented is an element of the array
     int                         port;
     const char*                 security; // "none", "tls" or "reality"
@@ -325,6 +328,7 @@ struct jsonSetEnableHostResponseStruct {
 
 struct jsonReorderHostsPostStruct {
     int*                        ids; // every pointer presented is an element of the array
+    int64_t                     idsCount;
 
 };
 
@@ -366,6 +370,7 @@ struct jsonBulkAddHostsResponseStruct {
 
 struct jsonBulkSetEnableHostsPostStruct {
     int*                        ids; // every pointer presented is an element of the array
+    int64_t                     idsCount;
     unsigned char               enable;
 
 };
@@ -386,6 +391,7 @@ struct jsonBulkSetEnableHostsResponseStruct {
 
 struct jsonBulkDeleteHostsPostStruct {
     int*                        ids; // every pointer presented is an element of the array
+    int64_t                     idsCount;
 
 };
 

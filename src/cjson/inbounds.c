@@ -1,49 +1,11 @@
 #include "../../include/cjson/inbounds.h"
 #include "../../include/log.h"
+#include "../../include/cjson/jsonValidation.h"
 
 #include <cjson/cJSON.h>
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
-
-static unsigned char isJsonValid(const char* json) {
-    DBG(LOG_INFO, "Function called");
-
-    if (json == NULL) {
-        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is nullptr");
-
-        return 0;
-
-    }
-    
-    const char* ptrErr = NULL;
-    cJSON* j = cJSON_ParseWithOpts(json, &ptrErr, 1);
-    if (j == NULL) {
-        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Parsing failed, printing error location");
-
-        size_t errOffset = ptrErr - json;
-
-        size_t startOffset = (errOffset > 10) ? errOffset - 10 : 0;
-        size_t offsetLen = (errOffset + 10ULL < strlen(json)) ? 10 : strlen(json) - startOffset;
-        char errMsg[1024];
-        sprintf(
-            errMsg,
-            "Error occurred on parsing the json configuration file, the error occurred on:\n%.*s\nexiting...\n",
-            (int)offsetLen,
-            json + startOffset
-        );
-
-        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, errMsg);
-
-        return 0;
-
-    }
-
-    cJSON_Delete(j);
-
-    return 1;
-
-}
 
 void jsonListInboundStreamSettingsTcpSettingsObjectStructDelete(struct jsonListInboundStreamSettingsTcpSettingsObjectStruct* listInStreamSettingsTcpSettingsObjStruct) {
     if (listInStreamSettingsTcpSettingsObjStruct->listInStreamSettingsTcpSettingsObjHeaderObjStruct) {
@@ -2357,7 +2319,7 @@ void jsonSetInboundFallbacksResponseStructDelete(struct jsonSetInboundFallbacksR
 struct jsonListInboundClientStatsArrayStruct* jsonListInboundClientStatsArray(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;
@@ -4808,7 +4770,7 @@ static int jsonListInboundStreamSettingsRealitySettingsParse(cJSON* streamSettin
 struct jsonListInboundStruct* jsonListInbound(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;
@@ -14492,7 +14454,7 @@ struct jsonListInboundStruct* jsonListInbound(const char* json) {
 struct jsonListInboundOptionsStruct* jsonListInboundOptions(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;
@@ -14670,7 +14632,7 @@ const char* jsonAddInboundPost(struct jsonListInboundObjectStruct* addInboundObj
 struct jsonAddInboundResponseStruct* jsonAddInboundResponse(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;
@@ -14736,7 +14698,7 @@ const char* jsonDeleteSingleInboundPost(struct jsonDeleteSingleInboundPostStruct
 struct jsonDeleteSingleInboundResponseStruct* jsonDeleteSingleInboundResponse(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;
@@ -14875,7 +14837,7 @@ const char* jsonDeleteMultipleInboundsPost(struct jsonDeleteMultipleInboundsPost
 struct jsonDeleteMultipleInboundResponseStruct* jsonDeleteMultipleInboundResponse(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;
@@ -14990,7 +14952,7 @@ struct jsonDeleteMultipleInboundResponseStruct* jsonDeleteMultipleInboundRespons
 struct jsonSetEnableInboundResponseStruct* jsonSetEnableInboundResponse(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;
@@ -15049,7 +15011,7 @@ struct jsonSetEnableInboundResponseStruct* jsonSetEnableInboundResponse(const ch
 struct jsonResetInboundResponseStruct* jsonResetInboundResponse(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;
@@ -15108,7 +15070,7 @@ struct jsonResetInboundResponseStruct* jsonResetInboundResponse(const char* json
 struct jsonRemoveEveryClientFromInboundResponseStruct* jsonRemoveEveryClientFromInboundResponse(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;
@@ -15188,7 +15150,7 @@ struct jsonRemoveEveryClientFromInboundResponseStruct* jsonRemoveEveryClientFrom
 struct jsonResetAllInboundsUploadNDownloadStruct* jsonResetAllInboundsUploadNDownload(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;
@@ -15247,7 +15209,7 @@ struct jsonResetAllInboundsUploadNDownloadStruct* jsonResetAllInboundsUploadNDow
 struct jsonListInboundSlimStruct* jsonListInboundSlim(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;
@@ -32359,7 +32321,7 @@ struct jsonImportInboundsResponseStruct* jsonImportInboundsResponse(const char* 
 struct jsonSetInboundFallbacksResponseStruct* jsonSetInboundFallbacksResponse(const char* json) {
     DBG(LOG_INFO, "Function called");
 
-    if (!isJsonValid(json)) {
+    if (!__isJsonValid(json)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Provided json is not valid, returning...");
 
         return NULL;

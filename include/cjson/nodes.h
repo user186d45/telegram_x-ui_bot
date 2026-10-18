@@ -425,6 +425,7 @@ struct jsonProbeNodeResponseStruct {
 
 struct jsonUpdateNodePanelPostStruct {
     int*                        ids; // node ids to update; every pointer presented is
+    int64_t                     idsCount;
                                      // an element of the array
     unsigned char               dev; // use dev channel instead of stable
 
