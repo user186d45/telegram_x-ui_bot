@@ -643,6 +643,8 @@ struct jsonSettingValidateRegexResponseStruct*     jsonSettingValidateRegexRespo
 
 const char*                                        jsonSettingApiTokensListPost(struct jsonSettingApiTokensListPostStruct* settingApiTokensListPostStruct);
 
+struct jsonSettingApiTokensListPostStruct*       jsonSettingApiTokensListPostStructParse(const char* json);
+
 const char*                                        jsonSettingApiTokenNewPost(struct jsonSettingApiTokenNewPostStruct* settingApiTokenNewPostStruct);
 
 struct jsonSettingApiTokenNewResponseStruct*       jsonSettingApiTokenNewResponse(const char* json);

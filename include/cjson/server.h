@@ -289,6 +289,7 @@ struct jsonServerXrayObservatoryHistoryResponseStruct {
 struct jsonServerGetXrayVersionResponseStruct {
     unsigned char               success;
     const char*                 msg;
+    size_t                      objCount;
     const char**                obj; // every pointer presented is an element of the array
 
 };
@@ -432,6 +433,7 @@ struct jsonServerDescendantsObjectArrayStruct {
     const char*                 address;
     const char*                 status; // e.g. "online"
     const char**                versions; // Omittable; not present at the documented sample
+    size_t                      versionsCount;
 
 };
 
@@ -642,6 +644,7 @@ struct jsonServerUpdateGeofileResponseStruct {
 struct jsonServerLogsResponseStruct {
     unsigned char               success;
     const char*                 msg;
+    size_t                      objCount;
     const char**                obj; // every pointer presented is an element of the array
 
 };
@@ -697,6 +700,7 @@ struct jsonServerAmneziawgLogsPeersArrayStruct {
 
 struct jsonServerAmneziawgLogsObjectStruct {
     const char**                events; // every pointer presented is an element of the array
+    size_t                      eventsCount;
     size_t                      jsonServerAmneziawgLogsPeersArrayStructSize;
     struct jsonServerAmneziawgLogsPeersArrayStruct* awgLogsObjPeersArrStruct; // array
     unsigned char               running;
@@ -830,6 +834,7 @@ struct jsonServerScanRealityTargetObjectStruct {
     unsigned char               privateTarget;
     const char*                 reason;
     const char**                serverNames; // every pointer presented is an element of the array
+    size_t                      serverNamesCount;
     const char*                 target;
     unsigned char               tls13;
     const char*                 tlsVersion; // e.g. "1.3"

@@ -58,6 +58,9 @@ add_cjson_test(test_clients_bulk test_clients_bulk.c ${REPO_ROOT}/src/cjson/clie
 add_test(NAME clients_bulk COMMAND test_clients_bulk)
 
 add_cjson_test(test_clients_endpoints test_clients_endpoints.c ${REPO_ROOT}/src/cjson/clients.c ${INBOUNDS_SRC} ${LOG_SRC} ${JSON_VALIDATION_SRC})
+add_cjson_test(test_settings test_settings.c ${REPO_ROOT}/src/cjson/settings.c ${LOG_SRC} ${JSON_VALIDATION_SRC})
+add_test(NAME settings COMMAND test_settings)
+
 add_test(NAME clients_endpoints COMMAND test_clients_endpoints)
 
 add_cjson_test(test_security_sample test_security_sample.c ${INBOUNDS_SRC} ${LOG_SRC} ${JSON_VALIDATION_SRC})
