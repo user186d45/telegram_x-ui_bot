@@ -43,7 +43,9 @@ int main(void) {
     }
 
     const char* failSample = "{\"success\": false, \"msg\": \"error\"}";
-    failures += check("success false is rejected", jsonListEveryClient(failSample) == NULL);
+    struct jsonListEveryClientStruct* rf = jsonListEveryClient(failSample);
+    failures += check("success false keeps msg", rf != NULL && rf->success == 0 && rf->msg != NULL && strcmp(rf->msg, "error") == 0);
+    jsonListEveryClientStructDelete(rf);
 
     if (failures) {
         printf("LIST EVERY CLIENT TESTS FAILED: %d\n", failures);

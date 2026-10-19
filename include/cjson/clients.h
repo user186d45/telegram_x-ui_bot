@@ -25,6 +25,7 @@ struct jsonListEveryClientObjectTrafficObjectStruct {
     int                         reset;
     int64_t                     resetDay;
     int64_t                     resetMax;
+    int64_t                     resetWeekday;
     int64_t                     resetCount;
     int64_t                     lastOnline;
     int64_t                     lastSubFetch;
@@ -139,6 +140,7 @@ struct jsonFilterClientsObjectItemsArrayResponseStruct {
     int                         reset;
     int                         resetDay;
     int                         resetMax;
+    int                         resetWeekday;
     const char*                 subId;
     int64_t                     totalGB; // Albeit named totalGB, its the total traffic of the
                                          // user in BYTES
@@ -172,6 +174,7 @@ struct jsonFilterClientsObjectSummaryObjectResponseStruct {
 struct jsonFilterClientsObjectResponseStruct {
     int64_t                     filtered;
     const char**                groups; // every pointer presented is an element of the array
+    int64_t                     groupsCount;
     size_t                      jsonFilterClientsObjectItemsArrayResponseStructSize;
     struct jsonFilterClientsObjectItemsArrayResponseStruct* filterCliObjItemsArrStruct; // array
     int                         page;
@@ -640,6 +643,7 @@ struct jsonResetAllClientsTrafficsResponseStruct {
 
 struct jsonDeleteAllDepletedClientsResponseStruct {
     unsigned char*              success;
+    const char*                 msg;
     int64_t                     deleted;
 
 };
@@ -652,6 +656,7 @@ struct jsonDeleteAllDepletedClientsResponseStruct {
 
 struct jsonDeleteAllOrphanClientsResponseStruct {
     unsigned char*              success;
+    const char*                 msg;
     int64_t                     deleted;
 
 };
@@ -740,6 +745,7 @@ struct jsonExportAllClientsObjectArrayClientObjectResponseStruct {
     unsigned char               enable;
     int64_t                     tgId;
     const char*                 subId;
+    const char*                 group;
     const char*                 comment;
     int                         reset;
     int                         resetDay;
@@ -754,10 +760,19 @@ struct jsonExportAllClientsObjectArrayClientObjectResponseStruct {
 
 
 
+struct jsonExportAllClientsTrafficObjectResponseStruct {
+    int64_t                     up;
+    int64_t                     down;
+    int                         resetCount;
+    int64_t                     lastOnline;
+
+};
+
 struct jsonExportAllClientsObjectArrayResponseStruct {
     struct jsonExportAllClientsObjectArrayClientObjectResponseStruct* exportAllCliObjArrCliObjRStruct;
     int* inboundIds;
     int64_t                     inboundIdsCount;
+    struct jsonExportAllClientsTrafficObjectResponseStruct* trafficObjRStruct; // optional, NULL when the traffic field is not present
 
 };
 
@@ -776,6 +791,14 @@ struct jsonExportAllClientsResponseStruct {
 // Import clients post and response structs
 // =====================================================
 
+struct jsonImportClientsTrafficObjectPostStruct {
+    int64_t                     up;
+    int64_t                     down;
+    int                         resetCount;
+    int64_t                     lastOnline;
+
+};
+
 struct jsonImportClientsDataObjectPostStruct {
     const char*                 id;
     const char*                 security;
@@ -788,6 +811,7 @@ struct jsonImportClientsDataObjectPostStruct {
     unsigned char               enable;
     int64_t                     tgId;
     const char*                 subId;
+    const char*                 group;
     const char*                 comment;
     int                         reset;
     int                         resetDay;
@@ -797,6 +821,9 @@ struct jsonImportClientsDataObjectPostStruct {
     int64_t                     createdAt; // "created_at" on server side
     int64_t                     updatedAt; // "updated_at" on server side
     int                         limitHwid;
+    int*                        inboundIds; // same { client, inboundIds } syntax as the export array
+    int64_t                     inboundIdsCount;
+    struct jsonImportClientsTrafficObjectPostStruct* trafficObjPStruct; // optional, NULL when the traffic field is not present
 
 };
 
@@ -859,9 +886,12 @@ struct jsonImportClientsResponseStruct {
 
 struct jsonBulkAdjustClientsPostStruct {
     const char**                emails;
+    int64_t                     emailsCount;
     int                         addDays;
     int64_t                     addBytes;
     const char*                 flow; // Omittable
+    int                         limitHwid;
+    const char*                 adTag; // Omittable
 
 };
 
@@ -899,6 +929,7 @@ struct jsonBulkAdjustClientsResponseStruct {
 
 struct jsonBulkEnableClientsPostStruct {
     const char**                emails;
+    int64_t                     emailsCount;
 
 };
 
@@ -937,6 +968,7 @@ struct jsonBulkEnableClientsResponseStruct {
 
 struct jsonBulkDisableClientsPostStruct {
     const char**                emails;
+    int64_t                     emailsCount;
 
 };
 
@@ -975,6 +1007,7 @@ struct jsonBulkDisableClientsResponseStruct {
 
 struct jsonBulkDeleteClientsPostStruct {
     const char**                emails;
+    int64_t                     emailsCount;
     unsigned char               keepTraffic;
 
 };
@@ -1072,6 +1105,7 @@ struct jsonBulkCreateClientsResponseStruct {
 
 struct jsonBulkAddClients2GroupPostStruct {
     const char**                emails;
+    int64_t                     emailsCount;
     const char*                 group;
 
 };
@@ -1104,6 +1138,7 @@ struct jsonBulkAddClients2GroupResponseStruct {
 
 struct jsonBulkRemoveClientsGroupPostStruct {
     const char**                emails;
+    int64_t                     emailsCount;
 
 };
 
@@ -1138,6 +1173,7 @@ struct jsonBulkRemoveClientsGroupResponseStruct {
 
 struct jsonBulkAttachClientsPostStruct {
     const char**                emails;
+    int64_t                     emailsCount;
     int*                        inboundIds;
     int64_t                     inboundIdsCount;
 
@@ -1146,9 +1182,12 @@ struct jsonBulkAttachClientsPostStruct {
 
 
 struct jsonBulkAttachClientsObjectResponseStruct {
-    const char**                attached;
-    const char**                skipped;
-    const char**                errors;
+    const char**                attached; // every pointer presented is an element of the array
+    int64_t                     attachedCount;
+    const char**                skipped; // every pointer presented is an element of the array
+    int64_t                     skippedCount;
+    const char**                errors; // every pointer presented is an element of the array
+    int64_t                     errorsCount;
 
 };
 
@@ -1179,6 +1218,7 @@ struct jsonBulkAttachClientsResponseStruct {
 
 struct jsonBulkDetachClientsPostStruct {
     const char**                emails;
+    int64_t                     emailsCount;
     int*                        inboundIds;
     int64_t                     inboundIdsCount;
 
@@ -1187,9 +1227,12 @@ struct jsonBulkDetachClientsPostStruct {
 
 
 struct jsonBulkDetachClientsObjectResponseStruct {
-    const char**                detached;
-    const char**                skipped;
-    const char**                errors;
+    const char**                detached; // every pointer presented is an element of the array
+    int64_t                     detachedCount;
+    const char**                skipped; // every pointer presented is an element of the array
+    int64_t                     skippedCount;
+    const char**                errors; // every pointer presented is an element of the array
+    int64_t                     errorsCount;
 
 };
 
@@ -1212,6 +1255,7 @@ struct jsonBulkDetachClientsResponseStruct {
 
 struct jsonBulkResetTrafficPostStruct {
     const char**                emails;
+    int64_t                     emailsCount;
 
 };
 
@@ -1260,6 +1304,7 @@ struct jsonListGroupEmailsResponseStruct {
     unsigned char               success;
     const char*                 msg;
     const char**                obj; // every pointer presented is an element of the array
+    int64_t                     objCount;
 
 };
 
@@ -1394,6 +1439,7 @@ struct jsonListClientIpsResponseStruct {
     unsigned char               success;
     const char*                 msg;
     const char**                obj; // The endpoint documentation describes the obj as an
+    int64_t                     objCount;
                                      // array of "ip (timestamp)" strings, while its documented
                                      // sample response shows null ( undefined behavior )
 
@@ -1418,6 +1464,7 @@ struct jsonListClientHwidsObjectArrayStruct {
     const char*                 deviceOs;
     const char*                 osVersion;
     const char*                 deviceModel;
+    const char*                 fingerprint;
 
 };
 
@@ -1461,6 +1508,16 @@ struct jsonOnlinesResponseStruct {
     unsigned char               success;
     const char*                 msg;
     const char**                obj; // every pointer presented is an element of the array
+    int64_t                     objCount;
+
+};
+
+
+
+struct jsonOnlinesByGuidObjectArrayStruct {
+    const char*                 panelGuid; // key of the hosting node
+    const char**                emails; // every pointer presented is an element of the array
+    int64_t                     emailsCount;
 
 };
 
@@ -1469,10 +1526,34 @@ struct jsonOnlinesResponseStruct {
 struct jsonOnlinesByGuidResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // JSON object keyed by the panelGuid of the hosting node,
-                                     // each value being the array of online client emails;
-                                     // dynamic keys cannot be modeled by a C struct
-                                     // ( undefined behavior )
+    size_t                      jsonOnlinesByGuidObjectArrayStructSize;
+    struct jsonOnlinesByGuidObjectArrayStruct* onlinesByGuidObjArrStruct; // array
+
+};
+
+
+
+struct jsonClientIpsByGuidIpObjectArrayStruct {
+    const char*                 ip;
+    int64_t                     timestamp;
+
+};
+
+
+
+struct jsonClientIpsByGuidClientObjectArrayStruct {
+    const char*                 email;
+    size_t                      jsonClientIpsByGuidIpObjectArrayStructSize;
+    struct jsonClientIpsByGuidIpObjectArrayStruct* clientIpsByGuidIpObjArrStruct; // array
+
+};
+
+
+
+struct jsonClientIpsByGuidObjectArrayStruct {
+    const char*                 panelGuid; // key of the observing node
+    size_t                      jsonClientIpsByGuidClientObjectArrayStructSize;
+    struct jsonClientIpsByGuidClientObjectArrayStruct* clientIpsByGuidCliObjArrStruct; // array
 
 };
 
@@ -1481,10 +1562,17 @@ struct jsonOnlinesByGuidResponseStruct {
 struct jsonClientIpsByGuidResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // JSON object keyed by the panelGuid of the observing
-                                     // node, each value mapping a client email to the array of
-                                     // { ip, timestamp } items that node saw; dynamic keys
-                                     // cannot be modeled by a C struct ( undefined behavior )
+    size_t                      jsonClientIpsByGuidObjectArrayStructSize;
+    struct jsonClientIpsByGuidObjectArrayStruct* clientIpsByGuidObjArrStruct; // array
+
+};
+
+
+
+struct jsonActiveInboundsObjectArrayStruct {
+    const char*                 panelGuid; // key of the hosting node
+    const char**                tags; // every pointer presented is an element of the array
+    int64_t                     tagsCount;
 
 };
 
@@ -1493,10 +1581,16 @@ struct jsonClientIpsByGuidResponseStruct {
 struct jsonActiveInboundsResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // JSON object keyed by the panelGuid of the hosting node,
-                                     // each value being the array of inbound tags that carried
-                                     // traffic in the heartbeat window; dynamic keys cannot
-                                     // be modeled by a C struct ( undefined behavior )
+    size_t                      jsonActiveInboundsObjectArrayStructSize;
+    struct jsonActiveInboundsObjectArrayStruct* activeInboundsObjArrStruct; // array
+
+};
+
+
+
+struct jsonLastOnlineObjectArrayStruct {
+    const char*                 email;
+    int64_t                     lastOnline;
 
 };
 
@@ -1505,9 +1599,8 @@ struct jsonActiveInboundsResponseStruct {
 struct jsonLastOnlineResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // JSON object mapping each client email to its last-seen
-                                     // unix timestamp; dynamic keys cannot be modeled by a C
-                                     // struct ( undefined behavior )
+    size_t                      jsonLastOnlineObjectArrayStructSize;
+    struct jsonLastOnlineObjectArrayStruct* lastOnlineObjArrStruct; // array
 
 };
 
@@ -1528,15 +1621,66 @@ struct jsonSubLinksResponseStruct {
     unsigned char               success;
     const char*                 msg;
     const char**                obj; // every pointer presented is an element of the array
+    int64_t                     objCount;
 
 };
 
 
 
+struct jsonRenewalPreviewPostStruct {
+    int64_t                     expiryTime; // Current cutoff in unix milliseconds; 0 unlimited, negative first-use duration
+    int                         reset; // Fixed interval in days; 0 disabled
+    int                         resetDay; // Monthly calendar day 1-31; 0 disabled
+    int                         resetWeekday; // Weekly calendar day 1-7 (Monday-Sunday); 0 disabled
+    int                         resetMax; // Maximum renewals; 0 unlimited
+    int                         resetCount; // Renewals already consumed; defaults to 0
+
+};
+
+
+
+struct jsonRenewalPreviewObjectStruct {
+    unsigned char               canRenew;
+    unsigned char               delayedStart;
+    const char*                 nextExpiry;
+    const char*                 renewAt;
+    int                         renewals;
+    const char*                 suggestedExpiry;
+    int64_t                     suggestedExpiryTime;
+    const char*                 timeZone;
+    const char*                 validThrough;
+
+};
+
+
+
+struct jsonRenewalPreviewResponseStruct {
+    unsigned char               success;
+    const char*                 msg;
+    struct jsonRenewalPreviewObjectStruct* renewalPreviewObjStruct;
+
+};
+
+
+struct jsonHappLinkObjectStruct {
+    const char*                 encryptedLink;
+
+};
+
+
+
+struct jsonHappLinkResponseStruct {
+    unsigned char               success;
+    const char*                 msg;
+    struct jsonHappLinkObjectStruct* happLinkObjStruct;
+
+};
+
 struct jsonLinksResponseStruct {
     unsigned char               success;
     const char*                 msg;
     const char**                obj; // every pointer presented is an element of the array
+    int64_t                     objCount;
 
 };
 
@@ -1891,5 +2035,34 @@ struct jsonTrafficResponseStruct*                  jsonTrafficResponse(const cha
 struct jsonSubLinksResponseStruct*                 jsonSubLinksResponse(const char* json);
 
 struct jsonLinksResponseStruct*                    jsonLinksResponse(const char* json);
+
+
+void        jsonOnlinesByGuidObjectArrayStructDelete(struct jsonOnlinesByGuidObjectArrayStruct* onlinesByGuidObjArrStruct, size_t arraySize);
+
+void        jsonClientIpsByGuidIpObjectArrayStructDelete(struct jsonClientIpsByGuidIpObjectArrayStruct* clientIpsByGuidIpObjArrStruct, size_t arraySize);
+
+void        jsonClientIpsByGuidClientObjectArrayStructDelete(struct jsonClientIpsByGuidClientObjectArrayStruct* clientIpsByGuidCliObjArrStruct, size_t arraySize);
+
+void        jsonClientIpsByGuidObjectArrayStructDelete(struct jsonClientIpsByGuidObjectArrayStruct* clientIpsByGuidObjArrStruct, size_t arraySize);
+
+void        jsonActiveInboundsObjectArrayStructDelete(struct jsonActiveInboundsObjectArrayStruct* activeInboundsObjArrStruct, size_t arraySize);
+
+void        jsonLastOnlineObjectArrayStructDelete(struct jsonLastOnlineObjectArrayStruct* lastOnlineObjArrStruct, size_t arraySize);
+
+void        jsonHappLinkObjectStructDelete(struct jsonHappLinkObjectStruct* happLinkObjStruct);
+
+void        jsonHappLinkResponseStructDelete(struct jsonHappLinkResponseStruct* happLinkRStruct);
+
+struct jsonHappLinkResponseStruct*                 jsonHappLinkResponse(const char* json);
+
+void        jsonRenewalPreviewPostStructDelete(struct jsonRenewalPreviewPostStruct* renewalPreviewPostStruct);
+
+void        jsonRenewalPreviewObjectStructDelete(struct jsonRenewalPreviewObjectStruct* renewalPreviewObjStruct);
+
+void        jsonRenewalPreviewResponseStructDelete(struct jsonRenewalPreviewResponseStruct* renewalPreviewRStruct);
+
+const char*                                        jsonRenewalPreviewPost(struct jsonRenewalPreviewPostStruct* renewalPreviewPostStruct);
+
+struct jsonRenewalPreviewResponseStruct*           jsonRenewalPreviewResponse(const char* json);
 
 #endif /* CJSON_TELEGRAM_XUI_BOT_CLIENTS_H */

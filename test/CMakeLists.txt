@@ -51,6 +51,15 @@ add_test(NAME set_fallbacks_post COMMAND test_set_fallbacks_post)
 add_cjson_test(test_list_every_client test_list_every_client.c ${REPO_ROOT}/src/cjson/clients.c ${INBOUNDS_SRC} ${LOG_SRC} ${JSON_VALIDATION_SRC})
 add_test(NAME list_every_client COMMAND test_list_every_client)
 
+add_cjson_test(test_clients_samples test_clients_samples.c ${REPO_ROOT}/src/cjson/clients.c ${INBOUNDS_SRC} ${LOG_SRC} ${JSON_VALIDATION_SRC})
+add_test(NAME clients_samples COMMAND test_clients_samples)
+
+add_cjson_test(test_clients_bulk test_clients_bulk.c ${REPO_ROOT}/src/cjson/clients.c ${INBOUNDS_SRC} ${LOG_SRC} ${JSON_VALIDATION_SRC})
+add_test(NAME clients_bulk COMMAND test_clients_bulk)
+
+add_cjson_test(test_clients_endpoints test_clients_endpoints.c ${REPO_ROOT}/src/cjson/clients.c ${INBOUNDS_SRC} ${LOG_SRC} ${JSON_VALIDATION_SRC})
+add_test(NAME clients_endpoints COMMAND test_clients_endpoints)
+
 add_cjson_test(test_security_sample test_security_sample.c ${INBOUNDS_SRC} ${LOG_SRC} ${JSON_VALIDATION_SRC})
 add_test(NAME security_sample COMMAND test_security_sample ${CMAKE_CURRENT_SOURCE_DIR}/sample_inbounds.json)
 
