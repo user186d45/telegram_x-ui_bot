@@ -35,6 +35,7 @@ struct jsonXrayConfigObjectResponseStruct {
 
 struct jsonXrayConfigResponseStruct {
     unsigned char               success;
+    const char*                 msg;
     struct jsonXrayConfigObjectResponseStruct* xrayConfigObjRStruct;
 
 };
@@ -49,7 +50,9 @@ struct jsonXrayConfigResponseStruct {
 struct jsonXrayGetDefaultJsonConfigResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // This shall be null on normal ( not customized  ) setup
+    const char*                 obj; // documented as the default JSON config but
+                                     // the documented sample response shows null; exact shape
+                                     // not provided ( undefined behavior )
 
 };
 
@@ -62,7 +65,7 @@ struct jsonXrayGetDefaultJsonConfigResponseStruct {
 struct jsonXrayGetOutboundsTrafficResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // documented as per-outbound up/down/total counters but
+    const char*                 obj; // documented as per-outbound up/down/total counters but
                                      // the documented sample response shows null; exact shape
                                      // not provided ( undefined behavior )
 
@@ -126,7 +129,9 @@ struct jsonXrayWarpPostStruct {
 struct jsonXrayWarpResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // This shall be null on normal ( not customized  ) setup
+    const char*                 obj; // documented as action-dependent data (config, stats,
+                                     // keys, etc.) but the documented sample response
+                                     // shows null ( undefined behavior )
 
 };
 
@@ -149,7 +154,9 @@ struct jsonXrayNordPostStruct {
 struct jsonXrayNordResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // This shall be null on normal ( not customized  ) setup
+    const char*                 obj; // documented as action-dependent data (countries,
+                                     // servers, credentials, etc.) but the documented
+                                     // sample response shows null ( undefined behavior )
 
 };
 
@@ -173,7 +180,10 @@ struct jsonXrayPiaPostStruct {
 struct jsonXrayPiaResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // This shall be null on normal ( not customized  ) setup
+    const char*                 obj; // documented as action-dependent data (countries,
+                                     // servers, credentials, WireGuard keys, etc.) but
+                                     // the documented sample response shows null
+                                     // ( undefined behavior )
 
 };
 
@@ -218,7 +228,9 @@ struct jsonXrayTestOutboundPostStruct {
 struct jsonXrayTestOutboundResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // This shall be null on normal ( not customized  ) setup
+    const char*                 obj; // documented as the test result with tag, delay,
+                                     // HTTP status and timing breakdown but the documented
+                                     // sample response shows null ( undefined behavior )
 
 };
 
@@ -244,7 +256,7 @@ struct jsonXrayTestOutboundsPostStruct {
 struct jsonXrayTestOutboundsResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // documented as an array of results with tag, delay,
+    const char*                 obj; // documented as an array of results with tag, delay,
                                      // HTTP status and connect/TLS/TTFB timing breakdown but
                                      // the documented sample response shows null
                                      // ( undefined behavior )
@@ -268,7 +280,7 @@ struct jsonXrayBalancerStatusPostStruct {
 struct jsonXrayBalancerStatusResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // map keyed by balancer tag; dynamic keys cannot be
+    const char*                 obj; // map keyed by balancer tag; dynamic keys cannot be
                                      // modeled by a C struct and the documented sample
                                      // response shows null ( undefined behavior )
 
@@ -317,7 +329,9 @@ struct jsonXrayRouteTestPostStruct {
 struct jsonXrayRouteTestResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // This shall be null on normal ( not customized  ) setup
+    const char*                 obj; // documented as the route test result but the
+                                     // documented sample response shows null
+                                     // ( undefined behavior )
 
 };
 
@@ -331,7 +345,7 @@ struct jsonXrayRouteTestResponseStruct {
 struct jsonXrayGeoDataFilesResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // documented as per-database layout, size, mtime,
+    const char*                 obj; // documented as per-database layout, size, mtime,
                                      // category count and parse error but the documented
                                      // sample response shows null ( undefined behavior )
 
@@ -345,12 +359,11 @@ struct jsonXrayGeoDataFilesResponseStruct {
 // =====================================================
 
 struct jsonXrayGeoDataCategoriesQueryStruct {
-    char*                       file; // database file name inside the asset folder
+    const char*                 file; // database file name inside the asset folder
                                       // ( required ), eg geosite.dat
-    char*                       q; // case-insensitive substring filter on the category code
-    int                         offset; // rows to skip, defaults to 0
-    int                         limit; // rows to return, capped at 500; omit to return every
-                                       // category
+    const char*                 q; // case-insensitive substring filter on the category code
+    int                         offset; // rows to skip, defaults to 0; 0 means omitted
+    int                         limit; // rows to return, capped at 500; 0 means omitted (return all)
 
 };
 
@@ -359,7 +372,7 @@ struct jsonXrayGeoDataCategoriesQueryStruct {
 struct jsonXrayGeoDataCategoriesResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // documented as a page of categories with entry counts
+    const char*                 obj; // documented as a page of categories with entry counts
                                      // and domain attributes but the documented sample
                                      // response shows null ( undefined behavior )
 
@@ -373,13 +386,13 @@ struct jsonXrayGeoDataCategoriesResponseStruct {
 // =====================================================
 
 struct jsonXrayGeoDataEntriesQueryStruct {
-    char*                       file; // database file name inside the asset folder
+    const char*                 file; // database file name inside the asset folder
                                       // ( required )
-    char*                       code; // category code, case-insensitive ( required ),
+    const char*                 code; // category code, case-insensitive ( required ),
                                       // eg google
-    char*                       q; // case-insensitive substring filter on the rule value
-    int                         offset; // rows to skip, defaults to 0
-    int                         limit; // rows to return, capped at 500, defaults to the cap
+    const char*                 q; // case-insensitive substring filter on the rule value
+    int                         offset; // rows to skip, defaults to 0; 0 means omitted
+    int                         limit; // rows to return, capped at 500; 0 means omitted (defaults to cap)
 
 };
 
@@ -388,7 +401,7 @@ struct jsonXrayGeoDataEntriesQueryStruct {
 struct jsonXrayGeoDataEntriesResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // documented as a page of rules but the documented
+    const char*                 obj; // documented as a page of rules but the documented
                                      // sample response shows null ( undefined behavior )
 
 };
@@ -414,7 +427,7 @@ struct jsonXrayGeoDataValidatePostStruct {
 struct jsonXrayGeoDataValidateResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // documented as the non-resolving tokens with reasons
+    const char*                 obj; // documented as the non-resolving tokens with reasons
                                      // but the documented sample response shows null
                                      // ( undefined behavior )
 
@@ -429,7 +442,7 @@ struct jsonXrayGeoDataValidateResponseStruct {
 struct jsonXrayOutboundSubsListResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // documented as the subscription rows ( remark, url,
+    const char*                 obj; // documented as the subscription rows ( remark, url,
                                      // tagPrefix, updateInterval, enabled, allowPrivate,
                                      // allowInsecure, prepend ) but the documented sample
                                      // response shows null; exact row shape not provided
@@ -447,7 +460,7 @@ struct jsonXrayOutboundSubsListResponseStruct {
 struct jsonXrayOutboundSubsCreatePostStruct {
     const char*                 remark; // optional display label
     const char*                 url; // subscription URL ( required ); must be public http(s),
-                                    // private/internal targets blocked unless allowPrivate
+                                     // private/internal targets blocked unless allowPrivate
     const char*                 tagPrefix; // prefix for generated outbound tags, defaults to
                                            // the lowest free "sub-" prefix
     int                         updateInterval; // seconds between auto-refreshes,
@@ -458,7 +471,9 @@ struct jsonXrayOutboundSubsCreatePostStruct {
     unsigned char               allowInsecure; // skip TLS certificate verification when
                                                // fetching the URL, default false
     unsigned char               prepend; // place this subscription's outbounds before the
-                                         // manual template outbounds, default false
+                                          // manual template outbounds, default false
+    const char*                 userAgent; // custom User-Agent sent when fetching this
+                                           // subscription, defaults to "3x-ui-outbound-sub/1.0"
 
 };
 
@@ -480,7 +495,7 @@ struct jsonXrayOutboundSubsCreateResponseStruct {
 struct jsonXrayOutboundSubsUpdatePostStruct {
     const char*                 remark; // optional display label
     const char*                 url; // subscription URL ( required ); must be public http(s),
-                                    // private/internal targets blocked unless allowPrivate
+                                     // private/internal targets blocked unless allowPrivate
     const char*                 tagPrefix; // prefix for generated outbound tags, defaults to
                                            // the lowest free "sub-" prefix
     int                         updateInterval; // seconds between auto-refreshes,
@@ -491,7 +506,9 @@ struct jsonXrayOutboundSubsUpdatePostStruct {
     unsigned char               allowInsecure; // skip TLS certificate verification when
                                                // fetching the URL, default false
     unsigned char               prepend; // place this subscription's outbounds before the
-                                         // manual template outbounds, default false
+                                          // manual template outbounds, default false
+    const char*                 userAgent; // custom User-Agent sent when fetching this
+                                           // subscription, defaults to "3x-ui-outbound-sub/1.0"
 
 };
 
@@ -527,7 +544,7 @@ struct jsonXrayOutboundSubsDeleteResponseStruct {
 struct jsonXrayOutboundSubsRefreshResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // documented as the parsed outbounds but the documented
+    const char*                 obj; // documented as the parsed outbounds but the documented
                                      // sample response shows null ( undefined behavior )
 
 };
@@ -565,6 +582,8 @@ struct jsonXrayOutboundSubsParsePostStruct {
                                               // default false
     unsigned char               allowInsecure; // skip TLS certificate verification,
                                                // default false
+    const char*                 userAgent; // custom User-Agent sent while fetching the
+                                           // preview, defaults to "3x-ui-outbound-sub/1.0"
 
 };
 
@@ -573,7 +592,8 @@ struct jsonXrayOutboundSubsParsePostStruct {
 struct jsonXrayOutboundSubsParseResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // This shall be null on normal ( not customized  ) setup
+    const char*                 obj; // documented as the parsed outbounds but the documented
+                                     // sample response shows null ( undefined behavior )
 
 };
 
@@ -713,11 +733,11 @@ struct jsonXrayRouteTestResponseStruct*            jsonXrayRouteTestResponse(con
 
 struct jsonXrayGeoDataFilesResponseStruct*         jsonXrayGeoDataFilesResponse(const char* json);
 
-struct jsonXrayGeoDataCategoriesQueryStruct*       jsonXrayGeoDataCategoriesQuery(const char* json);
+const char*                                        jsonXrayGeoDataCategoriesQueryString(struct jsonXrayGeoDataCategoriesQueryStruct* xrayGeoDataCategoriesQueryStruct);
 
 struct jsonXrayGeoDataCategoriesResponseStruct*    jsonXrayGeoDataCategoriesResponse(const char* json);
 
-struct jsonXrayGeoDataEntriesQueryStruct*          jsonXrayGeoDataEntriesQuery(const char* json);
+const char*                                        jsonXrayGeoDataEntriesQueryString(struct jsonXrayGeoDataEntriesQueryStruct* xrayGeoDataEntriesQueryStruct);
 
 struct jsonXrayGeoDataEntriesResponseStruct*       jsonXrayGeoDataEntriesResponse(const char* json);
 

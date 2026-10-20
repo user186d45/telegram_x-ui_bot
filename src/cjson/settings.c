@@ -86,6 +86,7 @@ void jsonSettingAllSmtpObjectStructDelete(struct jsonSettingAllSmtpObjectStruct*
     if (!setAllObjSmtpObjStruct) {
         return;
     }
+    free((char*)setAllObjSmtpObjStruct->smtpEnabledEvents);
     free((char*)setAllObjSmtpObjStruct->smtpEncryptionType);
     free((char*)setAllObjSmtpObjStruct->smtpFrom);
     free((char*)setAllObjSmtpObjStruct->smtpFromName);
@@ -401,10 +402,16 @@ void jsonSettingApiTokensObjectStructDelete(struct jsonSettingApiTokensObjectStr
     free(objArrays);
 }
 
+
 void jsonSettingApiTokensListPostStructDelete(struct jsonSettingApiTokensListPostStruct* settingApiTokensListPostStruct) {
     if (!settingApiTokensListPostStruct) {
         return;
     }
+    if (settingApiTokensListPostStruct->objArrays) {
+        jsonSettingApiTokensObjectStructDelete(settingApiTokensListPostStruct->objArrays, settingApiTokensListPostStruct->jsonSettingApiTokensObjectStructSize);
+        settingApiTokensListPostStruct->objArrays = NULL;
+    }
+    free((char*)settingApiTokensListPostStruct->msg);
     free(settingApiTokensListPostStruct);
 }
 
@@ -421,6 +428,7 @@ void jsonSettingApiTokenNewResponseStructDelete(struct jsonSettingApiTokenNewRes
         return;
     }
     free((char*)settingApiTokenNewRStruct->msg);
+    free((char*)settingApiTokenNewRStruct->obj);
     free(settingApiTokenNewRStruct);
 }
 

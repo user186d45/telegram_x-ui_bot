@@ -55,6 +55,14 @@ static int jsonCopyNumberItem(cJSON* parent, const char* key, int64_t* dest) {
     return 1;
 }
 
+static int jsonCopyIntItem(cJSON* parent, const char* key, int* dest) {
+    if (!cJSON_HasObjectItem(parent, key) || !cJSON_IsNumber(cJSON_GetObjectItem(parent, key))) {
+        return 1;
+    }
+    *dest = (int)cJSON_GetObjectItem(parent, key)->valuedouble;
+    return 1;
+}
+
 static int jsonCopyDoubleItem(cJSON* parent, const char* key, double* dest) {
     if (!cJSON_HasObjectItem(parent, key) || !cJSON_IsNumber(cJSON_GetObjectItem(parent, key))) {
         return 1;
@@ -351,7 +359,7 @@ static int jsonServerStatusPublicIPObjectStructParse(cJSON* obj, struct jsonServ
 
 static int jsonServerStatusAppStatsObjectStructParse(cJSON* obj, struct jsonServerStatusAppStatsObjectStruct* appStatsStruct) {
     if (!obj) return 0;
-    jsonCopyNumberItem(obj, "threads", (int64_t*)&appStatsStruct->threads);
+    jsonCopyIntItem(obj, "threads", &appStatsStruct->threads);
     jsonCopyNumberItem(obj, "mem", &appStatsStruct->mem);
     jsonCopyNumberItem(obj, "uptime", &appStatsStruct->uptime);
     return 1;
@@ -397,8 +405,8 @@ static int jsonServerStatusObjectStructParse(cJSON* obj, struct jsonServerStatus
     jsonCopyStringItem(obj, "panelVersion", &statusStruct->panelVersion);
     jsonCopyStringItem(obj, "panelGuid", &statusStruct->panelGuid);
     jsonCopyNumberItem(obj, "uptime", &statusStruct->uptime);
-    jsonCopyNumberItem(obj, "tcpCount", (int64_t*)&statusStruct->tcpCount);
-    jsonCopyNumberItem(obj, "udpCount", (int64_t*)&statusStruct->udpCount);
+    jsonCopyIntItem(obj, "tcpCount", &statusStruct->tcpCount);
+    jsonCopyIntItem(obj, "udpCount", &statusStruct->udpCount);
 
     if (cJSON_HasObjectItem(obj, "mem") && cJSON_IsObject(cJSON_GetObjectItem(obj, "mem"))) {
         statusStruct->srvStatusObjMemObjStruct = (struct jsonServerStatusMemObjectStruct*)calloc(1, sizeof(struct jsonServerStatusMemObjectStruct));
@@ -905,6 +913,7 @@ void jsonServerXrayMetricsHistoryResponseStructDelete(struct jsonServerXrayMetri
         return;
     }
     free((char*)serverXrayMetricsHistoryRStruct->msg);
+    free((char*)serverXrayMetricsHistoryRStruct->obj);
     free(serverXrayMetricsHistoryRStruct);
 }
 
@@ -941,7 +950,9 @@ struct jsonServerXrayMetricsHistoryResponseStruct* jsonServerXrayMetricsHistoryR
             return NULL;
         }
 
-        serverXrayMetricsHistoryRStruct->obj = NULL;
+        if (cJSON_HasObjectItem(jsonParser, "obj") && cJSON_IsString(cJSON_GetObjectItem(jsonParser, "obj"))) {
+            jsonCopyStringItem(jsonParser, "obj", &serverXrayMetricsHistoryRStruct->obj);
+        }
 
         cJSON_Delete(jsonParser);
         return serverXrayMetricsHistoryRStruct;
@@ -968,6 +979,7 @@ void jsonServerXrayObservatoryResponseStructDelete(struct jsonServerXrayObservat
         return;
     }
     free((char*)serverXrayObservatoryRStruct->msg);
+    free((char*)serverXrayObservatoryRStruct->obj);
     free(serverXrayObservatoryRStruct);
 }
 
@@ -1004,7 +1016,9 @@ struct jsonServerXrayObservatoryResponseStruct* jsonServerXrayObservatoryRespons
             return NULL;
         }
 
-        serverXrayObservatoryRStruct->obj = NULL;
+        if (cJSON_HasObjectItem(jsonParser, "obj") && cJSON_IsString(cJSON_GetObjectItem(jsonParser, "obj"))) {
+            jsonCopyStringItem(jsonParser, "obj", &serverXrayObservatoryRStruct->obj);
+        }
 
         cJSON_Delete(jsonParser);
         return serverXrayObservatoryRStruct;
@@ -1277,7 +1291,7 @@ struct jsonServerGetUpdateStatusResponseStruct* jsonServerGetUpdateStatusRespons
             return NULL;
         }
 
-        jsonCopyNumberItem(obj, "exitCode", (int64_t*)&getUpdateStatusObjStruct->exitCode);
+        jsonCopyIntItem(obj, "exitCode", &getUpdateStatusObjStruct->exitCode);
         jsonCopyNumberItem(obj, "finishedAt", &getUpdateStatusObjStruct->finishedAt);
         jsonCopyStringItem(obj, "runId", &getUpdateStatusObjStruct->runId);
         jsonCopyStringItem(obj, "state", &getUpdateStatusObjStruct->state);
@@ -2786,7 +2800,7 @@ static int jsonServerXrayLogsObjectArrayStructParse(cJSON* arrItem, struct jsonS
     if (!arrItem) return 0;
     jsonCopyStringItem(arrItem, "DateTime", &logStruct->DateTime);
     jsonCopyStringItem(arrItem, "Email", &logStruct->Email);
-    jsonCopyNumberItem(arrItem, "Event", (int64_t*)&logStruct->Event);
+    jsonCopyIntItem(arrItem, "Event", &logStruct->Event);
     jsonCopyStringItem(arrItem, "FromAddress", &logStruct->FromAddress);
     jsonCopyStringItem(arrItem, "Inbound", &logStruct->Inbound);
     jsonCopyStringItem(arrItem, "Outbound", &logStruct->Outbound);
@@ -2921,7 +2935,7 @@ static int jsonServerAmneziawgLogsPeersArrayStructParse(cJSON* arrItem, struct j
     jsonCopyStringItem(arrItem, "email", &peerStruct->email);
     jsonCopyStringItem(arrItem, "endpoint", &peerStruct->endpoint);
     jsonCopyNumberItem(arrItem, "handshake", &peerStruct->handshake);
-    jsonCopyNumberItem(arrItem, "inboundId", (int64_t*)&peerStruct->inboundId);
+    jsonCopyIntItem(arrItem, "inboundId", &peerStruct->inboundId);
     jsonCopyStringItem(arrItem, "interface", &peerStruct->interface);
     jsonCopyBoolItem(arrItem, "online", &peerStruct->online);
     jsonCopyStringItem(arrItem, "tag", &peerStruct->tag);
@@ -3555,9 +3569,9 @@ static int jsonServerScanRealityTargetObjectStructParse(cJSON* obj, struct jsonS
     jsonCopyBoolItem(obj, "h2", &scanStruct->h2);
     jsonCopyStringItem(obj, "host", &scanStruct->host);
     jsonCopyStringItem(obj, "ip", &scanStruct->ip);
-    jsonCopyNumberItem(obj, "latencyMs", (int64_t*)&scanStruct->latencyMs);
+    jsonCopyIntItem(obj, "latencyMs", &scanStruct->latencyMs);
     jsonCopyStringItem(obj, "notAfter", &scanStruct->notAfter);
-    jsonCopyNumberItem(obj, "port", (int64_t*)&scanStruct->port);
+    jsonCopyIntItem(obj, "port", &scanStruct->port);
     jsonCopyBoolItem(obj, "privateTarget", &scanStruct->privateTarget);
     jsonCopyStringItem(obj, "reason", &scanStruct->reason);
     if (cJSON_HasObjectItem(obj, "serverNames") && cJSON_IsArray(cJSON_GetObjectItem(obj, "serverNames"))) {
@@ -3820,7 +3834,7 @@ static int jsonServerClientIpsIpsItemStructParse(cJSON* arrItem, struct jsonServ
 static int jsonServerClientIpsObjectArrayStructParse(cJSON* arrItem, struct jsonServerClientIpsObjectArrayStruct* clientStruct) {
     if (!arrItem) return 0;
     jsonCopyStringItem(arrItem, "clientEmail", &clientStruct->clientEmail);
-    jsonCopyNumberItem(arrItem, "id", (int64_t*)&clientStruct->id);
+    jsonCopyIntItem(arrItem, "id", &clientStruct->id);
     if (cJSON_HasObjectItem(arrItem, "ips") && cJSON_IsArray(cJSON_GetObjectItem(arrItem, "ips"))) {
         cJSON* ipsArr = cJSON_GetObjectItem(arrItem, "ips");
         size_t ipsCount = cJSON_GetArraySize(ipsArr);
