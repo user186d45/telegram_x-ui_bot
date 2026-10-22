@@ -33,8 +33,8 @@
 // =====================================================
 
 struct jsonSubServerGetQueryStruct {
-    char*                       format; // "info" to get the subscription status view-model
-                                        // as JSON instead of the links
+    const char*                 format; // "info" to get the subscription status view-model
+                                        // as JSON instead of the links; 0 means omitted
 
 };
 
@@ -43,7 +43,7 @@ struct jsonSubServerGetQueryStruct {
 struct jsonSubServerGetResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // documented as the page view-model ( traffic, expiry,
+    const char*                 obj; // documented as the page view-model ( traffic, expiry,
                                      // online status ) for format=info but the documented
                                      // sample response shows null; exact shape not provided
                                      // ( undefined behavior )
@@ -61,7 +61,7 @@ struct jsonSubServerGetResponseStruct {
 struct jsonSubServerJsonResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // documented as a JSON array of proxy configs but the
+    const char*                 obj; // documented as a JSON array of proxy configs but the
                                      // documented sample response shows null; exact config
                                      // shape not provided ( undefined behavior )
 
@@ -75,14 +75,30 @@ struct jsonSubServerJsonResponseStruct {
 // enabled in settings, path prefix configured by
 // subClashPath
 // =====================================================
-
 struct jsonSubServerClashResponseStruct {
     unsigned char               success;
     const char*                 msg;
-    void*                       obj; // documented as a Clash YAML config but the documented
+    const char*                 obj; // documented as a Clash YAML config but the documented
                                      // sample response shows null ( undefined behavior )
 
 };
+
+
+// =====================================================
+// HWID device-slot status response struct ( aggregate
+// device-slot usage for the subscription ). Path:
+// /{subPath}/{subid}/hwid-status
+// =====================================================
+
+struct jsonSubServerHwidStatusResponseStruct {
+    unsigned char               success;
+    const char*                 msg;
+    const char*                 obj; // documented as active, full, limit, registered, remaining
+                                     // but the documented sample response shows null
+                                     // ( undefined behavior )
+
+};
+
 
 void        jsonSubServerGetQueryStructDelete(struct jsonSubServerGetQueryStruct* subServerGetQueryStruct);
 
@@ -92,12 +108,16 @@ void        jsonSubServerJsonResponseStructDelete(struct jsonSubServerJsonRespon
 
 void        jsonSubServerClashResponseStructDelete(struct jsonSubServerClashResponseStruct* subServerClashRStruct);
 
-struct jsonSubServerGetQueryStruct*                jsonSubServerGetQuery(const char* json);
+void        jsonSubServerHwidStatusResponseStructDelete(struct jsonSubServerHwidStatusResponseStruct* subServerHwidStatusRStruct);
+
+const char*                                        jsonSubServerGetQueryString(struct jsonSubServerGetQueryStruct* subServerGetQueryStruct);
 
 struct jsonSubServerGetResponseStruct*             jsonSubServerGetResponse(const char* json);
 
 struct jsonSubServerJsonResponseStruct*            jsonSubServerJsonResponse(const char* json);
 
 struct jsonSubServerClashResponseStruct*           jsonSubServerClashResponse(const char* json);
+
+struct jsonSubServerHwidStatusResponseStruct*      jsonSubServerHwidStatusResponse(const char* json);
 
 #endif /* CJSON_TELEGRAM_XUI_BOT_SUBSCRIPTION_SERVER_H */

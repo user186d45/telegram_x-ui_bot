@@ -72,6 +72,9 @@ add_test(NAME xray_settings COMMAND test_xray_settings)
 add_cjson_test(test_server ${REPO_ROOT}/src/cjson/server.c ${REPO_ROOT}/src/cjson/clients.c ${LOG_SRC} ${JSON_VALIDATION_SRC} test_server.c)
 add_test(NAME server COMMAND test_server)
 
+add_cjson_test(test_subscription_server test_subscription_server.c ${REPO_ROOT}/src/cjson/subscription-server.c ${LOG_SRC} ${JSON_VALIDATION_SRC})
+add_test(NAME subscription_server COMMAND test_subscription_server)
+
 # Assertion mutants return early without freeing, so LeakSanitizer would exit
 # before stdout is flushed and hide the FAILED line. Leak detection is turned off
 # for them; the delete_leak mutant keeps it on, since LSan is what catches it.
