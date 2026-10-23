@@ -24,5 +24,5 @@ enum logLevel {
 
 void applicationLog(uint8_t logLevel, const char* prettyFunc, const char* msg);
 
-#endif
+#endif /* LOG_H */
 

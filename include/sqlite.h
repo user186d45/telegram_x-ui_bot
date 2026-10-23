@@ -21,5 +21,5 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql);
 
 static void sqlErrorMsg(const char* msg, sqlite3* db, int rc);
 
-#endif
+#endif /* SQLITE_TELEGRAM_XUI_BOT */
 

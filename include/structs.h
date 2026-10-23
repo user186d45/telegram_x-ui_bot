@@ -54,5 +54,5 @@ struct userInfo {
 
 extern struct userInfo* uInfo;
 
-#endif
+#endif /* STRUCTS_TELEGRAM_XUI_BOT */
 
