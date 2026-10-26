@@ -6,6 +6,8 @@
 
 #include <sqlite3.h>
 
+#include "./structs.h"
+
 enum userDataRWSql : uint8_t {
     userDataRWSql_ALL,
     userDataRWSql_BALANCE,
@@ -15,11 +17,9 @@ enum userDataRWSql : uint8_t {
 
 };
 
-unsigned char createCheckDb();
-unsigned char writeUserData(enum userDataRWSql uDataRWSql);
-unsigned char readUserData(enum userDataRWSql uDataRWSql);
-
-static void sqlErrorMsg(const char* msg, sqlite3* db, int rc);
+unsigned char sqlCreateCheckDb();
+unsigned char sqlWriteUserData(struct userInfoStruct* uInfo, enum userDataRWSql uDataRWSql);
+unsigned char sqlReadUserData(struct userInfoStruct* uInfo, enum userDataRWSql uDataRWSql);
 
 #endif /* SQLITE_TELEGRAM_XUI_BOT */
 

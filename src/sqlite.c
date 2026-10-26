@@ -8,9 +8,10 @@
 #include <sqlite3.h>
 #include <assert.h>
 
-static sqlite3* userDb = NULL;
+static void sqlErrorMsg(const char* msg, sqlite3* db, int rc);
+static void insertNewUser(struct userInfoStruct* uInfo);
 
-unsigned char createCheckDb() {
+unsigned char sqlCreateCheckDb() {
     DBG(LOG_INFO, "Function called");
     const char* tableCreate = "CREATE TABLE IF NOT EXISTS users( "
                               "userId INTEGER PRIMARY KEY, "
@@ -19,7 +20,7 @@ unsigned char createCheckDb() {
                               "hasJoined BLOB NOT NULL DEFAULT 0 CHECK(length(hasJoined = 1)), "
                               "banned BLOB NOT NULL DEFAULT 0 CHECK(length(banned = 1)) "
                               ");";
-
+    sqlite3* userDb = NULL;
     int rc = sqlite3_open("user.db", &userDb);
     if (rc != SQLITE_OK) {
         sqlErrorMsg("Cannot open user database", userDb, rc);
@@ -56,9 +57,10 @@ unsigned char createCheckDb() {
 
 }
 
-unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
+unsigned char sqlWriteUserData(struct userInfoStruct* uInfo, enum userDataRWSql uDataRWSql) {
     DBG(LOG_INFO, "Function called");
 
+    sqlite3* userDb = NULL;
     int rc = sqlite3_open("user.db", &userDb);
     if (rc != SQLITE_OK) {
         sqlErrorMsg("Cannot open user database", userDb, rc);
@@ -72,8 +74,7 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
     switch (uDataRWSql) {
         case userDataRWSql_ALL:
         {
-            const char* insertAllSql = "INSERT OR REPLACE INTO users SET (userId, balance, hasJoined, banned, cState) VALUES (?, ?, ?, ?, ?);";
-            insertSql = insertAllSql;
+            insertSql = "INSERT OR REPLACE INTO users SET (userId, balance, hasJoined, banned, cState) VALUES (?, ?, ?, ?, ?);";
 
             break;
 
@@ -81,18 +82,14 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
 
         case userDataRWSql_BALANCE:
         {
-            const char* insertBalanceSql = "UPDATE users SET balance = ? WHERE userId = ?;";
-
-            insertSql = insertBalanceSql;
+            insertSql = "UPDATE users SET balance = ? WHERE userId = ?;";
 
             break;
         }
 
         case userDataRWSql_PHONE_NUMBER:
         {
-            const char* insertPhoneSql = "UPDATE users SET phoneNumber = ? WHERE userId = ?;";
-
-            insertSql = insertPhoneSql;
+            insertSql = "UPDATE users SET phoneNumber = ? WHERE userId = ?;";
 
             break;
 
@@ -100,9 +97,7 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
 
         case userDataRWSql_JOIN_STATE:
         {
-            const char* insertJoinStateSql = "UPDATE users SET hasJoined = ? WHERE userId = ?;";
-
-            insertSql = insertJoinStateSql;
+            insertSql = "UPDATE users SET hasJoined = ? WHERE userId = ?;";
 
             break;
 
@@ -110,9 +105,7 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
 
         case userDataRWSql_BANNED_STATE:
         {
-            const char* insertBannedStateSql = "UPDATE users SET banned = ? WHERE userId = ?;";
-
-            insertSql = insertBannedStateSql;
+            insertSql = "UPDATE users SET banned = ? WHERE userId = ?;";
 
             break;
 
@@ -200,9 +193,10 @@ unsigned char writeUserData(enum userDataRWSql uDataRWSql) {
 
 }
 
-unsigned char readUserData(enum userDataRWSql uDataRWSql) {
+unsigned char sqlReadUserData(struct userInfoStruct* uInfo, enum userDataRWSql uDataRWSql) {
     DBG(LOG_INFO, "Function called");
 
+    sqlite3* userDb = NULL;
     int rc = sqlite3_open("user.db", &userDb);
     if (rc != SQLITE_OK) {
         sqlErrorMsg("Cannot open user database", userDb, rc);
@@ -262,9 +256,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
     switch (uDataRWSql) {
         case userDataRWSql_ALL:
         {
-            const char* allDataFieldName = "userDataRWSql_ALL";
-
-            readDataFieldName = allDataFieldName;
+            readDataFieldName = "userDataRWSql_ALL";
 
             break;
 
@@ -272,9 +264,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
 
         case userDataRWSql_BALANCE:
         {
-            const char* balanceFieldName = "userDataRWSql_BALANCE";
-
-            readDataFieldName = balanceFieldName;
+            readDataFieldName = "userDataRWSql_BALANCE";
 
             break;
 
@@ -282,9 +272,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
 
         case userDataRWSql_PHONE_NUMBER:
         {
-            const char* phoneNumberFieldName = "userDataRWSql_PHONE_NUMBER";
-
-            readDataFieldName = phoneNumberFieldName;
+            readDataFieldName = "userDataRWSql_PHONE_NUMBER";
 
             break;
 
@@ -292,9 +280,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
 
         case userDataRWSql_JOIN_STATE:
         {
-            const char* joinStateFieldName = "userDataRWSql_JOIN_STATE";
-
-            readDataFieldName = joinStateFieldName;
+            readDataFieldName = "userDataRWSql_JOIN_STATE";
 
             break;
 
@@ -302,9 +288,7 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
 
         case userDataRWSql_BANNED_STATE:
         {
-            const char* bannedStateFieldName = "userDataRWSql_BANNED_STATE";
-
-            readDataFieldName = bannedStateFieldName;
+            readDataFieldName = "userDataRWSql_BANNED_STATE";
 
             break;
 
@@ -316,6 +300,15 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
         case userDataRWSql_ALL:
             sqlite3_bind_int64(stmt, 1, uInfo->userId);
             rc = sqlite3_step(stmt);
+            if (rc == SQLITE_DONE) {
+                applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "Provided userId not found in the database, creating a new entry");
+
+                insertNewUser(uInfo);
+
+                return 1;
+
+            }
+
             if (rc != SQLITE_ROW) {
                 sqlErrorMsg("Cannot execute read all statement", userDb, rc);
 
@@ -345,6 +338,15 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
         case userDataRWSql_BALANCE:
             sqlite3_bind_int64(stmt, 1, uInfo->userId);
             rc = sqlite3_step(stmt);
+            if (rc == SQLITE_DONE) {
+                applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "Provided userId not found in the database, creating a new entry");
+
+                insertNewUser(uInfo);
+
+                return 1;
+
+            }
+
             if (rc != SQLITE_ROW) {
                 sqlErrorMsg("Cannot execute read all statement", userDb, rc);
 
@@ -370,6 +372,15 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
         case userDataRWSql_PHONE_NUMBER:
             sqlite3_bind_int64(stmt, 1, uInfo->userId);
             rc = sqlite3_step(stmt);
+            if (rc == SQLITE_DONE) {
+                applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "Provided userId not found in the database, creating a new entry");
+
+                insertNewUser(uInfo);
+
+                return 1;
+
+            }
+
             if (rc != SQLITE_ROW) {
                 sqlErrorMsg("Cannot execute read all statement", userDb, rc);
 
@@ -395,6 +406,15 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
         case userDataRWSql_JOIN_STATE:
             sqlite3_bind_int64(stmt, 1, uInfo->userId);
             rc = sqlite3_step(stmt);
+            if (rc == SQLITE_DONE) {
+                applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "Provided userId not found in the database, creating a new entry");
+
+                insertNewUser(uInfo);
+
+                return 1;
+
+            }
+
             if (rc != SQLITE_ROW) {
                 sqlErrorMsg("Cannot execute read all statement", userDb, rc);
 
@@ -420,6 +440,15 @@ unsigned char readUserData(enum userDataRWSql uDataRWSql) {
         case userDataRWSql_BANNED_STATE:
             sqlite3_bind_int64(stmt, 1, uInfo->userId);
             rc = sqlite3_step(stmt);
+            if (rc == SQLITE_DONE) {
+                applicationLog(LOG_WARNING, __PRETTY_FUNCTION__, "Provided userId not found in the database, creating a new entry");
+
+                insertNewUser(uInfo);
+
+                return 1;
+
+            }
+
             if (rc != SQLITE_ROW) {
                 sqlErrorMsg("Cannot execute read all statement", userDb, rc);
 
@@ -464,6 +493,19 @@ static void sqlErrorMsg(const char* msg, sqlite3* db, int rc) {
     char b[1024];
     snprintf(b, sizeof(b), "%s: rc = %i, sqlite3_errmsg = %s", msg, rc, dbMessage);
     applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, (const char*)&b);
+
+}
+
+static void insertNewUser(struct userInfoStruct* uInfo) {
+    uInfo->phoneNumber = NULL;
+    uInfo->balance = 0;
+    uInfo->hasJoined = 0;
+    uInfo->banned = 0;
+    uInfo->cState = CS_IDLE;
+    if (!sqlWriteUserData(uInfo, userDataRWSql_ALL)) {
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Failed to write the new user to database");
+
+    }
 
 }
 

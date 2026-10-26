@@ -5,54 +5,73 @@
 #include <stdint.h>
 #include <time.h>
 
-struct panelInfo {
+struct panelInfoStruct {
     int                      id;
-    const char*              domainAddress;
-    const char*              panelPath;
-    const char*              authKey;
+    const char*              accessUrl;
+    const char*              apiKey;
 
 };
 
-struct applicationConfig {
+struct panelsStruct {
+    size_t                   panelsCount;
+    struct panelInfoStruct*  pInfoStructs;
+
+};
+
+struct applicationMessagesStruct {
+    const char* welcomeMessage;
+    const char* bannedMessage;
+
+};
+
+struct applicationConfigStruct {
     const char*              botApiKey;
+    size_t                   adminsCount;
     const char**             admins;
+    size_t                   channels2JoinCount;
     const char**             channels2Join;
-    struct panelInfo**       panelsInfo;
+
+    int                      conversationStateTimeOut;
+    int                      ticketTimeOut;
+
+    struct applicationMessagesStruct* aMessages;
 
 };
 
 enum conversationState {
-    IDLE,
-    GET_PHONE_NUMBER,
-    GET_VERIFICATION,
-    GET_AMOUNT,
-    GET_RECEIPT_PHOTO,
-    GET_TICKET
+    CS_IDLE,
+    CS_GET_PHONE_NUMBER,
+    CS_GET_VERIFICATION,
+    CS_GET_AMOUNT,
+    CS_GET_RECEIPT_PHOTO,
+    CS_GET_TICKET
 
 };
 
-struct runtimeUserInfo {
-    int32_t                  priceListMsgId;
+struct runtimeUserInfoStruct {
+    int64_t                  userId;
+    size_t                   entryIndex;
 
     time_t                   lastActivity;
-    time_t                   TicketTime;
-    time_t                   ReceiptTime;
+    uint8_t                  cState;
+    int32_t                  priceListMsgId;
+    time_t                   ticketTime;
 
 };
 
-struct userInfo {
+struct userInfoStruct {
     int64_t                  userId;
     const char*              phoneNumber;
     int                      balance;
     unsigned char            hasJoined;
     unsigned char            banned;
-    uint8_t                  cState;
 
-    struct runtimeUserInfo* rUserInfo;
+    struct runtimeUserInfoStruct* rUserInfo;
 
 };
 
-extern struct userInfo* uInfo;
+extern struct panelsStruct* panels;
+extern struct applicationConfigStruct* aConfig;
 
 #endif /* STRUCTS_TELEGRAM_XUI_BOT */
 

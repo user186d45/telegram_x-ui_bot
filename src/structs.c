@@ -1,4 +1,5 @@
 #include "../include/structs.h"
 
-struct userInfo* uInfo = NULL;
+struct panelsStruct* panels = NULL;
+struct applicationConfigStruct* aConfig = NULL;
 

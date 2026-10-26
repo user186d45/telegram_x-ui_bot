@@ -1,26 +1,11 @@
 #ifndef BOT_TELEGRAM_XUI_BOT
 #define BOT_TELEGRAM_XUI_BOT
 
-#include <tgbot/tgbot.h>
-
-class iBot {
-public:
-    virtual void updateUserInfoFromMessage(TgBot::Message::Ptr messagePtr) = 0;
-    virtual void updateUserInfoFromCallback(TgBot::CallbackQuery::Ptr cBQueryPtr) = 0;
-
-};
-
-class commandHandler : public iBot {
-
-};
-
-class messageHandler : public iBot {
-
-};
-
-class inlineKeyboardHandler : public iBot {
-
-};
+#include "./bot/interface.hpp"
+#include "./bot/handlers.hpp"
+#include "./bot/commandHandlers.hpp"
+#include "./bot/messageHandlers.hpp"
+#include "./bot/inlineKeyboardHandlers.hpp"
 
 #endif /* BOT_TELEGRAM_XUI_BOT */
 
