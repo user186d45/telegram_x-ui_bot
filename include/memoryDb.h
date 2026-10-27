@@ -6,15 +6,15 @@
 #include "./structs.h"
 
 struct memoryDbStruct {
-    size_t entryCount;
+    size_t                   entryCount;
 
     struct runtimeUserInfoStruct* runtimeEntries[RUNTIME_ENTITIES_BUFFER_SIZE];
 
 };
 
-unsigned char memoryDbLoadUser(struct userInfoStruct* uInfo);
-unsigned char memoryDbUpdateUser(struct runtimeUserInfoStruct* rUserInfo);
-void memoryDbDeleteEntry(struct runtimeUserInfoStruct* rUserInfo);
+unsigned char       memoryDbLoadUser(struct userInfoStruct* uInfo);
+unsigned char       memoryDbUpdateUser(struct runtimeUserInfoStruct* rUserInfo);
+void                memoryDbDeleteEntry(struct runtimeUserInfoStruct* rUserInfo);
 
 #endif /* MEMORY_DB_TELEGRAM_XUI_BOT */
 

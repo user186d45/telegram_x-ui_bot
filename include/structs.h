@@ -19,15 +19,24 @@ struct panelsStruct {
 };
 
 struct applicationMessagesStruct {
-    const char* welcomeMessage;
-    const char* bannedMessage;
+    const char*              welcomeMessage;
+    const char*              bannedMessage;
+
+};
+
+struct applicationButtonTextsStruct {
+    const char*              productsListsText;
+    const char*              profileText;
+    const char*              depositText;
+    const char*              supportText;
+    const char*              adminPanelText;
 
 };
 
 struct applicationConfigStruct {
     const char*              botApiKey;
     size_t                   adminsCount;
-    const char**             admins;
+    int64_t*                 admins;
     size_t                   channels2JoinCount;
     const char**             channels2Join;
 
@@ -35,6 +44,7 @@ struct applicationConfigStruct {
     int                      ticketTimeOut;
 
     struct applicationMessagesStruct* aMessages;
+    struct applicationButtonTextsStruct* aButtonTexts;
 
 };
 
