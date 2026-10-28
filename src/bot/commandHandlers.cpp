@@ -28,8 +28,7 @@ void startCommandHandler::handle(TgBot::Message::Ptr messagePtr) {
                 aConfig->aMessages->bannedMessage
         );
 
-        free((char*)uInfo->phoneNumber);
-        free(uInfo);
+        userInfoStructDelete(uInfo);
 
         return;
 
@@ -43,19 +42,18 @@ void startCommandHandler::handle(TgBot::Message::Ptr messagePtr) {
     productsListButton->text = aConfig->aButtonTexts->productsListsText;
     row0.push_back(productsListButton);
 
-
     TgBot::KeyboardButton::Ptr profileButton(new TgBot::KeyboardButton);
     profileButton->text = aConfig->aButtonTexts->profileText;
     row0.push_back(profileButton);
 
     rKeyboardMarkup->keyboard.push_back(row0);
 
+
     std::vector<TgBot::KeyboardButton::Ptr> row1;
 
     TgBot::KeyboardButton::Ptr depositButton(new TgBot::KeyboardButton);
     depositButton->text = aConfig->aButtonTexts->depositText;
     row1.push_back(depositButton);
-
 
     TgBot::KeyboardButton::Ptr supportButton(new TgBot::KeyboardButton);
     supportButton->text = aConfig->aButtonTexts->supportText;
@@ -91,8 +89,7 @@ void startCommandHandler::handle(TgBot::Message::Ptr messagePtr) {
             rKeyboardMarkup
     );
 
-    free((char*)uInfo->phoneNumber);
-    free(uInfo);
+    userInfoStructDelete(uInfo);
 
 }
 

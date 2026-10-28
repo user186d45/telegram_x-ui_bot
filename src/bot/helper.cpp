@@ -3,8 +3,9 @@
 
 template<typename... Args>
 TgBot::Message::Ptr botHelper::sendMessage(Args&&... args) {
+    TgBot::Message::Ptr message;
     try {
-        return bot->getApi().sendMessage(std::forward<Args>(args)...);
+        message =  bot->getApi().sendMessage(std::forward<Args>(args)...);
 
     } catch (const TgBot::TgException& e) {
         char b[516];
@@ -16,12 +17,15 @@ TgBot::Message::Ptr botHelper::sendMessage(Args&&... args) {
 
     }
 
+    return message;
+
 }
 
 template<typename... Args>
 TgBot::Message::Ptr botHelper::forwardMessage(Args&&... args) {
+    TgBot::Message::Ptr message;
     try {
-        return bot->getApi().forwardMessage(std::forward<Args>(args)...);
+        message =  bot->getApi().forwardMessage(std::forward<Args>(args)...);
 
     } catch (const TgBot::TgException& e) {
         char b[516];
@@ -32,6 +36,26 @@ TgBot::Message::Ptr botHelper::forwardMessage(Args&&... args) {
         return nullptr;
 
     }
+
+    return message;
+
+}
+
+unsigned char botHelper::deleteMessage(int64_t chatId, int32_t messageId) {
+    try {
+        bot->getApi().deleteMessage(chatId, messageId);
+
+    } catch (const TgBot::TgException& e) {
+        char b[516];
+        snprintf(b, sizeof(b), "Failed to delete message: %s", e.what());
+
+        applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, b);
+
+        return 1;
+
+    }
+
+    return 0;
 
 }
 

@@ -7,6 +7,7 @@
 
 struct panelInfoStruct {
     int                      id;
+    const char*              location;
     const char*              accessUrl;
     const char*              apiKey;
 
@@ -18,18 +19,33 @@ struct panelsStruct {
 
 };
 
-struct applicationMessagesStruct {
-    const char*              welcomeMessage;
-    const char*              bannedMessage;
+struct pricesStruct {
+    int                      multiLocationServicePrice;
+    int                      tunnelServicePrice;
+    int                      singleLocationServicePrice;
 
 };
 
-struct applicationButtonTextsStruct {
+struct applicationMessagesStruct {
+    const char*              welcomeMessage;
+    const char*              bannedMessage;
+    const char*              loadingServersStatusMessage;
+    const char*              priceListMessage;
+    const char*              multiLocationServicePriceText;
+    const char*              tunnelServicePriceText;
+    const char*              singleLocationServicePriceText;
+
+};
+
+struct applicationButtonsTextsStruct {
     const char*              productsListsText;
     const char*              profileText;
     const char*              depositText;
     const char*              supportText;
     const char*              adminPanelText;
+    const char*              multiLocationServiceText;
+    const char*              tunnelServiceText;
+    const char*              singleLocationServiceText;
 
 };
 
@@ -43,8 +59,10 @@ struct applicationConfigStruct {
     int                      conversationStateTimeOut;
     int                      ticketTimeOut;
 
+    struct pricesStruct*     prices;
+
     struct applicationMessagesStruct* aMessages;
-    struct applicationButtonTextsStruct* aButtonTexts;
+    struct applicationButtonsTextsStruct* aButtonTexts;
 
 };
 
@@ -52,6 +70,9 @@ enum conversationState {
     CS_IDLE,
     CS_GET_PHONE_NUMBER,
     CS_GET_VERIFICATION,
+    CS_GET_CUSTOM_TRAFFIC_MULTILOCATION_SERVICE,
+    CS_GET_CUSTOM_TRAFFIC_TUNNEL_SERVICE,
+    CS_GET_CUSTOM_TRAFFIC_SINGLELOCATION_SERVICE,
     CS_GET_AMOUNT,
     CS_GET_RECEIPT_PHOTO,
     CS_GET_TICKET
@@ -82,6 +103,8 @@ struct userInfoStruct {
 
 extern struct panelsStruct* panels;
 extern struct applicationConfigStruct* aConfig;
+
+void userInfoStructDelete(struct userInfoStruct* uInfo);
 
 #endif /* STRUCTS_TELEGRAM_XUI_BOT */
 
