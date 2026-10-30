@@ -8,7 +8,7 @@
 
 #include "./structs.h"
 
-enum userDataRWSql : uint8_t {
+enum userDataRWSql {
     userDataRWSql_ALL,
     userDataRWSql_BALANCE,
     userDataRWSql_PHONE_NUMBER,

@@ -4882,7 +4882,7 @@ static cJSON* jsonBulkEmailsArrayCreate(const char** emails, int64_t emailsCount
 
 }
 
-static int jsonBulkStringArrayParse(cJSON* arr, const char*** strArr, int64_t* strCount) {
+int  jsonBulkStringArrayParse(cJSON* arr, const char*** strArr, int64_t* strCount) {
     size_t arraySize = cJSON_GetArraySize(arr);
     if (!arraySize) {
         return 1;
@@ -4923,7 +4923,7 @@ static int jsonBulkStringArrayParse(cJSON* arr, const char*** strArr, int64_t* s
 
 }
 
-static void jsonBulkStringArrayFree(const char** strArr, int64_t strCount) {
+void jsonBulkStringArrayFree(const char** strArr, int64_t strCount) {
     if (!strArr) {
         return;
 

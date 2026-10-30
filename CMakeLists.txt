@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(telegram_x-ui_bot VERSION 1.0.0 LANGUAGES CXX)
+project(telegram_x-ui_bot VERSION 1.0.0 LANGUAGES C CXX)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -56,15 +56,20 @@ link_directories(
 set(SOURCES
     src/main.cpp
     src/bot.cpp
-    src/structs.cpp
-    src/curl.cpp
-    src/sqlite.cpp
-    src/log.cpp
+    src/structs.c
+    src/curl.c
+    src/sqlite.c
+    src/log.c
+    src/memoryDb.c
 )
 
 # cjson API sources, split one per documentation section under src/cjson
 file(GLOB CJSON_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/cjson/*.c")
 list(APPEND SOURCES ${CJSON_SOURCES})
+
+# bot handlers and dispatch sources
+file(GLOB BOT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/bot/*.cpp")
+list(APPEND SOURCES ${BOT_SOURCES})
 
 # Create executable
 add_executable(${PROJECT_NAME} ${SOURCES})

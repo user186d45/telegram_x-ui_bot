@@ -123,7 +123,7 @@ void listProductsMessageHandler::handle(TgBot::Message::Ptr messagePtr) {
 
     TgBot::InlineKeyboardButton::Ptr singleLocationServiceButton(new TgBot::InlineKeyboardButton);
     singleLocationServiceButton->text = aConfig->aButtonTexts->singleLocationServiceText;
-    singleLocationServiceButton->callbackData = "list tunnel services";
+    singleLocationServiceButton->callbackData = "list single location services";
     row2.push_back(singleLocationServiceButton);
 
     iKeyboardM->inlineKeyboard.push_back(row2);
@@ -165,7 +165,47 @@ void getCustomMultilocationTrafficAmountMessageHandler::handle(TgBot::Message::P
 
     }
 
-    // TODO
+    int orderPrice = aConfig->prices->multiLocationServicePrice * atoi(messagePtr->text.c_str());
+
+    char messageText[1024];
+    snprintf(
+            messageText,
+            sizeof(messageText),
+            "%s:\n\n"
+            "%i",
+            aConfig->aMessages->multiLocationServiceReceiptText,
+            orderPrice
+    );
+
+    TgBot::InlineKeyboardMarkup::Ptr iKeyboardM(new TgBot::InlineKeyboardMarkup);
+
+    std::vector<TgBot::InlineKeyboardButton::Ptr> row;
+
+    TgBot::InlineKeyboardButton::Ptr buyConfirmButton(new TgBot::InlineKeyboardButton);
+    buyConfirmButton->text = aConfig->aButtonTexts->buyConfirmButtonText;
+
+    char b[64];
+    if (uInfo->balance >= orderPrice) {
+        snprintf(b, sizeof(b), "service buy %i", orderPrice);
+
+    } else {
+        snprintf(b, sizeof(b), "Insufficient balance");
+
+    }
+    buyConfirmButton->callbackData = b;
+    row.push_back(buyConfirmButton);
+
+    iKeyboardM->inlineKeyboard.push_back(row);
+
+    helper.sendMessage(
+        uInfo->userId,
+        messageText,
+        nullptr,
+        nullptr,
+        iKeyboardM
+    );
+
+    userInfoStructDelete(uInfo);
 
 };
 
@@ -192,7 +232,47 @@ void getCustomTunnelTrafficAmountMessageHandler::handle(TgBot::Message::Ptr mess
 
     }
 
-    // TODO
+    int orderPrice = aConfig->prices->tunnelServicePrice * atoi(messagePtr->text.c_str());
+
+    char messageText[1024];
+    snprintf(
+            messageText,
+            sizeof(messageText),
+            "%s:\n\n"
+            "%i",
+            aConfig->aMessages->tunnelServiceReceiptText,
+            orderPrice
+    );
+
+    TgBot::InlineKeyboardMarkup::Ptr iKeyboardM(new TgBot::InlineKeyboardMarkup);
+
+    std::vector<TgBot::InlineKeyboardButton::Ptr> row;
+
+    TgBot::InlineKeyboardButton::Ptr buyConfirmButton(new TgBot::InlineKeyboardButton);
+    buyConfirmButton->text = aConfig->aButtonTexts->buyConfirmButtonText;
+
+    char b[64];
+    if (uInfo->balance >= orderPrice) {
+        snprintf(b, sizeof(b), "service buy %i", orderPrice);
+
+    } else {
+        snprintf(b, sizeof(b), "Insufficient balance");
+
+    }
+    buyConfirmButton->callbackData = b;
+    row.push_back(buyConfirmButton);
+
+    iKeyboardM->inlineKeyboard.push_back(row);
+
+    helper.sendMessage(
+        uInfo->userId,
+        messageText,
+        nullptr,
+        nullptr,
+        iKeyboardM
+    );
+
+    userInfoStructDelete(uInfo);
 
 };
 
@@ -219,7 +299,47 @@ void getCustomSingleLocationTrafficAmountMessageHandler::handle(TgBot::Message::
 
     }
 
-    // TODO
+    int orderPrice = aConfig->prices->singleLocationServicePrice * atoi(messagePtr->text.c_str());
+
+    char messageText[1024];
+    snprintf(
+            messageText,
+            sizeof(messageText),
+            "%s:\n\n"
+            "%i",
+            aConfig->aMessages->singleLocationServiceReceiptText,
+            orderPrice
+    );
+
+    TgBot::InlineKeyboardMarkup::Ptr iKeyboardM(new TgBot::InlineKeyboardMarkup);
+
+    std::vector<TgBot::InlineKeyboardButton::Ptr> row;
+
+    TgBot::InlineKeyboardButton::Ptr buyConfirmButton(new TgBot::InlineKeyboardButton);
+    buyConfirmButton->text = aConfig->aButtonTexts->buyConfirmButtonText;
+
+    char b[64];
+    if (uInfo->balance >= orderPrice) {
+        snprintf(b, sizeof(b), "service buy %i", orderPrice);
+
+    } else {
+        snprintf(b, sizeof(b), "Insufficient balance");
+
+    }
+    buyConfirmButton->callbackData = b;
+    row.push_back(buyConfirmButton);
+
+    iKeyboardM->inlineKeyboard.push_back(row);
+
+    helper.sendMessage(
+        uInfo->userId,
+        messageText,
+        nullptr,
+        nullptr,
+        iKeyboardM
+    );
+
+    userInfoStructDelete(uInfo);
 
 };
 

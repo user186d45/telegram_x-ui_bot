@@ -35,6 +35,10 @@ struct applicationMessagesStruct {
     const char*              tunnelServicePriceText;
     const char*              singleLocationServicePriceText;
 
+    const char*              multiLocationServiceReceiptText;
+    const char*              tunnelServiceReceiptText;
+    const char*              singleLocationServiceReceiptText;
+
 };
 
 struct applicationButtonsTextsStruct {
@@ -46,6 +50,7 @@ struct applicationButtonsTextsStruct {
     const char*              multiLocationServiceText;
     const char*              tunnelServiceText;
     const char*              singleLocationServiceText;
+    const char*              buyConfirmButtonText;
 
 };
 

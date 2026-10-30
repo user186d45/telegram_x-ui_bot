@@ -74,7 +74,7 @@ unsigned char sqlWriteUserData(struct userInfoStruct* uInfo, enum userDataRWSql 
     switch (uDataRWSql) {
         case userDataRWSql_ALL:
         {
-            insertSql = "INSERT OR REPLACE INTO users SET (userId, balance, hasJoined, banned, cState) VALUES (?, ?, ?, ?, ?);";
+            insertSql = "INSERT OR REPLACE INTO users (userId, balance, hasJoined, banned) VALUES (?, ?, ?, ?);";
 
             break;
 
@@ -137,7 +137,6 @@ unsigned char sqlWriteUserData(struct userInfoStruct* uInfo, enum userDataRWSql 
             sqlite3_bind_int(stmt, 2, uInfo->balance);
             sqlite3_bind_blob(stmt, 3, &uInfo->hasJoined, 1, SQLITE_STATIC);
             sqlite3_bind_blob(stmt, 4, &uInfo->banned, 1, SQLITE_STATIC);
-            sqlite3_bind_blob(stmt, 5, &uInfo->cState, 1, SQLITE_STATIC);
 
             break;
 
@@ -209,7 +208,7 @@ unsigned char sqlReadUserData(struct userInfoStruct* uInfo, enum userDataRWSql u
     const char* readSql = NULL;
     switch (uDataRWSql) {
         case userDataRWSql_ALL:
-            readSql = "SELECT balance, phoneNumber, hasJoined, banned, cState FROM users WHERE userId = ?;";
+            readSql = "SELECT balance, phoneNumber, hasJoined, banned FROM users WHERE userId = ?;";
 
             break;
 
@@ -501,7 +500,6 @@ static void insertNewUser(struct userInfoStruct* uInfo) {
     uInfo->balance = 0;
     uInfo->hasJoined = 0;
     uInfo->banned = 0;
-    uInfo->cState = CS_IDLE;
     if (!sqlWriteUserData(uInfo, userDataRWSql_ALL)) {
         applicationLog(LOG_ERROR, __PRETTY_FUNCTION__, "Failed to write the new user to database");
 

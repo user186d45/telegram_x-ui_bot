@@ -15,11 +15,7 @@ void userInfoStructDelete(struct userInfoStruct* uInfo) {
 
         }
 
-        if (uInfo->rUserInfo) {
-            free(uInfo->rUserInfo);
-
-        }
-
+        /* rUserInfo is owned by memoryDb and freed by memoryDbDeleteEntry() */
         free(uInfo);
 
     }
