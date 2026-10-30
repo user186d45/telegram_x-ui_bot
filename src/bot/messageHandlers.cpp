@@ -186,7 +186,7 @@ void getCustomMultilocationTrafficAmountMessageHandler::handle(TgBot::Message::P
 
     char b[64];
     if (uInfo->balance >= orderPrice) {
-        snprintf(b, sizeof(b), "service buy %i", orderPrice);
+        snprintf(b, sizeof(b), "service buy /%i /%i", SERVICES_MULTILOCATION, orderPrice);
 
     } else {
         snprintf(b, sizeof(b), "Insufficient balance");
@@ -253,7 +253,7 @@ void getCustomTunnelTrafficAmountMessageHandler::handle(TgBot::Message::Ptr mess
 
     char b[64];
     if (uInfo->balance >= orderPrice) {
-        snprintf(b, sizeof(b), "service buy %i", orderPrice);
+        snprintf(b, sizeof(b), "service buy /%i /%i", SERVICES_TUNNEL, orderPrice);
 
     } else {
         snprintf(b, sizeof(b), "Insufficient balance");
@@ -320,7 +320,7 @@ void getCustomSingleLocationTrafficAmountMessageHandler::handle(TgBot::Message::
 
     char b[64];
     if (uInfo->balance >= orderPrice) {
-        snprintf(b, sizeof(b), "service buy %i", orderPrice);
+        snprintf(b, sizeof(b), "service buy /%i /%i", SERVICES_SINGLELOCATION, orderPrice);
 
     } else {
         snprintf(b, sizeof(b), "Insufficient balance");

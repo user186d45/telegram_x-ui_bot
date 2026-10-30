@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <time.h>
 
+#define PCRE2_CODE_UNIT_WIDTH 8
+
 struct panelInfoStruct {
     int                      id;
     const char*              location;
@@ -39,6 +41,9 @@ struct applicationMessagesStruct {
     const char*              tunnelServiceReceiptText;
     const char*              singleLocationServiceReceiptText;
 
+    const char*              insufficientBalanceText;
+    const char*              balanceUpdateSuccessText;
+
 };
 
 struct applicationButtonsTextsStruct {
@@ -54,6 +59,12 @@ struct applicationButtonsTextsStruct {
 
 };
 
+struct multiLocationServicePanels {
+    int*                     panels;
+    size_t                   panelsCount;
+
+};
+
 struct applicationConfigStruct {
     const char*              botApiKey;
     size_t                   adminsCount;
@@ -65,6 +76,7 @@ struct applicationConfigStruct {
     int                      ticketTimeOut;
 
     struct pricesStruct*     prices;
+    struct multiLocationServicePanels* mLocationPanles;
 
     struct applicationMessagesStruct* aMessages;
     struct applicationButtonsTextsStruct* aButtonTexts;
@@ -82,6 +94,12 @@ enum conversationState {
     CS_GET_RECEIPT_PHOTO,
     CS_GET_TICKET
 
+};
+
+enum servicesEnum {
+    SERVICES_MULTILOCATION,
+    SERVICES_TUNNEL,
+    SERVICES_SINGLELOCATION
 };
 
 struct runtimeUserInfoStruct {

@@ -3,19 +3,25 @@
 
 #include "./handlers.hpp"
 
-class multiLocationServiceListIKHandler : inlineKeyboardHandler {
+class multiLocationServiceListIKHandler : private inlineKeyboardHandler {
 public:
     void handle(TgBot::CallbackQuery::Ptr cBQueryPtr) override;
 
 };
 
-class tunnelServiceListIKHandler : inlineKeyboardHandler {
+class tunnelServiceListIKHandler : private inlineKeyboardHandler {
 public:
     void handle(TgBot::CallbackQuery::Ptr cBQueryPtr) override;
 
 };
 
-class singleLocationServiceListIKHandler : inlineKeyboardHandler {
+class singleLocationServiceListIKHandler : private inlineKeyboardHandler {
+public:
+    void handle(TgBot::CallbackQuery::Ptr cBQueryPtr) override;
+
+};
+
+class buyServiceIKHandler : private inlineKeyboardHandler {
 public:
     void handle(TgBot::CallbackQuery::Ptr cBQueryPtr) override;
 
